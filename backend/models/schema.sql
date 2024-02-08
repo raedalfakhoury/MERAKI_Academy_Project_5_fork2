@@ -17,7 +17,7 @@ CREATE TABLE role_permission (
     id SERIAL NOT NULL,
     role_id INT,
     permission_id INT,
-    FOREIGN KEY (role_id) REFERENCES Role (id),
+    FOREIGN KEY (role_id) REFERENCES Roles (id),
     FOREIGN KEY (permission_id) REFERENCES Permissions (id),
     PRIMARY KEY (id)
 );
