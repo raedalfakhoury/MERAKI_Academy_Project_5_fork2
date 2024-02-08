@@ -1,14 +1,13 @@
-const pool = require("../models/db");
+const {pool} = require("../models/db");
 
 const createNewComment = (req, res) => {
   const post_id = req.params.id;
-  const user_id = req.token.userId;
-
+  const user_id = req.token.user_id;
   const { content } = req.body;
-  const currentDate = new Date();
-  const created_at = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '') + ' +0000';
-  const query = `INSERT INTO Comments (user_id,post_id,content,created_at) VALUES ($1,$2,$3,$4) RETURNING *`;
-  const data = [user_id,post_id,content,created_at];
+//   const currentDate = new Date();
+//   const created_at = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '') + ' +0000';
+  const query = `INSERT INTO Comments (user_id,post_id,content) VALUES ($1,$2,$3) RETURNING *`;
+  const data = [user_id,post_id,content];
 
   pool
     .query(query, data)
@@ -20,6 +19,7 @@ const createNewComment = (req, res) => {
       });
     })
     .catch((err) => {
+        console.log(err);
       res.status(404).json({
         success: false,
         message: "Server error",
@@ -30,10 +30,9 @@ const createNewComment = (req, res) => {
 
 const getCommentsByPostId = (req, res) => {
   const post_id = req.params.id;
-  const query = `SELECT * FROM "Comments" WHERE post_id = '${post_id}'`
-  const data = [post_id];
+  const query = `SELECT * FROM Comments WHERE post_id = '${post_id}'`
   pool
-    .query(query, data)
+    .query(query)
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -42,6 +41,7 @@ const getCommentsByPostId = (req, res) => {
       });
     })
     .catch((err) => {
+        console.log(err);
       res.status(500).json({
         success: false,
         message: "Server error",

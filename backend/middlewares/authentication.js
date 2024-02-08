@@ -7,7 +7,7 @@ const authentication = (req, res, next) => {
 
     const token = req.headers.authorization.split(" ").pop();
 
-    jwt.verify(token, process.env.SECRET, (err, result) => {
+    jwt.verify(token, process.env.SEC, (err, result) => {
       if (err) {
         res.status(403).json({
           success: false,
