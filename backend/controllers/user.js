@@ -105,6 +105,7 @@ const login = (req, res) => {
             massage:
               "The email doesn’t exist or the password you’ve entered is incorrect",
           });
+          return
         }
       });
     })
