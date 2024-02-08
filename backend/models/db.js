@@ -18,10 +18,17 @@ pool.connect((err, pool) => {
 const CreateTable = () => {
   pool
     .query(
-      `CREATE TABLE Roles (
-        id SERIAL NOT NULL,
-        role VARCHAR(255) NOT NULL,
-        PRIMARY KEY (id)
+      `CREATE TABLE Users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password_hash VARCHAR(100) NOT NULL,
+        bio TEXT,
+        profile_picture_url TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        role_id INT,
+        is_deleted INT,
+        FOREIGN KEY (role_id) REFERENCES Roles (id)
     )`
     )
     .then((result) => {

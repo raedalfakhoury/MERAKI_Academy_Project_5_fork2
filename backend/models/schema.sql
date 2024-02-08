@@ -33,7 +33,7 @@ CREATE TABLE Users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     role_id INT,
     is_deleted INT,
-    FOREIGN KEY (role_id) REFERENCES Role (id),
+    FOREIGN KEY (role_id) REFERENCES Roles (id)
 );
 
 -- Table: Posts
@@ -114,14 +114,23 @@ CREATE TABLE Reels (
 );
 
 
-
-
-
-
-
-
-
--- Inserting a new notification
+-- register
+INSERT INTO
+    Users (
+        username,
+        email,
+        password_hash,
+        bio,
+        profile_picture_url,
+        role_id,
+        is_deleted
+    )
+VALUES
+    ($ 1, $ 2, $ 3, $ 4, $ 5, $ 6, $ 7) RETURNING *
+    
+    
+    
+     -- Inserting a new notification
 INSERT INTO
     Notifications (user_id, content)
 VALUES
