@@ -12,11 +12,13 @@ app.use(cors());
 
 const userRouter = require("./routes/user")
 const roleRouter = require("./routes/roles")
+const PostRouter =require("./routes/post")
+
 
 
 app.use("/users", userRouter);
 app.use("/roles", roleRouter);
-
+app.use("/post",PostRouter)
 
 
 
