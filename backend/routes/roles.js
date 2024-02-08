@@ -8,3 +8,17 @@ roleRouter.post("/permission", createNewPermission);
 roleRouter.post("/role_permission", createNewRolePermission);
 
 module.exports = roleRouter;
+
+
+
+/* 
+
+create Roles =>  test 
+!api => http://localhost:5000/roles
+
+!body =>
+{
+    "role" : "admin"
+}
+
+*/
