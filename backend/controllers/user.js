@@ -79,7 +79,7 @@ const login = (req, res) => {
         console.log(result);
       const data = result.rows[0];
       console.log(data);
-      bcrypt.compare(password, data.password_hash, (err, isValid) => {
+      bcryptjs.compare(password, data.password_hash, (err, isValid) => {
         if (isValid) {
           payload = {
             user_id: data.id,

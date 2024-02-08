@@ -53,7 +53,7 @@ CREATE TABLE Comments (
     user_id INT,
     post_id INT,
     content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
     is_deleted INT,
     FOREIGN KEY (user_id) REFERENCES Users (id),
     FOREIGN KEY (post_id) REFERENCES Posts (id)
