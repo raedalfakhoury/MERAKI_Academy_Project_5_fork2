@@ -1,8 +1,9 @@
 const { pool } = require("../models/db");
-const bcrypt = require("bcrypt");
-
+ 
+const bcryptjs = require("bcryptjs")
+ 
 const jwt = require("jsonwebtoken");
-
+ 
 // role_id => users => 1
 const role_id = 1;
 // is deleted = 0 => is soft delete => => is_deleted = 1
@@ -16,7 +17,7 @@ const register = async (req, res) => {
   const { username, email, password_hash, bio, profile_picture_url } = req.body;
 
   const salt = 5;
-  const password = await bcrypt.hash(password_hash, salt);
+  const password = await bcryptjs.hash(password_hash, salt);
   const Email = email.toLowerCase();
   console.log(Email);
   console.log(password);
