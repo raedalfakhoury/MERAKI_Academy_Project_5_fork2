@@ -64,7 +64,8 @@ CREATE TABLE Likes (
     like_id SERIAL PRIMARY KEY,
     user_id INT,
     post_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
+    likes_count INTEGER DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users (id),
     FOREIGN KEY (post_id) REFERENCES Posts (id)
 );
@@ -152,3 +153,6 @@ SET
     is_read = TRUE
 WHERE
     user_id = 123;
+
+
+
