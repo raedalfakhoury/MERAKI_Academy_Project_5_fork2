@@ -79,14 +79,16 @@ const login = (req, res) => {
         console.log(result);
       const data = result.rows[0];
       console.log(data);
-      bcrypt.compare(password, data.password_hash, (err, isValid) => {
+      bcryptjs.compare(password, data.password_hash, (err, isValid) => {
         if (isValid) {
+          console.log();
           payload = {
             user_id: data.id,
             name: data.username,
             image:data.profile_picture_url,
             role: data.role_id,
           };
+          console.log(payload);
 
           options = { expiresIn: "360m" };
 

@@ -42,7 +42,7 @@ CREATE TABLE Posts (
     user_id INT,
     content TEXT NOT NULL,
     media_url TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
     is_deleted INT,
     FOREIGN KEY (user_id) REFERENCES Users (id)
 );
