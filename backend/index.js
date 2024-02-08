@@ -12,10 +12,12 @@ app.use(cors());
 
 const userRouter = require("./routes/user")
 const roleRouter = require("./routes/roles")
+const commentsRouter = require("./routes/comments");
 
 
 app.use("/users", userRouter);
 app.use("/roles", roleRouter);
+app.use("/comments", commentsRouter);
 
 
 
