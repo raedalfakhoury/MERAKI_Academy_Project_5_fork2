@@ -82,10 +82,39 @@ const updateCommentsById = (req, res) => {
       });
     });
 };
+
+
+const deleteCommentsById = (req, res) => {
+  const comment_id = req.params.id;
+  const query = `UPDATE Comments SET 	is_deleted= 1 WHERE comment_id='${comment_id} RETURNING *'`;
+  console.log(comment_id);
+
+  pool
+    .query(query)
+    .then((result) => {
+      if (result.rowCount !== 0) {
+        res.status(200).json({
+          success: true,
+          message: `Comment with id: ${comment_id} deleted successfully`,
+        });
+      } else {
+        throw new Error("Error happened while deleting Comment");
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err,
+      });
+    });
+};
+
 module.exports = {
   createNewComment,
   getCommentsByPostId,
-  updateCommentsById
+  updateCommentsById,
+  deleteCommentsById
 };
 
 
