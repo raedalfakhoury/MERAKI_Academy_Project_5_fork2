@@ -152,7 +152,28 @@ const updatepostById = (req, res) => {
       });
     });
 };
-module.exports = { createNewPost, getAllPosts, getPostById, getpostByuserId ,updatepostById};
+const deletePostByUserId = (req, res) => {
+  const { id } = req.params; 
+  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1 ;`;
+  const values = [id];
+  pool
+    .query(query, values)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        result: result.rows,
+      });
+
+      throw Error;
+    })
+    .catch((err) => { 
+      res.status(409).json({
+        success: false,
+        err
+      });
+    });
+};
+module.exports = { createNewPost, getAllPosts, getPostById, getpostByuserId ,updatepostById,deletePostByUserId};
 
 // CREATE TABLE Posts (
 //     id SERIAL PRIMARY KEY,
