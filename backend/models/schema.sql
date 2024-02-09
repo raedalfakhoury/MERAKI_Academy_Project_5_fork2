@@ -105,10 +105,9 @@ CREATE TABLE Stories (
 CREATE TABLE Reels (
     id SERIAL PRIMARY KEY,
     user_id INT,
-    reel_title VARCHAR(100) NOT NULL,
     description TEXT,
-    video_url TEXT,
-    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    video_url TEXT NOT NULL,
+    creation_date TIMESTAMP DEFAULT NOW(),
     is_deleted INT,
     FOREIGN KEY (user_id) REFERENCES Users (id)
 );
