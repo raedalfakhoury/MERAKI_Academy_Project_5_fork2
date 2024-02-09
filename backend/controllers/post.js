@@ -29,6 +29,9 @@ const createNewPost = (req, res) => {
     });
 };
 
+
+
+
 const getAllPosts = (req, res) => {
   const query = `
       SELECT * FROM Posts JOIN Users 
@@ -57,7 +60,47 @@ const getAllPosts = (req, res) => {
 };
 
 
-module.exports = { createNewPost,getAllPosts };
+
+
+
+const getPostById = (req, res) => {
+  const post_id = req.params.postbyid;
+
+  const query = `
+      SELECT * FROM Posts
+      WHERE id = $1 AND is_deleted = 0;
+  `;
+
+  const data = [post_id];
+
+  pool
+      .query(query, data)
+      .then((result) => {
+          if (result.rows.length > 0) {
+              res.status(200).json({
+                  success: true,
+                  message: `Post with ID ${post_id} retrieved successfully`,
+                  post: result.rows[0],
+              });
+          } else {
+              res.status(404).json({
+                  success: false,
+                  message: `Post with ID ${post_id} not found`,
+              });
+          }
+      })
+      .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+              success: false,
+              message: "Server error",
+              err: err.message,
+          });
+      });
+}
+
+
+module.exports = { createNewPost,getAllPosts,getPostById  };
 
 // CREATE TABLE Posts (
 //     id SERIAL PRIMARY KEY,
