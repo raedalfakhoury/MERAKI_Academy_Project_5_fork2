@@ -8,7 +8,8 @@ const {
   getpostByuserId,
   updatepostById,
   deletePostByUserId,
-  getAllPosts
+  getAllPosts,
+  deletePostById 
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
@@ -24,6 +25,10 @@ PostRouter.delete("/delete/:id", authentication, deletePostByUserId);
 PostRouter.put("/update/:id", authentication, updatepostById);
 
 PostRouter.get("/allpost", authentication, getAllPosts);
+
+PostRouter.delete("/:id", authentication,deletePostById );
+
+
 module.exports = PostRouter;
 
 // test createNewPost

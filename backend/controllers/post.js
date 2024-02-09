@@ -64,6 +64,7 @@ const getPostById = (req, res) => {
       });
     });
 };
+
 const getpostByuserId = (req, res) => {
   const { userId } = req.params;
 
@@ -126,6 +127,7 @@ const updatepostById = (req, res) => {
       });
     });
 };
+
 const deletePostByUserId = (req, res) => {
   const { id } = req.params;
   const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`
@@ -147,6 +149,7 @@ const deletePostByUserId = (req, res) => {
       });
     });
 };
+
 const getAllPosts = (req, res) => {
   const query = `SELECT * FROM Posts JOIN Users 
       ON posts.user_id = Users.id  
@@ -169,6 +172,28 @@ const getAllPosts = (req, res) => {
       });
     });
 };
+const deletePostById = (req, res) => {
+  const id = req.params.id;
+  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`
+  const values = [id];
+  pool
+    .query(query, values)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        result: result.rows,
+      });
+
+      throw Error;
+    })
+    .catch((err) => {
+      res.status(409).json({
+        success: false,
+        err,
+      });
+    });
+};
+
 
 module.exports = {
   createNewPost,
@@ -176,7 +201,8 @@ module.exports = {
   getpostByuserId,
   updatepostById,
   deletePostByUserId,
-  getAllPosts
+  getAllPosts,
+  deletePostById 
 };
 
 // CREATE TABLE Posts (
