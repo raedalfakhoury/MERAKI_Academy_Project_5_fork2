@@ -29,10 +29,10 @@ CREATE TABLE Users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(100) NOT NULL,
     bio TEXT,
-    profile_picture_url TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    profile_picture_url VARCHAR(255) DEFAULT 'https://i.stack.imgur.com/l60Hf.png',
+    created_at TIMESTAMP  DEFAULT NOW(),
     role_id INT,
-    is_deleted INT,
+    is_deleted INT  DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES Roles (id)
 );
 
@@ -166,3 +166,16 @@ UPDATE users
 -- const hardDelete = 
  FROM Users
  WHERE id = ${} RETURNING *
+
+
+
+ -- update data type form table => 
+ ALTER TABLE users
+ALTER COLUMN is_deleted SET DEFAULT 0
+
+
+
+-- ex update form table => 
+  const query =
+    "UPDATE articles SET title=COALESCE($1,title),description=COALESCE($2,description) WHERE id=$3 RETURNING *;";
+    const values = [title, description];
