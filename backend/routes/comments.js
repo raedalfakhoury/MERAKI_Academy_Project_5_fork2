@@ -4,6 +4,7 @@ const express = require("express");
 const {
   createNewComment,
   getCommentsByPostId,
+  updateCommentsById,
   deleteCommentsById
 } = require("../controllers/comments");
 
@@ -15,6 +16,10 @@ const commentsRouter = express.Router();
 
 commentsRouter.post("/:id",authentication,createNewComment);
 commentsRouter.get("/:id", getCommentsByPostId);
+
+commentsRouter.put("/:id", authentication,updateCommentsById);
+
 commentsRouter.delete("/:id",deleteCommentsById)
+
 
 module.exports = commentsRouter;

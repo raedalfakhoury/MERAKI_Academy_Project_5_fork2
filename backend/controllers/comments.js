@@ -83,6 +83,7 @@ const updateCommentsById = (req, res) => {
     });
 };
 
+
 const deleteCommentsById = (req, res) => {
   const comment_id = req.params.id;
   const query = `UPDATE Comments SET 	is_deleted= 1 WHERE comment_id='${comment_id} RETURNING *'`;
