@@ -7,7 +7,8 @@ const {
   getAllPosts,
   getPostById,
   getpostByuserId,
-  updatepostById
+  updatepostById,
+  deletePostByUserId
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
@@ -19,6 +20,7 @@ PostRouter.get("/:postbyid", authentication, getPostById);
 
 PostRouter.get("/:userId", authentication, getpostByuserId);
 PostRouter.put("/update/:id", authentication, updatepostById);
+PostRouter.delete("/delete/:id", authentication, deletePostByUserId);
  
 
 module.exports = PostRouter;
