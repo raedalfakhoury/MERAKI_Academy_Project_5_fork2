@@ -2,12 +2,17 @@ const express = require("express")
 
 const {register,login,deleteUser,updateUser} =require("../controllers/user")
 
+const authentication = require("../middlewares/authentication");
+const authorization = require("../middlewares/authorization");
+
+
+
 const userRouter  = express()
 
 userRouter.post("/register",register)
 userRouter.post("/login",login)
-userRouter.delete("/delete",deleteUser)
-userRouter.put("/update",updateUser)
+userRouter.delete("/delete",authentication,deleteUser)
+userRouter.put("/update",authentication,updateUser)
 
 
 
