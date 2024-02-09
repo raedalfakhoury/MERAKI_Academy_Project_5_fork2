@@ -29,7 +29,11 @@ const createNewPost = (req, res) => {
     });
 };
 
-const getAllPosts = (req, res) => {
+
+
+const getpostByuserId = (req, res) => { 
+  const {userId} = req.params; 
+
   const query = `
       SELECT * FROM Posts JOIN Users 
       ON posts.user_id = Users.id  
@@ -93,6 +97,7 @@ const getPostById = (req, res) => {
 };
 const getpostByuserId = (req, res) => {
   const { userId } = req.params;
+
   const query = `
           SELECT * FROM 
           Posts
@@ -127,6 +132,17 @@ const getpostByuserId = (req, res) => {
     });
 };
 
+
+
+const getAllPosts = (req, res) => {
+  const query = `
+      SELECT * FROM Posts JOIN Users 
+      ON posts.user_id = Users.id  
+      WHERE posts.is_deleted = 0 AND Users.is_deleted = 0
+     
+  `;
+
+
 const updatepostById = (req, res) => {
   const { id } = req.params;
   const { content,media_url } = req.body;
@@ -134,6 +150,7 @@ const updatepostById = (req, res) => {
   SET content = $1 , media_url=$2
   WHERE id = $3;`;
   const values = [ content,media_url, id];
+
   pool
     .query(query, values)
     .then((result) => {
@@ -141,6 +158,21 @@ const updatepostById = (req, res) => {
         success: true,
         result: result.rows,
       });
+
+};
+
+
+const getPostById = (req, res) => {
+  const post_id = req.params.postbyid;
+
+  const query = `
+      SELECT * FROM Posts
+      WHERE id = $1 AND is_deleted = 0;
+  `;
+
+  const data = [post_id];
+
+
 
       throw Error;
     })
@@ -163,6 +195,53 @@ const deletePostByUserId = (req, res) => {
         success: true,
         result: result.rows,
       });
+
+}
+
+const deletePostById = (req, res) => {
+  const post_id = req.params.delete;
+
+  const query = `
+      UPDATE Posts
+      SET is_deleted = 1
+      WHERE id = $1 AND is_deleted = 0
+      RETURNING *;
+  `;
+
+  const data = [post_id];
+console.log(post_id);
+  pool
+      .query(query, data)
+      .then((result) => {
+          if (result.rows.length > 0) {
+              res.status(200).json({
+                  success: true,
+                  message: `Post with ID ${post_id} deleted successfully`,
+                  post: result.rows[0],
+              });
+          } else {
+              res.status(404).json({
+                  success: false,
+                  message: `Post with ID ${post_id} not found`,
+              });
+          }
+      })
+      .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+              success: false,
+              message: "Server error",
+              err: err.message,
+          });
+      });
+};
+
+
+
+
+ 
+
+
 
       throw Error;
     })

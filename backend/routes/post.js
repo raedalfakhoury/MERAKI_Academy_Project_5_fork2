@@ -11,12 +11,29 @@ const {
   deletePostByUserId
 } = require("../controllers/post");
 
+
+const {createNewPost,getAllPosts,getPostById,getpostByuserId ,deletePostById} = require('../controllers/post');
+
+ 
+
+const authentication =require("../middlewares/authentication")
+
+
+
+
+PostRouter.post("/create",authentication,createNewPost);
+
+PostRouter.get("/allpost", authentication,getAllPosts)
+PostRouter.get("/:postbyid",authentication,getPostById )
+PostRouter.delete("/:delete",authentication,deletePostById )
+
 const authentication = require("../middlewares/authentication");
 
 PostRouter.post("/create", authentication, createNewPost);
 
 PostRouter.get("/allpost", authentication, getAllPosts);
 PostRouter.get("/:postbyid", authentication, getPostById);
+
 
 PostRouter.get("/:userId", authentication, getpostByuserId);
 PostRouter.put("/update/:id", authentication, updatepostById);
