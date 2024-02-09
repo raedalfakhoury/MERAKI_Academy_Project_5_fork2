@@ -2,7 +2,7 @@ const express = require("express")
 
 
 const {
-    addStory,removeStory
+    addStory,removeStory,getAllStoryById
 } = require("../controllers/story");
 
 const authentication = require("../middlewares/authentication");
@@ -12,7 +12,8 @@ const storyRouter = express();
 
 
 storyRouter.post("/", authentication,addStory);
-storyRouter.delete("/", authentication, removeStory);
+storyRouter.delete("/:id", authentication, removeStory);
+storyRouter.get("/:id", authentication, getAllStoryById);
 
 
 module.exports = storyRouter;
