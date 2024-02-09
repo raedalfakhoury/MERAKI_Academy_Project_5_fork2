@@ -3,8 +3,8 @@ const PostRouter = express.Router();
 // Import articles controllers
 
 const {createNewPost} = require('../controllers/post');
-
-PostRouter.post("/create",createNewPost);
+const authentication =require("../middlewares/authentication")
+PostRouter.post("/create",authentication,createNewPost);
 
 
 
