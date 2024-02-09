@@ -15,7 +15,7 @@ const roleRouter = require("./routes/roles")
 
 const PostRouter =require("./routes/post")
 
-
+const storyRouter =require("./routes/story")
 const commentsRouter = require("./routes/comments");
 
 
@@ -26,6 +26,7 @@ app.use("/roles", roleRouter);
 app.use("/post",PostRouter)
 
 app.use("/comments", commentsRouter);
+app.use("/story", storyRouter);
 
 
 

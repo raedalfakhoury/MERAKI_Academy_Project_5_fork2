@@ -30,9 +30,9 @@ CREATE TABLE Users (
     password_hash VARCHAR(100) NOT NULL,
     bio TEXT,
     profile_picture_url VARCHAR(255) DEFAULT 'https://i.stack.imgur.com/l60Hf.png',
-    created_at TIMESTAMP  DEFAULT NOW(),
+    created_at TIMESTAMP DEFAULT NOW(),
     role_id INT,
-    is_deleted INT  DEFAULT 0,
+    is_deleted INT DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES Roles (id)
 );
 
@@ -75,7 +75,7 @@ CREATE TABLE Follows (
     follow_id SERIAL PRIMARY KEY,
     follower_id INT,
     followed_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (follower_id) REFERENCES Users (id),
     FOREIGN KEY (followed_id) REFERENCES Users (id)
 );
@@ -86,20 +86,19 @@ CREATE TABLE Notifications (
     user_id INT,
     content TEXT NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES Users (id)
 );
 
 -- Table: Stories
 CREATE TABLE Stories (
     id SERIAL PRIMARY KEY,
-    user_id = INT,
-    content TEXT NOT NULL,
+    user_id INT,
     media_url TEXT,
     video_url TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_deleted INT,
-    FOREIGN KEY (user_id) REFERENCES Users (id)
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (user_id) REFERENCES Users (id),
+    CONSTRAINT story_duration CHECK (created_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours')
 );
 
 -- Table: Reels
@@ -114,7 +113,6 @@ CREATE TABLE Reels (
     FOREIGN KEY (user_id) REFERENCES Users (id)
 );
 
-
 -- register
 INSERT INTO
     Users (
@@ -127,11 +125,7 @@ INSERT INTO
         is_deleted
     )
 VALUES
-    ($ 1, $ 2, $ 3, $ 4, $ 5, $ 6, $ 7) RETURNING *
-    
-    
-    
-     -- Inserting a new notification
+    ($ 1, $ 2, $ 3, $ 4, $ 5, $ 6, $ 7) RETURNING * -- Inserting a new notification
 INSERT INTO
     Notifications (user_id, content)
 VALUES
@@ -154,28 +148,25 @@ SET
 WHERE
     user_id = 123;
 
-
-
 --   const SoftDelete =  
-UPDATE users
-  SET is_deleted = 0
- WHERE id = 1 RETURNING *
+UPDATE
+    users
+SET
+    is_deleted = 0
+WHERE
+    id = 1 RETURNING * -- const hardDelete = 
+FROM
+    Users
+WHERE
+    id = $ { } RETURNING * -- update data type form table => 
+ALTER TABLE
+    users
+ALTER COLUMN
+    is_deleted
+SET
+    DEFAULT 0 -- ex update form table => 
+    const query = "UPDATE articles SET title=COALESCE($1,title),description=COALESCE($2,description) WHERE id=$3 RETURNING *;";
 
-
-
--- const hardDelete = 
- FROM Users
- WHERE id = ${} RETURNING *
-
-
-
- -- update data type form table => 
- ALTER TABLE users
-ALTER COLUMN is_deleted SET DEFAULT 0
-
-
-
--- ex update form table => 
-  const query =
-    "UPDATE articles SET title=COALESCE($1,title),description=COALESCE($2,description) WHERE id=$3 RETURNING *;";
-    const values = [title, description];
+const
+values
+    = [title, description];
