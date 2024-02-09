@@ -156,3 +156,13 @@ WHERE
 
 
 
+--   const SoftDelete =  
+UPDATE users
+  SET is_deleted = 0
+ WHERE id = 1 RETURNING *
+
+
+
+-- const hardDelete = 
+ FROM Users
+ WHERE id = ${} RETURNING *

@@ -1,17 +1,15 @@
 const { pool } = require("../models/db");
- 
-const bcryptjs = require("bcryptjs")
- 
+
+const bcryptjs = require("bcryptjs");
+
 const jwt = require("jsonwebtoken");
- 
+
 // role_id => users => 1
 const role_id = 1;
 // is deleted = 0 => is soft delete => => is_deleted = 1
 const is_deleted = 0;
 
-const SEC = process.env.SEC
-
-
+const SEC = process.env.SEC;
 
 const register = async (req, res) => {
   const { username, email, password_hash, bio, profile_picture_url } = req.body;
@@ -76,7 +74,7 @@ const login = (req, res) => {
   pool
     .query(query)
     .then((result) => {
-        console.log(result);
+      console.log(result);
       const data = result.rows[0];
       console.log(data);
       bcryptjs.compare(password, data.password_hash, (err, isValid) => {
@@ -85,7 +83,7 @@ const login = (req, res) => {
           payload = {
             user_id: data.id,
             name: data.username,
-            image:data.profile_picture_url,
+            image: data.profile_picture_url,
             role: data.role_id,
           };
           console.log(payload);
@@ -105,12 +103,12 @@ const login = (req, res) => {
             massage:
               "The email doesn’t exist or the password you’ve entered is incorrect",
           });
-          return
+          return;
         }
       });
     })
     .catch((err) => {
-        console.log(err);
+      console.log(err);
       res.status(403).json({
         success: false,
         massage:
@@ -118,7 +116,36 @@ const login = (req, res) => {
       });
     });
 };
-const deleteUser = (req, res) => {};
+const deleteUser = (req, res) => {
+  const user_id = req.token.user_id;
+
+  const querySoftDelete = ` UPDATE users
+  SET is_deleted = 1
+  WHERE id = ${user_id} RETURNING *`;
+    
+  pool.query(querySoftDelete).then((result)=>{
+    console.log(result.rows);
+    res.status(203).json({
+      message:"Successful Deleted",
+      result:result.rows     
+    })
+    if(result.rows.length === 0){
+      res.status(404).json({
+        massage:"not exist",
+        result : result.rows
+        
+      })
+      return
+    }
+  }).catch((err)=>{
+    res.status(500).json({
+      massage:"SERVER ERROR",
+      err : err
+      
+    })
+  })
+};
+
 const updateUser = (req, res) => {};
 
 module.exports = { register, login, deleteUser, updateUser };
