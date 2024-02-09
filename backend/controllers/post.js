@@ -28,6 +28,8 @@ const createNewPost = (req, res) => {
       });
     });
 };
+
+
 const getpostByuserId = (req, res) => { 
   const {userId} = req.params; 
   const query = `
@@ -65,14 +67,6 @@ const getpostByuserId = (req, res) => {
 };
 
 
-
-
-
-=======
- 
-module.exports = { createNewPost , getpostByuserId};
- 
-
 const getAllPosts = (req, res) => {
   const query = `
       SELECT * FROM Posts JOIN Users 
@@ -99,9 +93,6 @@ const getAllPosts = (req, res) => {
           });
       });
 };
-
-
-
 
 
 const getPostById = (req, res) => {
@@ -140,10 +131,47 @@ const getPostById = (req, res) => {
       });
 }
 
+const deletePostById = (req, res) => {
+  const post_id = req.params.delete;
 
-module.exports = { createNewPost,getAllPosts,getPostById  };
-=======
-module.exports = { createNewPost,getAllPosts };
+  const query = `
+      UPDATE Posts
+      SET is_deleted = 1
+      WHERE id = $1 AND is_deleted = 0
+      RETURNING *;
+  `;
+
+  const data = [post_id];
+console.log(post_id);
+  pool
+      .query(query, data)
+      .then((result) => {
+          if (result.rows.length > 0) {
+              res.status(200).json({
+                  success: true,
+                  message: `Post with ID ${post_id} deleted successfully`,
+                  post: result.rows[0],
+              });
+          } else {
+              res.status(404).json({
+                  success: false,
+                  message: `Post with ID ${post_id} not found`,
+              });
+          }
+      })
+      .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+              success: false,
+              message: "Server error",
+              err: err.message,
+          });
+      });
+};
+
+module.exports = { createNewPost,getAllPosts,getPostById, getpostByuserId ,deletePostById };
+
+
  
 
 
