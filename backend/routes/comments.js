@@ -4,6 +4,7 @@ const express = require("express");
 const {
   createNewComment,
   getCommentsByPostId,
+  deleteCommentsById
 } = require("../controllers/comments");
 
 //middleware
@@ -14,5 +15,6 @@ const commentsRouter = express.Router();
 
 commentsRouter.post("/:id",authentication,createNewComment);
 commentsRouter.get("/:id", getCommentsByPostId);
+commentsRouter.delete("/:id",deleteCommentsById)
 
 module.exports = commentsRouter;
