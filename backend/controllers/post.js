@@ -29,7 +29,33 @@ const createNewPost = (req, res) => {
     });
 };
 
-module.exports = { createNewPost };
+const getAllPosts = (req, res) => {
+  const query = `
+      SELECT * FROM Posts
+      WHERE is_deleted = 0;
+  `;
+
+  pool
+      .query(query)
+      .then((result) => {
+          res.status(200).json({
+              success: true,
+              message: "All posts retrieved successfully",
+              posts: result.rows,
+          });
+      })
+      .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+              success: false,
+              message: "Server error",
+              err: err.message,
+          });
+      });
+};
+
+
+module.exports = { createNewPost,getAllPosts };
 
 // CREATE TABLE Posts (
 //     id SERIAL PRIMARY KEY,
