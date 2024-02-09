@@ -28,8 +28,43 @@ const createNewPost = (req, res) => {
       });
     });
 };
+const getpostByuserId = (req, res) => { 
+  const {userId} = req.params; 
+  const query = `
+          SELECT * FROM 
+          Posts
+          JOIN Users ON Posts.user_id = Users.id 
+          WHERE Posts.user_id=$1 AND Users.is_deleted=0;
+        `;
+  const data = [userId];
 
-module.exports = { createNewPost };
+  pool
+    .query(query, data)
+    .then((result) => {
+      if (result.rows.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: `The user: ${userId} has no posts`,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: `All Posts for the user: ${userId}`,
+          result: result.rows,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err.message,
+      });
+    });
+};
+
+module.exports = { createNewPost , getpostByuserId};
 
 // CREATE TABLE Posts (
 //     id SERIAL PRIMARY KEY,

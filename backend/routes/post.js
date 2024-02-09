@@ -2,9 +2,10 @@ const express = require("express");
 const PostRouter = express.Router();
 // Import articles controllers
 
-const {createNewPost} = require('../controllers/post');
+const {createNewPost,getpostByuserId} = require('../controllers/post');
 const authentication =require("../middlewares/authentication")
 PostRouter.post("/create",authentication,createNewPost);
+PostRouter.get("/:userId",authentication,getpostByuserId);
 
 
 
