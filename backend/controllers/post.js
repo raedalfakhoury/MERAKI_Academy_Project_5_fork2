@@ -31,8 +31,10 @@ const createNewPost = (req, res) => {
 
 const getAllPosts = (req, res) => {
   const query = `
-      SELECT * FROM Posts
-      WHERE is_deleted = 0;
+      SELECT * FROM Posts JOIN Users 
+      ON posts.user_id = Users.id  
+      WHERE posts.is_deleted = 0 AND Users.is_deleted = 0
+     
   `;
 
   pool
