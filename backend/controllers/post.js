@@ -63,16 +63,7 @@ const getpostByuserId = (req, res) => {
       });
     });
 };
-
-
-
-
-
-=======
  
-module.exports = { createNewPost , getpostByuserId};
- 
-
 const getAllPosts = (req, res) => {
   const query = `
       SELECT * FROM Posts JOIN Users 
@@ -99,11 +90,7 @@ const getAllPosts = (req, res) => {
           });
       });
 };
-
-
-
-
-
+ 
 const getPostById = (req, res) => {
   const post_id = req.params.postbyid;
 
@@ -139,11 +126,8 @@ const getPostById = (req, res) => {
           });
       });
 }
-
-
-module.exports = { createNewPost,getAllPosts,getPostById  };
-=======
-module.exports = { createNewPost,getAllPosts };
+ 
+module.exports = { createNewPost,getAllPosts,getPostById,getpostByuserId  };
  
 
 
