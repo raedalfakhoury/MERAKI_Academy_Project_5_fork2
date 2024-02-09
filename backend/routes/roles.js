@@ -18,7 +18,7 @@ create Roles =>  test
 
 !body =>
 {
-    "role" : "admin"
+    "role" : "user"
 }
 
 */
