@@ -85,6 +85,7 @@ const login = (req, res) => {
             name: data.username,
             image: data.profile_picture_url,
             role: data.role_id,
+            is_deleted: data.is_deleted,
           };
           console.log(payload);
 
@@ -122,30 +123,58 @@ const deleteUser = (req, res) => {
   const querySoftDelete = ` UPDATE users
   SET is_deleted = 1
   WHERE id = ${user_id} RETURNING *`;
-    
-  pool.query(querySoftDelete).then((result)=>{
-    console.log(result.rows);
-    res.status(203).json({
-      message:"Successful Deleted",
-      result:result.rows     
+
+  pool
+    .query(querySoftDelete)
+    .then((result) => {
+      console.log(result.rows);
+      res.status(203).json({
+        message: "Successful Deleted",
+        result: result.rows,
+      });
+      if (result.rows.length === 0) {
+        res.status(404).json({
+          massage: "not exist",
+          result: result.rows,
+        });
+        return;
+      }
     })
-    if(result.rows.length === 0){
-      res.status(404).json({
-        massage:"not exist",
-        result : result.rows
-        
-      })
-      return
-    }
-  }).catch((err)=>{
-    res.status(500).json({
-      massage:"SERVER ERROR",
-      err : err
-      
-    })
-  })
+    .catch((err) => {
+      res.status(500).json({
+        massage: "SERVER ERROR",
+        err: err,
+      });
+    });
 };
 
-const updateUser = (req, res) => {};
+const updateUser = (req, res) => {
+  const user_id = req.token.user_id;
+  const { username, profile_picture_url, bio } = req.body;
+  const query = `UPDATE Users SET username=COALESCE($1,username),profile_picture_url=COALESCE($2,profile_picture_url) ,bio=COALESCE($3,bio) WHERE id=$4 RETURNING *;`;
+  const VALUES = [username, profile_picture_url, bio, user_id];
+
+  pool
+    .query(query, VALUES)
+    .then((result) => {
+      res.status(200).json({
+        message: "Updated successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      if (err.code === "23505") {
+        res.status(200).json({
+          message: "username exists",
+          err: err,
+        });
+        return;
+      }
+      res.status(500).json({
+        message: err.message,
+        err: err,
+      });
+    });
+};
 
 module.exports = { register, login, deleteUser, updateUser };
