@@ -4,6 +4,7 @@ const express = require("express");
 const {
   createNewComment,
   getCommentsByPostId,
+  updateCommentsById
 } = require("../controllers/comments");
 
 //middleware
@@ -14,5 +15,5 @@ const commentsRouter = express.Router();
 
 commentsRouter.post("/:id",authentication,createNewComment);
 commentsRouter.get("/:id", getCommentsByPostId);
-
+commentsRouter.put("/:id", authentication,updateCommentsById);
 module.exports = commentsRouter;
