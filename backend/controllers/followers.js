@@ -43,5 +43,24 @@ const getAllFollwers = async (req, res) => {
   }
 };
 
-
-module.exports = { addFollowers , getAllFollwers};
+const deleteFollowed = async (req, res) => {
+    try {
+        const {followed_id} = req.body ;
+        const query = `DELETE FROM Follows WHERE followed_id=$1`;
+        const data = [followed_id]
+      const result = await pool.query(query,data);
+      
+      res.status(200).json({
+        success: true,
+        message: "deleted successfully",
+        result: result.rows,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: error,
+      });
+    }
+  };
+module.exports = { addFollowers , getAllFollwers ,deleteFollowed};
