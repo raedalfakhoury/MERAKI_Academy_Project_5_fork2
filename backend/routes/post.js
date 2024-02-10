@@ -19,8 +19,10 @@ PostRouter.post("/create", authentication, createNewPost);
 PostRouter.get("/:postbyid", authentication, getPostById);
 
 PostRouter.get("/:userId", authentication, getpostByuserId);
-
-PostRouter.delete("/delete/:id", authentication, deletePostByUserId);
+ 
+PostRouter.put("/update/:id", authentication, updatepostById);
+PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
+ 
 
 PostRouter.put("/update/:id", authentication, updatepostById);
 
@@ -28,6 +30,7 @@ PostRouter.get("/allpost", authentication, getAllPosts);
 
 PostRouter.delete("/:id", authentication,deletePostById );
 
+ 
 
 module.exports = PostRouter;
 

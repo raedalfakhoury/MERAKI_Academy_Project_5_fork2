@@ -107,7 +107,9 @@ const updatepostById = (req, res) => {
   const { content, media_url } = req.body;
   const query = `UPDATE Posts
   SET content = $1 , media_url=$2
+ 
   WHERE id = $3 RETURNING *;`;
+ 
   const values = [content, media_url, id];
   pool
     .query(query, values)
@@ -129,8 +131,11 @@ const updatepostById = (req, res) => {
 };
 
 const deletePostByUserId = (req, res) => {
-  const { id } = req.params;
-  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`
+ 
+  const id = req.token.user_id;
+  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1 ;`;
+  
+ 
   const values = [id];
   pool
     .query(query, values)
@@ -149,6 +154,7 @@ const deletePostByUserId = (req, res) => {
       });
     });
 };
+ 
 
 const getAllPosts = (req, res) => {
   const query = `SELECT * FROM Posts JOIN Users 
@@ -197,12 +203,15 @@ const deletePostById = (req, res) => {
 
 module.exports = {
   createNewPost,
+ 
   getPostById,
   getpostByuserId,
   updatepostById,
   deletePostByUserId,
+ 
   getAllPosts,
   deletePostById 
+ 
 };
 
 // CREATE TABLE Posts (
