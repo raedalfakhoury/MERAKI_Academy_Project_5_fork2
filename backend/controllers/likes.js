@@ -5,7 +5,7 @@ const createNewLike = (req, res) => {
   const user_id = req.token.user_id;
   const likes_count = 1;
 
-  const checkQuery = `SELECT * FROM Likes WHERE user_id = '${user_id}' AND post_id = '${post_id}';`;
+  const checkQuery = `SELECT * FROM Likes WHERE user_id = ${user_id} AND post_id = '${post_id}';`;
   const checkData = [user_id, post_id];
 
   pool.query(checkQuery)
