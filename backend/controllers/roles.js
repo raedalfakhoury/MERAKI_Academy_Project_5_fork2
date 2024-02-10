@@ -28,7 +28,26 @@ const createNewRole = (req, res) => {
       });
     });
 };
-const createNewPermission = (req, res) => {};
+const createNewPermission = (req, res) => {
+  const { permission } = req.body;
+  const query = `INSERT INTO Permissions (permission) VALUES ('${permission}') RETURNING *`;
+  pool
+    .query(query)
+    .then((permission) => {
+      res.status(201).json({
+        success: true,
+        massage: "permission created successfully",
+        permission: permission.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        massage: "Server error",
+        err: err,
+      });
+    });
+};
 const createNewRolePermission = (req, res) => {};
 
 module.exports = {
