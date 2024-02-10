@@ -29,8 +29,6 @@ const createNewPost = (req, res) => {
     });
 };
 
-
-
 const getPostById = (req, res) => {
   const post_id = req.params.postbyid;
 
@@ -66,8 +64,6 @@ const getPostById = (req, res) => {
       });
     });
 };
-
-
 
 const getpostByuserId = (req, res) => {
   const { userId } = req.params;
@@ -106,8 +102,6 @@ const getpostByuserId = (req, res) => {
     });
 };
 
-
-
 const updatepostById = (req, res) => {
   const { id } = req.params;
   const { content, media_url } = req.body;
@@ -115,7 +109,7 @@ const updatepostById = (req, res) => {
   SET content = $1 , media_url=$2
  
   WHERE id = $3 RETURNING *;`;
- 
+
   const values = [content, media_url, id];
   pool
     .query(query, values)
@@ -136,14 +130,10 @@ const updatepostById = (req, res) => {
     });
 };
 
-
-
 const deletePostByUserId = (req, res) => {
- 
   const id = req.token.user_id;
   const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1 ;`;
-  
- 
+
   const values = [id];
   pool
     .query(query, values)
@@ -162,12 +152,11 @@ const deletePostByUserId = (req, res) => {
       });
     });
 };
- 
 
 const getAllPosts = (req, res) => {
   const query = `SELECT * FROM Posts JOIN Users 
       ON posts.user_id = Users.id  
-      WHERE posts.is_deleted = 0 AND Users.is_deleted = 0 ;`
+      WHERE posts.is_deleted = 0 AND Users.is_deleted = 0 ;`;
   pool
     .query(query)
     .then((result) => {
@@ -187,11 +176,9 @@ const getAllPosts = (req, res) => {
     });
 };
 
-
-
 const deletePostById = (req, res) => {
   const id = req.params.id;
-  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`
+  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`;
   const values = [id];
   pool
     .query(query, values)
@@ -211,18 +198,42 @@ const deletePostById = (req, res) => {
     });
 };
 
+// كل المنشورات للاشخاص الذي اتابعهم مع منشوراتي
+const getAllPostsMyFriends = (req, res) => {
+  const user_id = req.token.user_id;
+  const query = `SELECT Posts.*
+  FROM Posts
+  JOIN Follows ON Posts.user_id = Follows.followed_id OR Follows.follower_id = Posts.user_id
+  WHERE Follows.follower_id =${user_id};`;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "All followed",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
 
 module.exports = {
   createNewPost,
- 
+
   getPostById,
   getpostByuserId,
   updatepostById,
   deletePostByUserId,
- 
+
   getAllPosts,
-  deletePostById 
- 
+  deletePostById,
+  getAllPostsMyFriends,
 };
 
 // CREATE TABLE Posts (

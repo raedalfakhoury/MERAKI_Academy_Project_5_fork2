@@ -171,3 +171,23 @@ SET
 const
 values
     = [title, description];
+
+
+
+
+
+
+
+
+    -- git followed_id الشخص الي انا متابعه صاحب ال  =>id   =>=> image && name
+    SELECT Users.username, Users.profile_picture_url
+FROM Users
+JOIN Follows ON Users.id = Follows.follower_id
+WHERE Follows.followed_id = 12;
+
+
+--  جبب كل البوستات للاصدقاء
+SELECT Posts.*
+FROM Posts
+JOIN Follows ON Posts.user_id = Follows.followed_id
+WHERE Follows.follower_id = 1;
