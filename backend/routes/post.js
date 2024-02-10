@@ -9,7 +9,8 @@ const {
   updatepostById,
   deletePostByUserId,
   getAllPosts,
-  deletePostById 
+  deletePostById ,
+  getAllPostsMyFriends
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
@@ -30,6 +31,12 @@ PostRouter.get("/allpost", authentication, getAllPosts);
 
 PostRouter.delete("/:id", authentication,deletePostById );
 
+
+
+
+
+
+PostRouter.get("/:id/getAllPostsMyFollower", authentication, getAllPostsMyFriends);
  
 
 module.exports = PostRouter;
@@ -47,3 +54,14 @@ module.exports = PostRouter;
 //     "content": "NO ONE CAN BE AT PEACE UNLESS THEY HAVE FREEDOM",
 //     "media_url": "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
 // }
+
+
+
+//! http://localhost:5000/post/1/getAllPostsMyFollower  {API method : get}
+/* 
+{
+
+
+}
+
+*/

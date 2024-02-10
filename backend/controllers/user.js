@@ -69,7 +69,7 @@ const login = (req, res) => {
 
   const query = `SELECT Users.id,Users.username,Users.email,Users.password_hash,Users.bio, Users.profile_picture_url,Users.is_deleted,Users.created_at,roles.id AS RoleId FROM Users
   JOIN Roles ON Users.role_id=Roles.id 
-    WHERE Users.email=$1`;
+    WHERE Users.email=$1 AND is_deleted = 0`;
 
   pool
     .query(query,[email])

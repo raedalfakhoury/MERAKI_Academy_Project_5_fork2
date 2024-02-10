@@ -63,4 +63,10 @@ const deleteFollowed = async (req, res) => {
       });
     }
   };
+
+
+
+
+
+
 module.exports = { addFollowers , getAllFollwers ,deleteFollowed};
