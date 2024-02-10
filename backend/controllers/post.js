@@ -29,6 +29,8 @@ const createNewPost = (req, res) => {
     });
 };
 
+
+
 const getPostById = (req, res) => {
   const post_id = req.params.postbyid;
 
@@ -64,6 +66,8 @@ const getPostById = (req, res) => {
       });
     });
 };
+
+
 
 const getpostByuserId = (req, res) => {
   const { userId } = req.params;
@@ -102,6 +106,8 @@ const getpostByuserId = (req, res) => {
     });
 };
 
+
+
 const updatepostById = (req, res) => {
   const { id } = req.params;
   const { content, media_url } = req.body;
@@ -129,6 +135,8 @@ const updatepostById = (req, res) => {
       });
     });
 };
+
+
 
 const deletePostByUserId = (req, res) => {
  
@@ -178,6 +186,9 @@ const getAllPosts = (req, res) => {
       });
     });
 };
+
+
+
 const deletePostById = (req, res) => {
   const id = req.params.id;
   const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`

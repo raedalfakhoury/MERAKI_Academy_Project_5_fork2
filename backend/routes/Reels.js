@@ -2,7 +2,7 @@ const express = require("express");
 const ReelsRouter = express.Router();
 
 
-const {createNewReels,deleteReels}=require("../controllers/Reels");
+const {createNewReels,deleteReels,getReelsByUser}=require("../controllers/Reels");
 
 const authentication = require("../middlewares/authentication");
 
@@ -11,6 +11,7 @@ ReelsRouter.delete("/delete/:id",authentication,deleteReels );
 
 
 
+ReelsRouter.get ("/:id",authentication,getReelsByUser)
 
 
 
