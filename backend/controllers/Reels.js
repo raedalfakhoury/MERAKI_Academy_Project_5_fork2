@@ -29,7 +29,32 @@ const createNewReels = (req, res) => {
 
     })
 
-}
+};
+
+
+const deleteReels = (req, res) => {
+    
+    const Reels_id = req.params.id;
+    const query = `UPDATE Reels SET is_deleted = 1 WHERE id=${Reels_id} RETURNING *`;
+
+    pool
+        .query(query)
+        .then((result) => {
+            res.status(200).json({
+                success: true,
+                message: "All reels deleted successfully",
+                result: result.rows,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                success: false,
+                message: "Server error",
+                result: err.message,
+            });
+        });
+};
 
 
 
@@ -41,4 +66,5 @@ const createNewReels = (req, res) => {
 
 
 
-module.exports = {createNewReels,}
+
+module.exports = {createNewReels,deleteReels}
