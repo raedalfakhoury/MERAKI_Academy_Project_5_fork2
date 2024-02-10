@@ -1,14 +1,5 @@
 const { pool } = require("../models/db");
-/*
-SELECT Users.username,
-follower_id AS UsersID, 'FOLLOWER' AS relationship FROM Follows JOIN Users
-ON Follows.follower_id = Users.id 
-UNION 
-
-SELECT Users.username, followed_id AS UsersID, 'FOLLOWING '  AS relationship FROM Follows JOIN Users
-ON Follows.followed_id = Users.id ;
  
-*/
 const addFollowers = async (req, res) => {
   try {
     const follower_id = req.token.user_id;
@@ -19,7 +10,29 @@ const addFollowers = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "created successfully",
-      result: result.rows[0],
+      result: result.rows,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      err: error,
+    });
+  }
+};
+
+const getAllFollwers = async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT Follower.username as FollowerName, Followed.username as FollowedUser,Followed.bio
+    FROM Follows  as F
+    INNER JOIN Users Follower ON F.follower_id = Follower.id
+    INNER JOIN Users Followed ON F.followed_id = Followed.id`);
+
+    res.status(200).json({
+      success: true,
+      message: "get successfully",
+      result: result.rows,
     });
   } catch (error) {
     res.status(500).json({
@@ -30,4 +43,5 @@ const addFollowers = async (req, res) => {
   }
 };
 
-module.exports = { addFollowers };
+
+module.exports = { addFollowers , getAllFollwers};
