@@ -108,7 +108,7 @@ CREATE TABLE Reels (
     description TEXT,
     video_url TEXT NOT NULL,
     creation_date TIMESTAMP DEFAULT NOW(),
-    is_deleted INT,
+    is_deleted INT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users (id)
 );
 
