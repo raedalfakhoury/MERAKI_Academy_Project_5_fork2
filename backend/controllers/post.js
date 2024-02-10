@@ -29,33 +29,6 @@ const createNewPost = (req, res) => {
     });
 };
 
-const getAllPosts = (req, res) => {
-  const query = `
-      SELECT * FROM Posts JOIN Users 
-      ON posts.user_id = Users.id  
-      WHERE posts.is_deleted = 0 AND Users.is_deleted = 0
-     
-  `;
-
-  pool
-    .query(query)
-    .then((result) => {
-      res.status(200).json({
-        success: true,
-        message: "All posts retrieved successfully",
-        posts: result.rows,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        success: false,
-        message: "Server error",
-        err: err.message,
-      });
-    });
-};
-
 const getPostById = (req, res) => {
   const post_id = req.params.postbyid;
 
@@ -91,8 +64,10 @@ const getPostById = (req, res) => {
       });
     });
 };
+
 const getpostByuserId = (req, res) => {
   const { userId } = req.params;
+
   const query = `
           SELECT * FROM 
           Posts
@@ -132,7 +107,9 @@ const updatepostById = (req, res) => {
   const { content, media_url } = req.body;
   const query = `UPDATE Posts
   SET content = $1 , media_url=$2
-  WHERE id = $3;`;
+ 
+  WHERE id = $3 RETURNING *;`;
+ 
   const values = [content, media_url, id];
   pool
     .query(query, values)
@@ -152,9 +129,13 @@ const updatepostById = (req, res) => {
       });
     });
 };
+
 const deletePostByUserId = (req, res) => {
+ 
   const id = req.token.user_id;
   const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1 ;`;
+  
+ 
   const values = [id];
   pool
     .query(query, values)
@@ -173,13 +154,64 @@ const deletePostByUserId = (req, res) => {
       });
     });
 };
+ 
+
+const getAllPosts = (req, res) => {
+  const query = `SELECT * FROM Posts JOIN Users 
+      ON posts.user_id = Users.id  
+      WHERE posts.is_deleted = 0 AND Users.is_deleted = 0 ;`
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "All posts retrieved successfully",
+        posts: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err.message,
+      });
+    });
+};
+const deletePostById = (req, res) => {
+  const id = req.params.id;
+  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`
+  const values = [id];
+  pool
+    .query(query, values)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        result: result.rows,
+      });
+
+      throw Error;
+    })
+    .catch((err) => {
+      res.status(409).json({
+        success: false,
+        err,
+      });
+    });
+};
+
+
 module.exports = {
   createNewPost,
-  getAllPosts,
+ 
   getPostById,
   getpostByuserId,
   updatepostById,
   deletePostByUserId,
+ 
+  getAllPosts,
+  deletePostById 
+ 
 };
 
 // CREATE TABLE Posts (

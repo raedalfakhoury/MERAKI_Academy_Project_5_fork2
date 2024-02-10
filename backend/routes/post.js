@@ -4,23 +4,32 @@ const PostRouter = express.Router();
 
 const {
   createNewPost,
-  getAllPosts,
   getPostById,
   getpostByuserId,
   updatepostById,
-  deletePostByUserId
+  deletePostByUserId,
+  getAllPosts,
+  deletePostById 
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
 
 PostRouter.post("/create", authentication, createNewPost);
 
-PostRouter.get("/allpost", authentication, getAllPosts);
 PostRouter.get("/:postbyid", authentication, getPostById);
 
 PostRouter.get("/:userId", authentication, getpostByuserId);
+ 
 PostRouter.put("/update/:id", authentication, updatepostById);
 PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
+ 
+
+PostRouter.put("/update/:id", authentication, updatepostById);
+
+PostRouter.get("/allpost", authentication, getAllPosts);
+
+PostRouter.delete("/:id", authentication,deletePostById );
+
  
 
 module.exports = PostRouter;

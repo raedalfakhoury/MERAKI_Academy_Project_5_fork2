@@ -14,18 +14,24 @@ const userRouter = require("./routes/user")
 const roleRouter = require("./routes/roles")
 
 const PostRouter =require("./routes/post")
+const ReelsRouter =require("./routes/Reels")
 
-
+const storyRouter =require("./routes/story")
 const commentsRouter = require("./routes/comments");
-
+const likesRouter = require("./routes/likes")
 
 
 app.use("/users", userRouter);
 app.use("/roles", roleRouter);
-
 app.use("/post",PostRouter)
 
+app.use("/Reels",ReelsRouter)
+
+
+
 app.use("/comments", commentsRouter);
+app.use("/story", storyRouter);
+app.use("/likes", likesRouter)
 
 
 
