@@ -67,30 +67,31 @@ const register = async (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  const query = `SELECT * FROM users
-    JOIN Roles ON users.role_id=Roles.id 
-    WHERE email='${email}'`;
+  const query = `SELECT Users.id,Users.username,Users.email,Users.password_hash,Users.bio, Users.profile_picture_url,Users.is_deleted,Users.created_at,roles.id AS RoleId FROM Users
+  JOIN Roles ON Users.role_id=Roles.id 
+    WHERE Users.email=$1`;
 
   pool
-    .query(query)
+    .query(query,[email])
     .then((result) => {
-      console.log(result);
+      
+      
       const data = result.rows[0];
       console.log(data);
       bcryptjs.compare(password, data.password_hash, (err, isValid) => {
         console.log(err);
         if (isValid) {
          
-          payload = {
+         const payload = {
             user_id: data.id,
             name: data.username,
             image: data.profile_picture_url,
-            role: data.role_id,
+            role: data.roleid,
             is_deleted: data.is_deleted,
           };
-          console.log(payload);
+          // console.log(payload);
 
-          options = { expiresIn: "360m" };
+          const options = { expiresIn: "360m" };
 
           const token = jwt.sign(payload, SEC, options);
           res.status(200).json({
