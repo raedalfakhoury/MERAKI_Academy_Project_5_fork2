@@ -129,11 +129,11 @@ const getpostByuserId = (req, res) => {
 
 const updatepostById = (req, res) => {
   const { id } = req.params;
-  const { content,media_url } = req.body;
+  const { content, media_url } = req.body;
   const query = `UPDATE Posts
   SET content = $1 , media_url=$2
   WHERE id = $3;`;
-  const values = [ content,media_url, id];
+  const values = [content, media_url, id];
   pool
     .query(query, values)
     .then((result) => {
@@ -148,12 +148,12 @@ const updatepostById = (req, res) => {
       console.log(err);
       res.status(409).json({
         success: false,
-        err
+        err,
       });
     });
 };
 const deletePostByUserId = (req, res) => {
-  const { id } = req.params; 
+  const id = req.token.user_id;
   const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1 ;`;
   const values = [id];
   pool
@@ -166,14 +166,21 @@ const deletePostByUserId = (req, res) => {
 
       throw Error;
     })
-    .catch((err) => { 
+    .catch((err) => {
       res.status(409).json({
         success: false,
-        err
+        err,
       });
     });
 };
-module.exports = { createNewPost, getAllPosts, getPostById, getpostByuserId ,updatepostById,deletePostByUserId};
+module.exports = {
+  createNewPost,
+  getAllPosts,
+  getPostById,
+  getpostByuserId,
+  updatepostById,
+  deletePostByUserId,
+};
 
 // CREATE TABLE Posts (
 //     id SERIAL PRIMARY KEY,

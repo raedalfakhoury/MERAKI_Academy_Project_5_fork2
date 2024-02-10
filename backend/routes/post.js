@@ -20,7 +20,7 @@ PostRouter.get("/:postbyid", authentication, getPostById);
 
 PostRouter.get("/:userId", authentication, getpostByuserId);
 PostRouter.put("/update/:id", authentication, updatepostById);
-PostRouter.delete("/delete/:id", authentication, deletePostByUserId);
+PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
  
 
 module.exports = PostRouter;

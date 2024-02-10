@@ -35,6 +35,16 @@ CREATE TABLE Users (
     is_deleted INT  DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES Roles (id)
 );
+ 
+ -- Table: Follows (Many-to-Many)
+CREATE TABLE Follows (
+    follow_id SERIAL PRIMARY KEY,
+    follower_id INT,
+    followed_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES Users (id),
+    FOREIGN KEY (followed_id) REFERENCES Users (id)
+);
 
 -- Table: Posts
 CREATE TABLE Posts (
@@ -70,15 +80,10 @@ CREATE TABLE Likes (
     FOREIGN KEY (post_id) REFERENCES Posts (id)
 );
 
--- Table: Follows (Many-to-Many)
-CREATE TABLE Follows (
-    follow_id SERIAL PRIMARY KEY,
-    follower_id INT,
-    followed_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (follower_id) REFERENCES Users (id),
-    FOREIGN KEY (followed_id) REFERENCES Users (id)
-);
+
+
+
+
 
 -- Table: Notifications
 CREATE TABLE Notifications (
