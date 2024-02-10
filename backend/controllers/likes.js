@@ -5,7 +5,7 @@ const createNewLike = (req, res) => {
   const user_id = req.token.user_id;
   const likes_count = 1;
 
-  const checkQuery = `SELECT * FROM Likes WHERE user_id = ${user_id} AND post_id = '${post_id}';`;
+  const checkQuery = `SELECT * FROM Likes WHERE user_id = '${user_id}' AND post_id = '${post_id}';`;
   const checkData = [user_id, post_id];
 
   pool.query(checkQuery)
@@ -38,6 +38,31 @@ const createNewLike = (req, res) => {
     });
 };
 
+
+const counterOfLikes = (req,res)=>{
+  const post_id = req.params.id;
+  const query = `SELECT COUNT(likes_count) FROM Likes WHERE post_id='${post_id}';`
+  pool
+  .query(query)
+  .then((result) => {
+    const likes_counter = result.rows[0].count
+    res.status(200).json({
+      success: true,
+      message: `All Likes for post: ${post_id} =   ${likes_counter}`,
+      LikesCounter: result.rows[0].count * 1,
+    });
+  })
+  .catch((err) => {
+      console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      err: err,
+    });
+  });
+}
+
 module.exports = {
   createNewLike,
+  counterOfLikes
 };
