@@ -8,8 +8,7 @@ function Home() {
    {/* <Navbar/>
    <Weather/>
    <div>Home</div> */}
-   <Post/>
-    
+   <Post/>  
     </>
   
   )
