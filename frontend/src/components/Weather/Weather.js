@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { React, useEffect, useState } from "react";
 import axios from "axios";
@@ -44,8 +45,25 @@ function Weather() {
   };
   getData();
   useEffect(() => {
-    getCoordinates();
+    getCoordinates()
+      .then(async (result) => {
+       await getData(result?.coords?.latitude, result?.coords?.longitude)
+      })
+      .catch((err) => {
+        console.log('error from get coordinate ',err);
+      });
   }, []);
+
+const nextDays = ()=>{
+  const days = forecast?.forecastday?.map((item,i)=>{
+    return <div key={i} className="dayInfo">
+     <h4>{item?.date}</h4>
+     
+    </div>
+  })
+}
+
+
   return <div>Weather</div>;
 }
 
