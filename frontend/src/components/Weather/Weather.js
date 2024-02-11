@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { React, useEffect, useState } from 'react'
-import axios from 'axios';
- 
+import { React, useEffect, useState } from "react";
+import axios from "axios";
 
 function Weather() {
   const getCoordinates = async () => {
@@ -11,10 +10,11 @@ function Weather() {
         (error) => reject(error)
       );
     });
-  }
-  return (
-    <div>Weather</div>
-  )
+  };
+  useEffect(() => {
+    getCoordinates();
+  }, []);
+  return <div>Weather</div>;
 }
 
-export default Weather
+export default Weather;
