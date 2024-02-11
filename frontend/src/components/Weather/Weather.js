@@ -3,6 +3,8 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 
 function Weather() {
+  const [currentWeather, setCurrentWeather] = useState();
+  const [loader,setLoader]=useState(true)
   const getCoordinates = async () => {
     return await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
@@ -18,8 +20,11 @@ function Weather() {
     try {
 
       const result = await axios.get(url)
+      setCurrentWeather(result?.data)
       console.log(result.data);
-      
+      if (result.data) {
+        setLoader(false)
+      }
        
     
     } catch (error) {
