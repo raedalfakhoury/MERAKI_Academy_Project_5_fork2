@@ -201,10 +201,11 @@ const deletePostById = (req, res) => {
 // كل المنشورات للاشخاص الذي اتابعهم مع منشوراتي
 const getAllPostsMyFriends = (req, res) => {
   const user_id = req.token.user_id;
-  const query = `SELECT Posts.*
+  const query = `SELECT Posts.* , Users.username ,Users.profile_picture_url
   FROM Posts
   JOIN Follows ON Posts.user_id = Follows.followed_id OR Follows.follower_id = Posts.user_id
-  WHERE Follows.follower_id =${user_id};`;
+  JOIN Users ON Posts.user_id = Users.id
+  WHERE Follows.follower_id =${user_id} AND Posts.is_deleted = 0;`
 
   pool
     .query(query)
