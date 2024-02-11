@@ -47,22 +47,27 @@ function Weather() {
   useEffect(() => {
     getCoordinates()
       .then(async (result) => {
-       await getData(result?.coords?.latitude, result?.coords?.longitude)
+        await getData(result?.coords?.latitude, result?.coords?.longitude);
       })
       .catch((err) => {
-        console.log('error from get coordinate ',err);
+        console.log("error from get coordinate ", err);
       });
   }, []);
 
-const nextDays = ()=>{
-  const days = forecast?.forecastday?.map((item,i)=>{
-    return <div key={i} className="dayInfo">
-     <h4>{item?.date}</h4>
-     
-    </div>
-  })
-}
-
+  const nextDays = () => {
+    const days = forecast?.forecastday?.map((item, i) => {
+      return (
+        <div key={i} className="dayInfo">
+          <h4>{item?.date}</h4>
+          <img alt="" src={`${item?.day?.condition?.icon}`}></img>
+          <p className="p">{`Max ${Math.round(
+            item?.day?.maxtemp_c
+          )} °C / Min ${Math.round(item?.day?.mintemp_c)} °C `}</p>
+        </div>
+      );
+    });
+    return days;
+  };
 
   return <div>Weather</div>;
 }

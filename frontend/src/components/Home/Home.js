@@ -5,9 +5,9 @@ import Weather from "../Weather/Weather"
 function Home() {
   return (
     <>
-   <Navbar/>
+   {/* <Navbar/> */}
    <Weather/>
-   <div>Home</div>
+   {/* <div>Home</div> */}
     
     </>
   
