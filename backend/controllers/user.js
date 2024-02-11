@@ -72,17 +72,14 @@ const login = (req, res) => {
     WHERE Users.email=$1 AND is_deleted = 0`;
 
   pool
-    .query(query,[email])
+    .query(query, [email])
     .then((result) => {
-      
-      
       const data = result.rows[0];
       console.log(data);
       bcryptjs.compare(password, data.password_hash, (err, isValid) => {
         console.log(err);
         if (isValid) {
-         
-         const payload = {
+          const payload = {
             user_id: data.id,
             name: data.username,
             image: data.profile_picture_url,
@@ -122,9 +119,10 @@ const login = (req, res) => {
 const deleteUser = (req, res) => {
   const user_id = req.token.user_id;
 
-  const querySoftDelete = ` UPDATE users
-  SET is_deleted = 1
-  WHERE id = ${user_id} RETURNING *`;
+  const querySoftDelete = `UPDATE Users
+  SET is_deleted = 1, username = 'username', profile_picture_url = 'https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png'
+  WHERE id = ${user_id}
+  RETURNING *`;
 
   pool
     .query(querySoftDelete)
