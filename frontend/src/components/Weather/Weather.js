@@ -5,6 +5,7 @@ import axios from "axios";
 import { FaTemperatureArrowUp, FaTemperatureArrowDown } from "react-icons/fa6";
 import { MdOutlineDescription } from "react-icons/md";
 import { WiHumidity, WiStrongWind, WiBarometer } from "react-icons/wi";
+import '../Weather/Weather.css'
 function Weather() {
   const [currentWeather, setCurrentWeather] = useState();
   const [loader, setLoader] = useState(true);
