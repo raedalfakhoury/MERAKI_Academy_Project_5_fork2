@@ -11,6 +11,23 @@ function Weather() {
       );
     });
   };
+  const getData = async (lat, lang) => {
+ 
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lang}&appid=20df6ed2d3d499f39b1ec55b2f5a7406&units=metric`
+ 
+    try {
+
+      const result = await axios.get(url)
+      console.log(result.data);
+      
+       
+    
+    } catch (error) {
+      console.log("ERROR ====> ", error);
+    }
+
+  }
+  getData()
   useEffect(() => {
     getCoordinates();
   }, []);
