@@ -17,7 +17,7 @@ function Post() {
         <Container className="containerPosts">
           <Row>
             <Col className="navCreatePost" style={{ padding: "0" }}>
-              <Col className="box active">
+              <Col className="box">
                 <span class="icon is-small">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -223,75 +223,88 @@ function Post() {
                 </Col>
               </Row>
             </Row>
-            <Row style={{ position: "relative" }} className="card-footer-post">
+            <Row className="card-footer-post">
               <Col
-                md={{ span: 1, offset: 0 }}
                 xs={4}
                 style={{
-                  position: "absolute",
-                  height: "2vw",
-                  width: "180px",
+                  display: "flex",
+                  flexDirection: "row",
+
+                  height: "60px",
+                  minWidth: "100px",
                   paddingTop: "5px",
+                  flexWrap: "nowrap",
                 }}
               >
-                <Image
+                <div
                   style={{
-                    maxWidth: "100%",
-                    height: "100%",
-                    position: "absolute",
+                    flex: 1,
+                    height: "40px",
                     border: "solid 2px #fff",
+                    width: "2",
+                    overflow: "hidden",
                   }}
-                  src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  roundedCircle
-                />
-                <Image
-                  style={{
-                    maxWidth: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    left: "25%",
-                    border: "solid 2px #fff",
-                  }}
-                  src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  roundedCircle
-                />
-                <Image
-                  style={{
-                    maxWidth: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    left: "40%",
-                    border: "solid 2px #fff",
-                  }}
-                  src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  roundedCircle
-                />
-                <Image
-                  style={{
-                    maxWidth: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    left: "55%",
-                    border: "solid 2px #fff",
-                  }}
-                  src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  roundedCircle
-                />
+                >
+                  <Image
+                    style={{
+                      flex: 1,
+                      height: "40px",
+                      width: "40px",
+                      border: "solid 2px #fff",
+                    }}
+                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    roundedCircle
+                  />
+
+                  <Image
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      marginLeft: "-10px",
+                      border: "solid 2px #fff",
+                    }}
+                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    roundedCircle
+                  />
+                  <Image
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      marginLeft: "-10px",
+                      border: "solid 2px #fff",
+                    }}
+                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    roundedCircle
+                  />
+                  <Image
+                    style={{
+                      height: "40px",
+                      width: "40px",
+                      marginLeft: "-10px",
+                      border: "solid 2px #fff",
+                    }}
+                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    roundedCircle
+                  />
+                </div>
               </Col>
-              <Col style={{ paddingLeft: "150px" }}>
+              <Col xs={2}>
                 <span
                   class="usernameLap"
                   style={{
                     fontSize: "10px",
                     fontFamily: "cursive",
                     fontWeight: "bold",
+                    marginLeft: "-40px",
                   }}
                 >
                   jamal And sara
                 </span>
-                <p class="xx">and 23 more liked this</p>
+                <p style={{ marginLeft: "-40px" }} class="xx">
+                  and 23 more liked this
+                </p>
               </Col>
-              <Col style={{ paddingTop: "7px" }}>
+              <Col className="comment-ic" style={{ paddingTop: "7px" }}>
                 <GiSelfLove className="num" />
                 <span className="num">12</span>
                 <FaRegComment className="num" style={{ marginLeft: "10px" }} />
@@ -310,8 +323,3 @@ function Post() {
 }
 
 export default Post;
-
-
-
-
-
