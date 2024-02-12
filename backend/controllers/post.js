@@ -252,6 +252,7 @@ const getAllPostsMyFriends = (req, res) => {
       FROM Comments 
       INNER JOIN Users ON Comments.user_id = Users.id
       WHERE Comments.post_id = Posts.id
+      LIMIT 4
   ) AS comments
 FROM 
   Posts
@@ -259,7 +260,7 @@ INNER JOIN Users ON Posts.user_id = Users.id
 WHERE 
   Posts.is_deleted = 0
   AND
-  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id = ${user_id});
+  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =30);
     `
 //  SELECT Posts.* , Users.username ,Users.profile_picture_url
 //   FROM Posts
