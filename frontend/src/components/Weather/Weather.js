@@ -141,6 +141,7 @@ function Weather() {
         <span></span>
 
         <div className="tempreture">
+          
           <h1>{forecast?.current?.temp_c} </h1>°
         </div>
         <img id="img" alt="" src={forecast?.current?.condition?.icon}></img>

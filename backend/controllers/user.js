@@ -176,5 +176,26 @@ const updateUser = (req, res) => {
       });
     });
 };
+const getAllUser = (req, res) => {
+  // const id = req.token.user_id;
+  // console.log("id",id);
+  const query = `SELECT * FROM Users WHERE NOT id = 1;`;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        message: "All Users",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log("from all", err);
+      res.status(500).json({
+        message: "Server error",
+        err: err,
+      });
+    });
+};
+module.exports = { register, login, deleteUser, updateUser, getAllUser };
 
-module.exports = { register, login, deleteUser, updateUser };
+

@@ -8,7 +8,7 @@
 }
 svg{
     font-size: 25px;
-    color: red;
+    /* color: red; */
 }
 .forThreeDays{
     display: flex;  
@@ -49,13 +49,14 @@ svg{
     height: fit-content;
     top: 0;
     left: 0;
-    background: #0a032a;
+    background: #5596E6;
     overflow: hidden;
     color: white;
     justify-content: center;
     align-items: center;
     padding: 0px 20px;
     gap: 15px;
+    border-radius: 10px;
 }
 .position{
     display: flex;
