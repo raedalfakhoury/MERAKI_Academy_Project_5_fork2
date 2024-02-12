@@ -1,15 +1,34 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { FaTemperatureArrowUp, FaTemperatureArrowDown } from "react-icons/fa6";
+import { FaTemperatureArrowUp, FaTemperatureArrowDown } from "react-icons/fa";
+
 import { MdOutlineDescription } from "react-icons/md";
 import { WiHumidity, WiStrongWind, WiBarometer } from "react-icons/wi";
-import '../Weather/Weather.css'
+import "../Weather/Weather.css";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
+
 function Weather() {
   const [currentWeather, setCurrentWeather] = useState();
   const [loader, setLoader] = useState(true);
   const [forecast, setForecast] = useState();
+
+const dayOfWeek = (date)=>{
+  const currentDate = new Date(date);
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const dayOfWeek = days[currentDate.getDay()];
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  
+  const formattedDate = `${dayOfWeek}, ${day}-${month}-${year}`;
+  console.log(formattedDate);
+return formattedDate  
+}
+
   const getCoordinates = async () => {
     return await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
@@ -33,20 +52,32 @@ function Weather() {
       console.log("ERROR ====> ", error);
     }
   };
+  const currentDay = ( )=>{
+    const currentDate = new Date( );
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const dayOfWeek = days[currentDate.getDay()];
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    
+    const formattedDate = `${dayOfWeek}, ${day}-${month}-${year}`;
+    console.log(formattedDate);
+  return formattedDate 
+  }
   const getClimatePrediction = (currentCity) => {
     axios
       .get(
-        `https://api.weatherapi.com/v1/forecast.json?key=1612951226954bf0ada164306232012&q=${currentCity}&days=4&aqi=no&alerts=no`
+        `https://api.weatherapi.com/v1/forecast.json?key=1612951226954bf0ada164306232012
+        &q=${currentCity}&days=4&aqi=no&alerts=no`
       )
       .then((res) => {
-        console.log(res.data);
-        setForecast(res?.data?.forecast);
+        setForecast(res?.data); 
       })
       .catch((err) => {
         console.error(err);
       });
   };
-  getData();
+
   useEffect(() => {
     getCoordinates()
       .then(async (result) => {
@@ -71,73 +102,73 @@ function Weather() {
     });
     return days;
   };
-
-  return (
+  // nextDays();
+    return (
+    // <div
+    //   className="mainWeatherScreen"
+    //   style={{
+    //     backgroundImage: `linear-gradient( rgba(9, 8, 37, 0.4), rgba(0, 15, 80, 0.7)),url(${""})`,
+    //     backgroundSize: "cover",
+    //     backgroundRepeat: "no-repeat",
+    //     backgroundPosition: "center",
+    //   }}
+    // ></div>
     <>
-      {
-        <div id="main-screen-con">
-          <div id="all-info-con">
-            <div id="current-weather-con">
-              <h2>current Weather</h2>
-              <div id="current-location-image-con">
-                <section id="temp-location">
-                  <h1 className="h1">{currentWeather?.sys.country}</h1>
-                  <h1 className="h1">{currentWeather?.name}</h1>
-                  <h1 className="h1">{`${Math.round(
-                    currentWeather?.main?.temp
-                  )}°C`}</h1>
-                </section>
-                <div>
-                  {
-                    <img
-                      alt="F"
-                      id="c-w-img"
-                      src={`https://openweathermap.org/img/wn/${currentWeather?.weather[0].icon}@4x.png`}
-                    />
-                  }
-                </div>
-              </div>
-
-              <div id="rest-info-con">
-                <dvi id="m-m-h-con">
-                  <section id="max">
-                    <FaTemperatureArrowUp size={30} color="red" />{" "}
-                    <h3>{`${Math.round(currentWeather?.main?.temp_max)}°C`}</h3>
-                  </section>
-                  <section id="min">
-                    <FaTemperatureArrowDown size={30} color="#4d7db6" />{" "}
-                    <h3>{`${Math.round(currentWeather?.main?.temp_min)}°C`}</h3>
-                  </section>
-                  <section id="humidity">
-                    <WiHumidity size={30} />{" "}
-                    <h3>{`${Math.round(currentWeather?.main?.temp_max)} %`}</h3>
-                  </section>
-                </dvi>
-                <dvi id="w-p-des-con">
-                  <section id="w-speed">
-                    <WiStrongWind size={30} color="red" />{" "}
-                    <h3>{`${Math.round(currentWeather?.wind?.speed)} km/h`}</h3>
-                  </section>
-                  <section id="pusher">
-                    <WiBarometer size={30} color="#4d7db6" />{" "}
-                    <h3>{`${Math.round(
-                      currentWeather?.main?.pressure
-                    )} hPa`}</h3>
-                  </section>
-                  <section id="w-des">
-                    <MdOutlineDescription size={30} />{" "}
-                    <h3>{currentWeather?.weather[0]?.description}</h3>
-                  </section>
-                </dvi>
-              </div>
-            </div>
-            <div id="forecast-con">
-              <h3>Forecast next Days</h3>
-              {nextDays()}
-            </div>
-          </div>
+      <div class="background">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <h1>{forecast?.location?.country}</h1>
+        <h2>{forecast?.location?.name}</h2>
+        <div className="tempreture">
+          <h3>{forecast?.current?.temp_c} </h3>
+          °C
         </div>
-      }
+        <img id="img"
+          alt=""
+          src={forecast?.current?.condition?.icon}
+        ></img>
+        <h3>{forecast?.current?.condition?.text}</h3>
+        <div className="reelFeel">
+          <h4>Real Feal : {forecast?.current?.feelslike_c}°C</h4>
+          <h4>humidity : {forecast?.current?.humidity}°C</h4>
+        </div>
+<div className="forThreeDays">
+  <div className="forOneDay">
+
+  </div>
+</div>
+
+        <h4>{currentDay()}</h4>
+      </div>
     </>
   );
 }
