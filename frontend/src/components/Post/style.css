@@ -2,6 +2,8 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, segoe ui,
+    helvetica neue, Arial, sans-serif;
 }
 
 .containerPosts {
@@ -9,6 +11,7 @@
   width: 50%;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
+
   min-width: 100px;
 }
 .navCreatePost {
@@ -37,12 +40,11 @@
   vertical-align: top;
   border: 1px solid transparent;
   border-radius: 4px 4px 0 0;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: #757a91;
   font-weight: 500;
   padding: 0.75em !important;
   cursor: pointer;
- 
 }
 .navCreatePost .box:hover {
   border-bottom-color: #d1d1d1;
@@ -190,11 +192,15 @@ textarea {
 .postsUserNav {
   padding: 16px 16px 0;
 }
+.postsUserNav:last-child{
+  justify-content: end;
+}
 circle {
   color: #757a91;
 }
 .bodyPost {
   padding: 16px 16px 0;
+
 }
 .bodyPostImage {
   padding: 10px;
@@ -228,4 +234,68 @@ circle {
   align-items: stretch;
   display: flex;
   max-height: 10vw;
+  overflow: hidden;
+}
+.icn-comment {
+  position: absolute;
+  z-index: 1;
+  bottom: -12px;
+  right: 65px;
+  background: #6ba4e9;
+  box-shadow: 0 14px 26px -12px rgba(85, 150, 230, 0.42),
+    0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 150, 230, 0.2) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  color: #fcfcfc;
+  opacity: 1;
+  transition: all 0.3s;
+  width: 50px;
+  height: 50x;
+  padding: 10px;
+  cursor: pointer;
+}
+.icn-comment:hover {
+  background-color: #4d4b89;
+}
+.icn-like {
+  position: absolute;
+  z-index: 1;
+  bottom: -12px;
+  right: 10px;
+  background: #6ba4e9;
+  box-shadow: 0 14px 26px -12px rgba(85, 150, 230, 0.42),
+    0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 150, 230, 0.2) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  color: #fcfcfc;
+  opacity: 1;
+  transition: all 0.3s;
+  width: 50px;
+  height: 50x;
+  padding: 10px;
+  cursor: pointer;
+}
+.num {
+  font-size: 0.9rem;
+  color: #888da8;
+  margin: 0 5px;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  overflow: hidden;
+}
+.navPostsDot {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }

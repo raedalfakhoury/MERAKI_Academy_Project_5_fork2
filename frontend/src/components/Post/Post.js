@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
+import { FaRegComment } from "react-icons/fa";
 
+import { GiSelfLove } from "react-icons/gi";
+import { BsSuitHeart } from "react-icons/bs";
 function Post() {
+  const [toggleLike, setToggleLike] = useState(false);
   return (
     <>
       <Container>
         <Container className="containerPosts">
           <Row>
-            <Col
-              className="navCreatePost"
-              style={{padding:"0"}}
-            >
+            <Col className="navCreatePost" style={{ padding: "0" }}>
               <Col className="box active">
                 <span class="icon is-small">
                   <svg
@@ -161,12 +162,12 @@ function Post() {
                   roundedCircle
                 />
               </Col>
-              <Col style={{ height: "10px" }} xs={9}>
+              <Col style={{ height: "10px" }} xs={6}>
                 <span className="usernameLap">jamal azeez</span>
                 <p className="xx">July 26 2018, 01:03pm</p>
               </Col>
 
-              <Col xs={1} xd={2}>
+              <Col className="navPostsDot">
                 <svg
                   style={{ cursor: "pointer" }}
                   xmlns="http://www.w3.org/2000/svg"
@@ -200,11 +201,24 @@ function Post() {
               </Row>
               <Row>
                 {" "}
-                <Col xs={12}>
+                <Col style={{ position: "relative" }} xs={12}>
                   <Image
                     style={{ maxWidth: "100%", height: "100%" }}
                     src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     rounded
+                  />
+                  <FaRegComment className="icn-comment" />
+                  <BsSuitHeart
+                    onClick={(e) => {
+                      setToggleLike(!toggleLike);
+                      if (!toggleLike) {
+                        e.target.style.color = "#fff";
+                        e.target.style.backgroundColor = "red";
+                      } else {
+                        e.target.style.backgroundColor = "#6ba4e9";
+                      }
+                    }}
+                    className="icn-like"
                   />
                 </Col>
               </Row>
@@ -277,7 +291,12 @@ function Post() {
                 </span>
                 <p class="xx">and 23 more liked this</p>
               </Col>
-              <Col style={{}}>dasdsa</Col>
+              <Col style={{ paddingTop: "7px" }}>
+                <GiSelfLove className="num" />
+                <span className="num">12</span>
+                <FaRegComment className="num" style={{ marginLeft: "10px" }} />
+                <span className="num">25</span>
+              </Col>
             </Row>
           </Col>
         </Container>
