@@ -198,15 +198,74 @@ const deletePostById = (req, res) => {
     });
 };
 
+/*SELECT 
+    Posts.id,
+    Posts.content,
+    Posts.media_url,
+    Users.profile_picture_url,
+    (
+        SELECT COUNT(*) 
+        FROM Comments 
+        WHERE Comments.post_id = Posts.id
+    ) AS comment_count,
+    ARRAY (
+        SELECT json_build_object(
+            'comment_content', Comments.content,
+            'commenter_profile_picture', Users.profile_picture_url
+        )
+        FROM Comments 
+        INNER JOIN Users ON Comments.user_id = Users.id
+        WHERE Comments.post_id = Posts.id
+    ) AS comments
+FROM 
+    Posts
+INNER JOIN Users ON Posts.user_id = Users.id
+WHERE 
+    Posts.is_deleted = 0;
+*/
+
+
+
 // كل المنشورات للاشخاص الذي اتابعهم مع منشوراتي
 const getAllPostsMyFriends = (req, res) => {
   const user_id = req.token.user_id;
-  const query = `SELECT Posts.* , Users.username ,Users.profile_picture_url
-  FROM Posts
-  JOIN Follows ON Posts.user_id = Follows.followed_id OR Follows.follower_id = Posts.user_id
-  JOIN Users ON Posts.user_id = Users.id
-  WHERE Follows.follower_id =${user_id} AND Posts.is_deleted = 0;`
-
+  const query = `SELECT 
+  Posts.id,
+  Posts.content,
+  Posts.media_url,
+  Users.profile_picture_url,
+  (
+      SELECT COUNT(*) 
+      FROM Comments 
+      WHERE Comments.post_id = Posts.id
+  ) AS comment_count,
+  (
+      SELECT COUNT(*) 
+      FROM Likes 
+      WHERE Likes.post_id = Posts.id
+  ) AS Like_count,
+  ARRAY (
+      SELECT json_build_object(
+          'comment_content', Comments.content,
+          'commenter_profile_picture', Users.profile_picture_url
+      )
+      FROM Comments 
+      INNER JOIN Users ON Comments.user_id = Users.id
+      WHERE Comments.post_id = Posts.id
+  ) AS comments
+FROM 
+  Posts
+INNER JOIN Users ON Posts.user_id = Users.id  
+WHERE 
+  Posts.is_deleted = 0
+  AND
+  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id = ${user_id});
+    `
+//  SELECT Posts.* , Users.username ,Users.profile_picture_url
+//   FROM Posts
+//   JOIN Follows ON Posts.user_id = Follows.followed_id 
+//   JOIN Users ON Posts.user_id = Users.id
+//   WHERE Follows.follower_id =${user_id} AND Posts.is_deleted = 0
   pool
     .query(query)
     .then((result) => {
