@@ -12,6 +12,7 @@ export default function Rigester() {
   const [userPassword, setUserPassword] = useState("");
 
   return (
+    
     <section className="background-radial-gradient overflow-hidden">
       <style>
         {`
