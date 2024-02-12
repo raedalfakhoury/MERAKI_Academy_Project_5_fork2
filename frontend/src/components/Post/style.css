@@ -9,6 +9,7 @@
   width: 50%;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
+  min-width: 100px;
 }
 .navCreatePost {
   align-items: center;
@@ -20,7 +21,9 @@
   flex-shrink: 0;
   justify-content: flex-start;
   background: #fcfcfc;
+  border-radius: 10px 10px 0 0;
 }
+
 .navCreatePost .box {
   align-items: center;
   border-bottom-color: #dbdbdb;
@@ -39,18 +42,29 @@
   font-weight: 500;
   padding: 0.75em !important;
   cursor: pointer;
+ 
 }
 .navCreatePost .box:hover {
   border-bottom-color: #d1d1d1;
   background-color: #f4f4f4;
 }
 .navCreatePost .active {
+  background-color: #fff;
+  border: 1px solid #e8e8e8;
+  border-bottom: none;
+  border-radius: -20px;
+}
+.navCreatePost .active:hover {
+  border-bottom-color: #fff;
+  background-color: #fff;
 }
 .navCreatePost .box * {
   padding: 2px;
 }
 .contentCreatePost {
-  padding: 16px;
+  padding: 26px;
+  padding-bottom: 100px;
+  margin-top: 10px;
   border-bottom: 1px solid #e8e8e8;
 }
 
@@ -109,11 +123,7 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+
 *,
 ::after,
 ::before {
@@ -173,4 +183,49 @@ textarea {
   gap: 4px;
   cursor: pointer;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.postsUserNav {
+  padding: 16px 16px 0;
+}
+circle {
+  color: #757a91;
+}
+.bodyPost {
+  padding: 16px 16px 0;
+}
+.bodyPostImage {
+  padding: 10px;
+  color: #757a91;
+  font-size: 0.9rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.usernameLap {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #393a4f;
+  transition: color 0.3s;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.xx {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 0.6rem;
+  color: #757a91;
+}
+.card-footer-post {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: none;
+  padding: 16px;
+  margin: 0;
+  margin: 8px 16px 16px;
+  border-top: 1px solid #e8e8e8;
+  background-color: transparent;
+  border-top: 1px solid #ffffff;
+  align-items: stretch;
+  display: flex;
+  max-height: 10vw;
 }

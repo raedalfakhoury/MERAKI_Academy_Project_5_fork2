@@ -1,6 +1,6 @@
-// import React from 'react'
-// import Navbar from "../Navbar/Navbar"
-// import Weather from "../Weather/Weather"
+import React from 'react'
+import Navbar from "../Navbar/Navbar"
+import Weather from "../Weather/Weather"
 import Post from '../Post/Post'
 function Home() {
   return (
