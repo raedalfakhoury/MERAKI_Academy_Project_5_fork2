@@ -5,10 +5,19 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GiPositionMarker } from "react-icons/gi";
 import "../Weather/Weather.css";
+import { UseDispatch, useDispatch, useSelector } from "react-redux";
+
+import forecastSlice, { setForecast } from "../redux/reducers/weather";
 
 function Weather() {
+  const dispatch = useDispatch();
+  const { forecast } = useSelector((state) => {
+    return {
+      forecast: state.forecast.forecast,
+    };
+  });
   const [loader, setLoader] = useState(true);
-  const [forecast, setForecast] = useState();
+  // const [forecast, setForecast] = useState();
 
   const dayOfWeek = (date) => {
     const currentDate = new Date(date);
@@ -27,7 +36,6 @@ function Weather() {
     const day = String(currentDate.getDate()).padStart(2, "0");
 
     const formattedDate = `${dayOfWeek}`;
-    console.log(formattedDate);
     return formattedDate;
   };
   const getCoordinates = async () => {
@@ -79,7 +87,8 @@ function Weather() {
         &q=${currentCity}&days=4&aqi=no&alerts=no`
       )
       .then((res) => {
-        setForecast(res?.data);
+        // setForecast(res?.data);
+        dispatch(setForecast(res?.data));
       })
       .catch((err) => {
         console.error(err);
@@ -98,7 +107,7 @@ function Weather() {
 
   return (
     <>
-      <div class="background">
+      <div className="background">
         <span></span>
         <span></span>
         <span></span>
@@ -132,8 +141,7 @@ function Weather() {
         <span></span>
 
         <div className="tempreture">
-          <h1>{forecast?.current?.temp_c} </h1>
-          °
+          <h1>{forecast?.current?.temp_c} </h1>°
         </div>
         <img id="img" alt="" src={forecast?.current?.condition?.icon}></img>
         <h3>{forecast?.current?.condition?.text}</h3>
@@ -143,7 +151,7 @@ function Weather() {
         </div>
 
         <div className="forThreeDays">
-          {forecast?.forecast?.forecastday.map((day, i) => {
+          {forecast?.forecast?.forecastday?.map((day, i) => {
             return (
               <div key={i} className="forOneDay">
                 <h5>{dayOfWeek(day?.date).slice(0, 3)}</h5>
@@ -156,7 +164,7 @@ function Weather() {
 
         <h4>{currentDay()}</h4>
         <div className="position">
-          <GiPositionMarker  />
+          <GiPositionMarker />
           <p>{forecast?.location?.country}</p> ,
           <p>{forecast?.location?.name}</p>
         </div>
