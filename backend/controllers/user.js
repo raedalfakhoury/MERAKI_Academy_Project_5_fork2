@@ -177,7 +177,9 @@ const updateUser = (req, res) => {
     });
 };
 const getAllUser = (req, res) => {
-  const query = `SELECT * FROM Users  ;`;
+  // const id = req.token.user_id;
+  // console.log("id",id);
+  const query = `SELECT * FROM Users WHERE NOT id = 1;`;
   pool
     .query(query)
     .then((result) => {
@@ -187,11 +189,13 @@ const getAllUser = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log('from all',err);
+      console.log("from all", err);
       res.status(500).json({
         message: "Server error",
         err: err,
       });
     });
 };
-module.exports = { register, login, deleteUser, updateUser ,getAllUser};
+module.exports = { register, login, deleteUser, updateUser, getAllUser };
+
+
