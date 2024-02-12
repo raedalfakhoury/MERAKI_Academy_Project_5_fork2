@@ -176,5 +176,22 @@ const updateUser = (req, res) => {
       });
     });
 };
-
-module.exports = { register, login, deleteUser, updateUser };
+const getAllUser = (req, res) => {
+  const query = `SELECT * FROM Users  ;`;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        message: "All Users",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log('from all',err);
+      res.status(500).json({
+        message: "Server error",
+        err: err,
+      });
+    });
+};
+module.exports = { register, login, deleteUser, updateUser ,getAllUser};
