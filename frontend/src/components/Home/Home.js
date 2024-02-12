@@ -6,6 +6,7 @@ import Weather from "../Weather/Weather"
 import Register from '../Rigester'
 import LoginPage from '../Login'
 import Post from '../Post/Post'
+import WelcomePage from '../welcome page/welcomepage'
 
 function Home() {
   return (
@@ -14,6 +15,7 @@ function Home() {
    <Weather/>
    <Register/>
    <LoginPage/>
+   <WelcomePage/>
    <div>Home</div>  
    <Post/>  
     </>
