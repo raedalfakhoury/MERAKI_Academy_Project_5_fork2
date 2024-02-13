@@ -11,13 +11,13 @@ import WelcomePage from '../welcome page/welcomepage'
 function Home() {
   return (
     <>
-    {/* <Navbar/>
-   <Weather/>
-   <Register/>
-   <LoginPage/>
-   <WelcomePage/> */}
+    {/* <Navbar/> */}
+   {/* <Weather/> */}
+   {/* <Register/> */}
+   {/* <LoginPage/> */}
+   <WelcomePage/>
    {/* <div>Home</div>   */}
-   <Post/>  
+   {/* <Post/>   */}
     </>
   
   )
