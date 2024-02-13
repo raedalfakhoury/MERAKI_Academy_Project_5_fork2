@@ -9,6 +9,9 @@ export const postsSlice = createSlice({
     setPosts: (state, action) => {
       state.posts = action.payload;
     },
+    addPost: (state, action) => {
+            state.posts.unshift(action.payload)
+    },
     filter_like: (state,action)=>{
         state.posts.map((post,i)=>{
             if(post.id === action.payload.id){
@@ -20,6 +23,6 @@ export const postsSlice = createSlice({
   },
 });
 
-export const { setPosts,filter_like } = postsSlice.actions;
+export const { setPosts,filter_like,addPost } = postsSlice.actions;
 
 export default postsSlice.reducer;
