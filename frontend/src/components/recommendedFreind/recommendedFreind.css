@@ -1,0 +1,23 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+.panel{
+    display: flex;
+
+}
+.profileImg{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+.mainRecommended {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+ border: 1px solid black;
+}
+#friend {
+  color: #8b7a91;
+}

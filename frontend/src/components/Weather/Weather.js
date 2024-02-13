@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GiPositionMarker } from "react-icons/gi";
 import "../Weather/Weather.css";
-import { UseDispatch, useDispatch, useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 
 import forecastSlice, { setForecast } from "../redux/reducers/weather";
 
