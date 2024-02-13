@@ -14,17 +14,17 @@ function Home() {
  
     {/* <Navbar/> */}
    {/* <Weather/> */}
-<RecommendedFreind/>
+{/* <RecommendedFreind/> */}
    {/* <Register/> */}
    {/* <LoginPage/> */}
    {/* <div>Home</div>   */}
-   {/* <Post/>   */}
+   <Post/>  
  
    
   
     
-   
-   <WelcomePage/> */}
+{/*    
+   <WelcomePage/>  */}
  
   
  

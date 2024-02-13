@@ -12,8 +12,11 @@ import { GiSelfLove } from "react-icons/gi";
 import { BsSuitHeart } from "react-icons/bs";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import CloseButton from "react-bootstrap/CloseButton";
+import { IoCameraOutline } from "react-icons/io5";
 function Post() {
-  // const [tog, setTog] = useState(false);
+  const [togComment, setTogComment] = useState(false);
+  const [IDPost, setIDPost] = useState("");
 
   const [image_url, setImage_url] = useState("");
   const [ContentPost, setContentPost] = useState("");
@@ -47,32 +50,30 @@ function Post() {
   });
   console.log(posts);
   // ! posts  data=>
-//  comment_count: "2"
-// comments: (2) [{…}, {…}]
-// content :"Creating a storyteller's circle where women share their joy, pain, and experience, the poems in this collection are lyrical vignettes"
-// created_at:"2024-02-10T16:55:56.635Z"
-// id:12
-// like_count:"2"
-// media_url: "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
-// profile_picture_url:"https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png"
-// username":username"
+  //  comment_count: "2"
+  // comments: (2) [{…}, {…}]
+  // content :"Creating a storyteller's circle where women share their joy, pain, and experience, the poems in this collection are lyrical vignettes"
+  // created_at:"2024-02-10T16:55:56.635Z"
+  // id:12
+  // like_count:"2"
+  // media_url: "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
+  // profile_picture_url:"https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png"
+  // username":username"
 
+  // ! ????????????
+  // comment_count:"0"
+  // comments:[]
+  // like_count:"0"
+  // profile_picture_url ?
+  //username:username ?
 
-// ! ????????????
-// comment_count:"0"
-// comments:[]
-// like_count:"0"
-// profile_picture_url ?
-//username:username ?
-
- // ! create post data =>
-// content: ""
-// created_at: "2024-02-13T14:19:21.326Z"
-// id:25
-// is_deleted: 0
-// media_url:"https://res.cloudinary.com/dmmo3zzyc/image/upload/v1707844756/si581g2sj4iazi6cl1zb.png"
-// user_id:30
-
+  // ! create post data =>
+  // content: ""
+  // created_at: "2024-02-13T14:19:21.326Z"
+  // id:25
+  // is_deleted: 0
+  // media_url:"https://res.cloudinary.com/dmmo3zzyc/image/upload/v1707844756/si581g2sj4iazi6cl1zb.png"
+  // user_id:30
 
   const createNewPost = () => {
     axios
@@ -255,62 +256,44 @@ function Post() {
                       placeholder="Write something about you..."
                     ></textarea>
                   </div>
+                  {image_url && (
+                    <Image
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "10px",
+                      }}
+                      src={image_url}
+                    />
+                  )}
                 </Col>
               </Row>
-              {image_url && (
-                <Image
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "10px",
-                  }}
-                  src={image_url}
-                />
-              )}
-              <Col className="imageClod">
-                <div
-                  onClick={(e) => {
-                    console.log(e.target);
-                  }}
-                  type="file"
-                  class="imageClodx"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="feather feather-camera"
-                  >
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                  </svg>
-                  <span>Media</span>
-                  {image_url && (
-                    <Button
-                      onClick={() => {
-                        createNewPost();
-                      }}
-                      style={{ marginLeft: "10px" }}
-                      variant="primary"
-                    >
-                      publish
-                    </Button>
-                  )}
-                </div>
 
-                <input
-                  onChange={(e) => {
-                    console.log(e);
-                    handleFile(e);
-                  }}
-                  type="file"
-                />
+              <Col style={{justifyContent:"space-between"}} className="imageClod">
+                
+                <label class="file-label">
+                  <input
+                    onChange={(e) => {
+                      handleFile(e);
+                    }}
+                    type="file"
+                    class="input-file"
+                  />
+                 <IoCameraOutline/>
+                 <span class="ic">  Media</span>
+                </label>
+                {image_url && (
+                  <Button 
+                    onClick={() => {
+                      createNewPost();
+                    }}
+                    style={{ marginLeft: "10px" ,borderRadius:"500px"}}
+                    variant="primary"
+                  >
+                    publish
+                  </Button>
+                )}
+
               </Col>
             </Col>
           </Row>
@@ -358,6 +341,48 @@ function Post() {
                       </svg>
                     </Col>
                   </Row>
+                  {IDPost === elm.id && (
+                    <>
+                      <Container className="cont_comment_box">
+                        <Row style={{ paddingBottom: "15px" }}>
+                          <Col className="com-text">comments (8)</Col>
+                          <Col></Col>
+                          <CloseButton
+                            style={{ padding: "10px" }}
+                            onClick={() => {
+                              setTogComment(!togComment);
+                              setIDPost("");
+                            }}
+                          />
+                        </Row>
+                        <Row>
+                          <Col
+                            md={2}
+                            xs={6}
+                            style={{ maxHeight: "40px", maxWidth: "70px" }}
+                          >
+                            <Image
+                              style={{ width: "100%", height: "100%" }}
+                              src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                              roundedCircle
+                            />
+                          </Col>
+                          <Col>
+                            <span>Dan Walker 28 minutes ago</span>
+                          </Col>
+                          <Col></Col>
+                        </Row>
+                        <Row>
+                          <p className="xx" style={{ padding: "10px" }}>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit, sed do eiusmod tempo incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris consequat.
+                          </p>
+                        </Row>
+                      </Container>
+                    </>
+                  )}
                   <Row
                     className="bodyPost"
                     style={{ justifyContent: "center" }}
@@ -375,21 +400,23 @@ function Post() {
                           rounded
                         />
                         <FaRegComment
-                          onClick={() => {}}
+                          onClick={() => {
+                            setTogComment(!togComment);
+                            setIDPost(elm.id);
+                          }}
                           className="icn-comment"
                         />
+
                         <BsSuitHeart
                           onClick={(e) => {
                             setToggleLike(!toggleLike);
                             if (!toggleLike) {
                               Like(elm.id);
-
-                              // e.target.style.backgroundColor = "#6ba4e9";
-                            } else {
-                              Like(elm.id);
-
                               // e.target.style.color = "#fff";
                               // e.target.style.backgroundColor = "red";
+                            } else {
+                              Like(elm.id);
+                              // e.target.style.backgroundColor = "#6ba4e9";
                             }
                           }}
                           className="icn-like"
@@ -397,6 +424,7 @@ function Post() {
                       </Col>
                     </Row>
                   </Row>
+
                   <Row className="card-footer-post">
                     <Col
                       xs={3}

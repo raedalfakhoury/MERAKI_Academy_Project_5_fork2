@@ -176,6 +176,7 @@ textarea {
   border: none;
   padding-left: 10px;
 }
+
 .imageClodx {
   border-radius: 20px;
   padding: 5px 15px 5px 15px;
@@ -192,14 +193,14 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .postsUserNav {
   padding: 16px 16px 0;
 }
- 
-.postsUserNav:last-child{
+
+.postsUserNav:last-child {
   justify-content: flex-end;
- 
 }
 circle {
   color: #757a91;
@@ -307,4 +308,52 @@ circle {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.cont_comment_box {
+  background-color: rgb(255, 255, 255);
+  max-width: 41%;
+
+  position: absolute;
+  z-index: 5;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid rgb(189, 189, 189);
+  padding: 12px;
+}
+
+.com-text {
+  font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, segoe ui,
+    helvetica neue, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #757a91;
+}
+.input-file {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background-color: rgb(247, 247, 247);
+  color: rgb(136, 141, 185);
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 30px; /* Adjust as needed to accommodate the icon */
+  border-radius: 500px;
+}
+
+.ic {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.file-label:hover {
+  background-color: #f2f2f2;
 }
