@@ -233,7 +233,9 @@ const getAllPostsMyFriends = (req, res) => {
   Posts.id,
   Posts.content,
   Posts.media_url,
+  Posts.created_at,
   Users.profile_picture_url,
+  Users.username,
   (
       SELECT COUNT(*) 
       FROM Comments 
@@ -247,7 +249,8 @@ const getAllPostsMyFriends = (req, res) => {
   ARRAY (
       SELECT json_build_object(
           'comment_content', Comments.content,
-          'commenter_profile_picture', Users.profile_picture_url
+          'commenter_profile_picture', Users.profile_picture_url,
+          'commenter_name', Users.username
       )
       FROM Comments 
       INNER JOIN Users ON Comments.user_id = Users.id

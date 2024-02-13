@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 import Container from "react-bootstrap/Container";
@@ -6,11 +7,71 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import { FaRegComment } from "react-icons/fa";
-
+import { setPosts, filter_like } from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
 import { BsSuitHeart } from "react-icons/bs";
+import axios from "axios";
+
 function Post() {
+  const [tog, setTog] = useState(false);
+  const dispatch = useDispatch();
+  const { posts } = useSelector((state) => {
+    return {
+      posts: state.posts.posts,
+    };
+  });
+
+  // console.log(posts.like_count);
+  const Like = (id) => {
+    axios
+      .post(
+        `http://localhost:5000/likes/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4MjA1NTAsImV4cCI6MTcwNzg0MjE1MH0.00_V1BpyMLjrWj33dOMdU2oNN1IcjQjw2X-Pv0mYCCY`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log("true  like =>", result);
+        axios
+          .get(`http://localhost:5000/likes/${id}`, {
+            headers: {
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4MjA1NTAsImV4cCI6MTcwNzg0MjE1MH0.00_V1BpyMLjrWj33dOMdU2oNN1IcjQjw2X-Pv0mYCCY`,
+            },
+          })
+          .then((result) => {
+            console.log("cunt =>>>>>>", result.data.LikesCounter);
+            dispatch(filter_like({ id: id, num: result.data.LikesCounter }));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const [toggleLike, setToggleLike] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/post/1/getAllPostsMyFollower", {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4MjA1NTAsImV4cCI6MTcwNzg0MjE1MH0.00_V1BpyMLjrWj33dOMdU2oNN1IcjQjw2X-Pv0mYCCY`,
+        },
+      })
+      .then((result) => {
+        console.log(result.data.result);
+        dispatch(setPosts(result.data.result));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [dispatch]);
+
   return (
     <>
       <Container>
@@ -148,171 +209,163 @@ function Post() {
             </Col>
           </Row>
         </Container>
-        <Container className="containerPosts">
-          <Col>
-            <Row className="postsUserNav">
-              <Col
-                md={2}
-                xs={6}
-                style={{ maxHeight: "40px", maxWidth: "70px" }}
-              >
-                <Image
-                  style={{ width: "100%", height: "100%" }}
-                  src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  roundedCircle
-                />
-              </Col>
-              <Col style={{ height: "10px" }} xs={6}>
-                <span className="usernameLap">jamal azeez</span>
-                <p className="xx">July 26 2018, 01:03pm</p>
-              </Col>
+        {/* =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
+        {posts?.map((elm, i) => {
+          return (
+            <>
+              <Container className="containerPosts">
+                <Col>
+                  <Row className="postsUserNav">
+                    <Col
+                      md={2}
+                      xs={6}
+                      style={{ maxHeight: "40px", maxWidth: "70px" }}
+                    >
+                      <Image
+                        style={{ width: "100%", height: "100%" }}
+                        src={elm.profile_picture_url}
+                        roundedCircle
+                      />
+                    </Col>
+                    <Col style={{ height: "10px" }} xs={6}>
+                      <span className="usernameLap">{elm.username}</span>
+                      <p className="xx">{elm.created_at} pm</p>
+                    </Col>
 
-              <Col className="navPostsDot">
-                <svg
-                  style={{ cursor: "pointer" }}
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-more-vertical"
-                >
-                  <circle cx="12" cy="12" r="1"></circle>
-                  <circle cx="12" cy="5" r="1"></circle>
-                  <circle cx="12" cy="19" r="1"></circle>
-                </svg>
-              </Col>
-            </Row>
-            <Row className="bodyPost" style={{ justifyContent: "center" }}>
-              <Row className="bodyPostImage">
-                {" "}
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Mauris in sapien eu mi tincidunt posuere at nec dui. Mauris
-                  finibus lectus in mollis porta. Pellentesque rutrum
-                  consectetur aliquet. Sed vel purus suscipit, condimentum orci
-                  id, dignissim purus. In vitae facilisis nibh. Aliquam id erat
-                  convallis, luctus mi eu, accumsan justo. Nullam interdum.
-                </p>
-              </Row>
-              <Row>
-                {" "}
-                <Col style={{ position: "relative" }} xs={12}>
-                  <Image
-                    style={{ maxWidth: "100%", height: "100%" }}
-                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    rounded
-                  />
-                  <FaRegComment className="icn-comment" />
-                  <BsSuitHeart
-                    onClick={(e) => {
-                      setToggleLike(!toggleLike);
-                      if (!toggleLike) {
-                        e.target.style.color = "#fff";
-                        e.target.style.backgroundColor = "red";
-                      } else {
-                        e.target.style.backgroundColor = "#6ba4e9";
-                      }
-                    }}
-                    className="icn-like"
-                  />
+                    <Col className="navPostsDot">
+                      <svg
+                        style={{ cursor: "pointer" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-more-vertical"
+                      >
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                      </svg>
+                    </Col>
+                  </Row>
+                  <Row
+                    className="bodyPost"
+                    style={{ justifyContent: "center" }}
+                  >
+                    <Row className="bodyPostImage">
+                      {" "}
+                      <p>{elm.content}</p>
+                    </Row>
+                    <Row>
+                      {" "}
+                      <Col style={{ position: "relative" }} xs={12}>
+                        <Image
+                          style={{ width: "100%", height: "50vh" }}
+                          src={elm.media_url}
+                          rounded
+                        />
+                        <FaRegComment
+                          onClick={() => {}}
+                          className="icn-comment"
+                        />
+                        <BsSuitHeart
+                          onClick={(e) => {
+                            setToggleLike(!toggleLike);
+                            if (!toggleLike) {
+                              Like(elm.id);
+
+                              // e.target.style.backgroundColor = "#6ba4e9";
+                            } else {
+                              Like(elm.id);
+
+                              // e.target.style.color = "#fff";
+                              // e.target.style.backgroundColor = "red";
+                            }
+                          }}
+                          className="icn-like"
+                        />
+                      </Col>
+                    </Row>
+                  </Row>
+                  <Row className="card-footer-post">
+                    <Col
+                      xs={3}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+
+                        height: "60px",
+                        minWidth: "100px",
+                        paddingTop: "5px",
+                        flexWrap: "nowrap",
+                      }}
+                    >
+                      <div
+                        style={{
+                          flex: 1,
+                          height: "40px",
+                          border: "solid 2px #fff",
+                          width: "300px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {elm.comments?.map((elm, i) => {
+                          return (
+                            <>
+                              <Image
+                                style={{
+                                  flex: 1,
+                                  height: "40px",
+                                  width: "40px",
+                                  marginRight: "-5px",
+                                  border: "solid 3px #fff",
+                                }}
+                                src={elm.commenter_profile_picture}
+                                roundedCircle
+                              />
+                            </>
+                          );
+                        })}
+                      </div>
+                    </Col>
+                    <Col xs={2}>
+                      <span
+                        class="usernameLap"
+                        style={{
+                          fontSize: "10px",
+                          fontFamily: "cursive",
+                          fontWeight: "bold",
+                          marginLeft: "-40px",
+                        }}
+                      >
+                        {elm.comments[0]?.commenter_name}{" "}
+                        {elm.comments[0] && <span>and</span>}{" "}
+                        {elm.comments[1]?.commenter_name}
+                      </span>
+                      {elm.comments[0] && (
+                        <p style={{ marginLeft: "-40px" }} class="xx">
+                          and {elm.comment_count} more comment this
+                        </p>
+                      )}
+                    </Col>
+                    <Col className="comment-ic" style={{ paddingTop: "7px" }}>
+                      <FaRegComment className="num" />
+                      <span className="num">{elm.comment_count}</span>
+                      <GiSelfLove className="num" />
+                      <span style={{ marginLeft: "10px" }} className="num">
+                        {elm.like_count}
+                      </span>
+                    </Col>
+                  </Row>
                 </Col>
-              </Row>
-            </Row>
-            <Row className="card-footer-post">
-              <Col
-                xs={4}
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-
-                  height: "60px",
-                  minWidth: "100px",
-                  paddingTop: "5px",
-                  flexWrap: "nowrap",
-                }}
-              >
-                <div
-                  style={{
-                    flex: 1,
-                    height: "40px",
-                    border: "solid 2px #fff",
-                    width: "2",
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    style={{
-                      flex: 1,
-                      height: "40px",
-                      width: "40px",
-                      border: "solid 2px #fff",
-                    }}
-                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    roundedCircle
-                  />
-
-                  <Image
-                    style={{
-                      height: "40px",
-                      width: "40px",
-                      marginLeft: "-10px",
-                      border: "solid 2px #fff",
-                    }}
-                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    roundedCircle
-                  />
-                  <Image
-                    style={{
-                      height: "40px",
-                      width: "40px",
-                      marginLeft: "-10px",
-                      border: "solid 2px #fff",
-                    }}
-                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    roundedCircle
-                  />
-                  <Image
-                    style={{
-                      height: "40px",
-                      width: "40px",
-                      marginLeft: "-10px",
-                      border: "solid 2px #fff",
-                    }}
-                    src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    roundedCircle
-                  />
-                </div>
-              </Col>
-              <Col xs={2}>
-                <span
-                  class="usernameLap"
-                  style={{
-                    fontSize: "10px",
-                    fontFamily: "cursive",
-                    fontWeight: "bold",
-                    marginLeft: "-40px",
-                  }}
-                >
-                  jamal And sara
-                </span>
-                <p style={{ marginLeft: "-40px" }} class="xx">
-                  and 23 more liked this
-                </p>
-              </Col>
-              <Col className="comment-ic" style={{ paddingTop: "7px" }}>
-                <GiSelfLove className="num" />
-                <span className="num">12</span>
-                <FaRegComment className="num" style={{ marginLeft: "10px" }} />
-                <span className="num">25</span>
-              </Col>
-            </Row>
-          </Col>
-        </Container>
+              </Container>
+            </>
+          );
+        })}
       </Container>
 
       <br />
