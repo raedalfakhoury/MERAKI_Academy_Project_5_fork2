@@ -14,7 +14,7 @@ function Home() {
  
     {/* <Navbar/> */}
    {/* <Weather/> */}
-<RecommendedFreind/>
+// <RecommendedFreind/>
    {/* <Register/> */}
    {/* <LoginPage/> */}
    {/* <div>Home</div>   */}
@@ -24,10 +24,9 @@ function Home() {
   
     
    
-   <WelcomePage/> */}
+//    <WelcomePage/> 
  
-  
- 
+
     </>
   
   )

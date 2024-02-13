@@ -12,7 +12,6 @@ export default function Rigester() {
   const [userPassword, setUserPassword] = useState("");
 
   return (
-    
     <section className="background-radial-gradient overflow-hidden">
       <style>
         {`
@@ -46,6 +45,41 @@ export default function Rigester() {
           .bg-glass {
             background-color: hsla(0, 0%, 100%, 0.9) !important;
             backdrop-filter: saturate(200%) blur(25px);
+          }
+
+          .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+          }
+          
+          .split {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+          }
+          
+          .left {
+            left: 0;
+            background-color: #ffff;
+          }
+          
+          .right {
+            right: 0;
+            background-color: red;
+          }
+          
+          .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+          }
+          
+          .centered img {
+            width: 150px;
+            border-radius: 50%;
           }
         `}
       </style>
