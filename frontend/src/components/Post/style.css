@@ -193,7 +193,7 @@ textarea {
   padding: 16px 16px 0;
 }
 .postsUserNav:last-child{
-  justify-content: end;
+  justify-content: flex-end;
 }
 circle {
   color: #757a91;
@@ -297,5 +297,5 @@ circle {
   margin: 0;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
