@@ -5,12 +5,16 @@
   font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, segoe ui,
     helvetica neue, Arial, sans-serif;
 }
+body {
+  background-color: rgb(245, 245, 245);
+}
 
 .containerPosts {
   margin-top: 10px;
   width: 50%;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
+  background-color: #fff;
 
   min-width: 100px;
 }
@@ -192,16 +196,15 @@ textarea {
 .postsUserNav {
   padding: 16px 16px 0;
 }
+ 
 .postsUserNav:last-child{
   justify-content: flex-end;
+ 
 }
 circle {
   color: #757a91;
 }
-.bodyPost {
-  padding: 16px 16px 0;
 
-}
 .bodyPostImage {
   padding: 10px;
   color: #757a91;
@@ -236,6 +239,12 @@ circle {
   max-height: 10vw;
   overflow: hidden;
 }
+.comment-ic {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  flex: 1;
+}
 .icn-comment {
   position: absolute;
   z-index: 1;
@@ -263,7 +272,7 @@ circle {
 }
 .icn-like {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   bottom: -12px;
   right: 10px;
   background: #6ba4e9;
