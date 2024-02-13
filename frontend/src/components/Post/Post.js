@@ -7,20 +7,94 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import { FaRegComment } from "react-icons/fa";
-import { setPosts, filter_like } from "../redux/reducers/Posts";
+import { setPosts, filter_like, addPost } from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
 import { BsSuitHeart } from "react-icons/bs";
 import axios from "axios";
-
+import { Button } from "react-bootstrap";
 function Post() {
-  const [tog, setTog] = useState(false);
+  // const [tog, setTog] = useState(false);
+
+  const [image_url, setImage_url] = useState("");
+  const [ContentPost, setContentPost] = useState("");
+  const pr_key = "rllytlm7";
+  const cloud_name = "dmmo3zzyc";
+
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        formData
+      )
+      .then((result) => {
+        // console.log(result.data.secure_url);
+        setImage_url(result.data.secure_url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => {
     return {
       posts: state.posts.posts,
     };
   });
+  console.log(posts);
+  // ! posts  data=>
+//  comment_count: "2"
+// comments: (2) [{…}, {…}]
+// content :"Creating a storyteller's circle where women share their joy, pain, and experience, the poems in this collection are lyrical vignettes"
+// created_at:"2024-02-10T16:55:56.635Z"
+// id:12
+// like_count:"2"
+// media_url: "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
+// profile_picture_url:"https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png"
+// username":username"
 
+
+// ! ????????????
+// comment_count:"0"
+// comments:[]
+// like_count:"0"
+// profile_picture_url ?
+//username:username ?
+
+ // ! create post data =>
+// content: ""
+// created_at: "2024-02-13T14:19:21.326Z"
+// id:25
+// is_deleted: 0
+// media_url:"https://res.cloudinary.com/dmmo3zzyc/image/upload/v1707844756/si581g2sj4iazi6cl1zb.png"
+// user_id:30
+
+
+  const createNewPost = () => {
+    axios
+      .post(
+        `http://localhost:5000/post/create`,
+        { content: ContentPost, media_url: image_url },
+        {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result.data.result);
+        // dispatch(addPost(result.data.result))
+        setImage_url("");
+        setContentPost("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   // console.log(posts.like_count);
   const Like = (id) => {
     axios
@@ -29,7 +103,7 @@ function Post() {
         {},
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4MjA1NTAsImV4cCI6MTcwNzg0MjE1MH0.00_V1BpyMLjrWj33dOMdU2oNN1IcjQjw2X-Pv0mYCCY`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
           },
         }
       )
@@ -38,7 +112,7 @@ function Post() {
         axios
           .get(`http://localhost:5000/likes/${id}`, {
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4MjA1NTAsImV4cCI6MTcwNzg0MjE1MH0.00_V1BpyMLjrWj33dOMdU2oNN1IcjQjw2X-Pv0mYCCY`,
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
             },
           })
           .then((result) => {
@@ -60,7 +134,7 @@ function Post() {
     axios
       .get("http://localhost:5000/post/1/getAllPostsMyFollower", {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4MjA1NTAsImV4cCI6MTcwNzg0MjE1MH0.00_V1BpyMLjrWj33dOMdU2oNN1IcjQjw2X-Pv0mYCCY`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
         },
       })
       .then((result) => {
@@ -173,7 +247,7 @@ function Post() {
                   <div class="controlCreateText">
                     <textarea
                       onChange={(e) => {
-                        console.log(e.target.value);
+                        setContentPost(e.target.value);
                       }}
                       id="publish"
                       class="textarea"
@@ -183,8 +257,24 @@ function Post() {
                   </div>
                 </Col>
               </Row>
+              {image_url && (
+                <Image
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "10px",
+                  }}
+                  src={image_url}
+                />
+              )}
               <Col className="imageClod">
-                <div class="imageClodx">
+                <div
+                  onClick={(e) => {
+                    console.log(e.target);
+                  }}
+                  type="file"
+                  class="imageClodx"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -201,10 +291,26 @@ function Post() {
                     <circle cx="12" cy="13" r="4"></circle>
                   </svg>
                   <span>Media</span>
-                  {/* <input id="feed-upload-input-2" type="file" accept=".png, .jpg, .jpeg .video" onChange={(e)=>{
-                    console.log(e.target.value);
-                  }}/> */}
+                  {image_url && (
+                    <Button
+                      onClick={() => {
+                        createNewPost();
+                      }}
+                      style={{ marginLeft: "10px" }}
+                      variant="primary"
+                    >
+                      publish
+                    </Button>
+                  )}
                 </div>
+
+                <input
+                  onChange={(e) => {
+                    console.log(e);
+                    handleFile(e);
+                  }}
+                  type="file"
+                />
               </Col>
             </Col>
           </Row>
@@ -332,14 +438,14 @@ function Post() {
                         })}
                       </div>
                     </Col>
-                    <Col xs={2}>
+                    <Col style={{ alignItems: "center" }}>
                       <span
                         class="usernameLap"
                         style={{
                           fontSize: "10px",
                           fontFamily: "cursive",
                           fontWeight: "bold",
-                          marginLeft: "-40px",
+                          paddingTop: "25px",
                         }}
                       >
                         {elm.comments[0]?.commenter_name}{" "}
@@ -347,7 +453,7 @@ function Post() {
                         {elm.comments[1]?.commenter_name}
                       </span>
                       {elm.comments[0] && (
-                        <p style={{ marginLeft: "-40px" }} class="xx">
+                        <p style={{ marginLeft: "" }} class="xx">
                           and {elm.comment_count} more comment this
                         </p>
                       )}
