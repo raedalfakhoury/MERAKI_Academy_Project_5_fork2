@@ -15,7 +15,7 @@ function Home() {
     
    {/* <Weather/> */}
 <RecommendedFreind/>
-   {/* <Register/> */}
+   <Register/>
    {/* <LoginPage/> */}
 {/* //    <Post/>   */}
 {/* //    <WelcomePage/>    */}
