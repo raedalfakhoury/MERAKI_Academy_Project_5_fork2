@@ -12,12 +12,13 @@ function Home() {
   return (
     <>
     {/* <Navbar/> */}
+    
    {/* <Weather/> */}
-{/* <RecommendedFreind/> */}
+<RecommendedFreind/>
    {/* <Register/> */}
    {/* <LoginPage/> */}
-//    <Post/>  
-//    <WelcomePage/>   
+{/* //    <Post/>   */}
+{/* //    <WelcomePage/>    */}
 
     </>
   
