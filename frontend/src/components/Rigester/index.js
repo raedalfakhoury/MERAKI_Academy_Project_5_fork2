@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import {Button,Form,Container,Row,Col} from "react-bootstrap";
@@ -13,6 +15,7 @@ export default function Rigester() {
   const [userAge, setUserAge] = useState(0);
   const [result, setUserResult] = useState("");
   const [status, setStatus] = useState(false);
+  const redirect = useNavigate();
 
   return (
     <section className="background-radial-gradient overflow-hidden">
@@ -198,6 +201,8 @@ export default function Rigester() {
                       .then((res) => {
                         setStatus(true)
                         setUserResult(res.data.message);
+                        redirect("/users/login");
+
                       })
                       .catch((err) => {
                         setUserResult(err.response.data.message)
