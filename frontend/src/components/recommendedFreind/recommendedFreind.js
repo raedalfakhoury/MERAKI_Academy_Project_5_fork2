@@ -31,7 +31,7 @@ const RecommendedFreind = () => {
       const j = Math.floor(Math.random() * (i + 1));
       [usersCopy[i], usersCopy[j]] = [usersCopy[j], usersCopy[i]];
     }
-    const toggles = new Array(usersCopy.length).fill(false);
+    const toggles = new Array(usersCopy.length).fill(true);
     dispatch(setUsers(usersCopy));
     setToggle(toggles);
   }
@@ -64,9 +64,9 @@ const RecommendedFreind = () => {
             </div>
           </div>
           {toggle[i] ? (
-            <SiNike onClick={() => handleToggle(i)} className="nike" />
+            <GoPersonAdd onClick={() => handleToggle(i) } className="person" />
           ) : (
-            <GoPersonAdd onClick={() => handleToggle(i)} className="person" />
+            <SiNike onClick={() => handleToggle(i)} className="nike" />
           )}
         </div>
       ))}
