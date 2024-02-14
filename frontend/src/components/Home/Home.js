@@ -12,10 +12,13 @@ import WelcomePage from "../welcome page/welcomepage";
 function Home() {
   return (
     <>
+        
+
       <Routes>
-        <Route path="/Home" element={<Home />} />
-        <Route path="/users/register" element={<Register />} />
-        <Route path="/users/login" element={<LoginPage />} />
+        // <Route path="/users/register" element={<Register />} />
+        // <Route path="/users/login" element={<LoginPage />} />
+        // <Route path="/" element={<WelcomePage/>} />
+
         {/* <Route path="/users/aboutUs" element={<AboutUs />} /> */}
         {/* <Route path="/users/dashboard" element={<Dashboard />} /> */}
         {/* <Route path="/users/admin" element={<Admin />} /> */}
@@ -25,7 +28,6 @@ function Home() {
       {/* <Navbar/> */}
       {/* <Weather/> */}
       {/* <RecommendedFreind/> */}
-      <Register/>
       {/* <LoginPage /> */}
       {/* <div>Home</div>   */}
       {/* <Post/>   */}
