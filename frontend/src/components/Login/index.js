@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import store from "../redux/store";
-import authSlice,{ setLogin } from "../redux/reducers/auth/index";
+import authSlice, { setLogin } from "../redux/reducers/auth/index";
 import {
   Container,
   Row,
@@ -11,6 +11,7 @@ import {
   Form,
   Button,
   InputGroup,
+  Alert,
 } from "react-bootstrap";
 import axios from "axios";
 
@@ -20,10 +21,11 @@ function LoginPage() {
   const [userPassword, setUserPassword] = useState("");
   const [result, setUserResult] = useState("");
   const redirect = useNavigate();
-
-  const {token} = useSelector((state) => {
+  const [status, setStatus] = useState(false);
+  const [variant, setVariant] = useState("success");
+  const { token } = useSelector((state) => {
     return {
-      token: state.auth.token ,
+      token: state.auth.token,
     };
   });
   return (
@@ -136,19 +138,34 @@ function LoginPage() {
                                       password: userPassword,
                                     })
                                     .then((res) => {
-                                      setUserResult(res.data.message);
-                                      dispatch(setLogin(res.data.token))
-                                      redirect("/users/dashboard");
-                                      
+                                      setStatus(true);
+                                      console.log(res.data.massage);
+                                      setUserResult(res.data.massage);
+                                      dispatch(setLogin(res.data.token));
+
+                                      // redirect("/users/dashboard");
                                     })
                                     .catch((err) => {
-                                      console.log(err);
-                                      setUserResult(err.response.data.message);
+                                      console.log(err.response.data.massage);
+                                      setUserResult(err.response.data.massage);
+                                      setVariant("danger");
                                     });
                                 }}
                               >
                                 Sign in
                               </Button>
+                              {status
+                                ? result && (
+                                  <Alert key={variant} variant={variant}>
+                                  {result}
+                                </Alert>
+                                  )
+                                : result && (
+                                  <Alert key={variant} variant={variant}>
+                                  {result}
+                                </Alert>
+                                  )}
+
                             </div>
                           </Col>
                         </Row>
