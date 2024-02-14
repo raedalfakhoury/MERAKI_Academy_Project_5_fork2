@@ -179,7 +179,7 @@ const updateUser = (req, res) => {
 const getAllUser = (req, res) => {
   // const id = req.token.user_id;
   // console.log("id",id);
-  const query = `SELECT * FROM Users WHERE NOT id = 1;`;
+  const query = `SELECT * FROM Users WHERE NOT id = 1 ;` ;
   pool
     .query(query)
     .then((result) => {
