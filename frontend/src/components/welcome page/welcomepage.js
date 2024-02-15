@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import NavBar from "../Navbar/Navbar";
-import welcomepage from "../welcome page/welcomepage.css"
+import welcomepage from "../welcome page/welcomepage.css";
+import { useNavigate } from "react-router-dom";
+
 import {
   Carousel,
   Card,
@@ -74,7 +76,8 @@ function FeaturedSection() {
             <Card.Body className="flex-grow-1">
               <Card.Title>Master Personal Finance and Economics</Card.Title>
               <Card.Text>
-                Take control of your................................................
+                Take control of
+                your................................................
               </Card.Text>
               <a href="#" className="icon-link">
                 Discover Courses
@@ -135,18 +138,18 @@ function FeaturedSection() {
 }
 
 function AboutSection() {
+  const redirect = useNavigate();
+  const featuredRef = useRef(null);
+
   return (
     <div className="containers">
       <Container>
-        
         <Row className="gx-lg-5 align-items-center mb-5">
-          
           <Col
             lg={6}
             style={{ zIndex: 10, top: "60%", left: "30%" }}
             className="mb-5 mb-lg-0"
           >
-            
             <img
               src="https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
               alt=""
@@ -172,25 +175,27 @@ function AboutSection() {
               dolorum consequatur nulla, neque debitis eos reprehenderit quasi
               ab ipsum nisi dolorem modi. Quos?
             </p>
-            <Button variant="light" className="waves-effect waves-light">
-              Download
+            <Button
+              href="#landing-start"
+              variant="light"
+              className="waves-effect waves-light"
+              onClick={() => {}}
+            >
+              Get Started
             </Button>{" "}
             <Button variant="light" className="waves-effect waves-light ">
-              Download
+              Take a Tour
             </Button>{" "}
-
           </Col>
         </Row>
       </Container>
-
     </div>
   );
 }
 
 function WelcomeSection() {
   return (
-    <div className="about-section text-center bg-light py-5">
-      
+    <div className="about-section text-center bg-light py-5" id="landing-start">
       <Container>
         <h1
           className="display-4 mb-4"
@@ -236,10 +241,6 @@ function WelcomeSection() {
   );
 }
 
-
-
-
-
 class WelcomePage extends React.Component {
   render() {
     return (
@@ -282,7 +283,7 @@ class WelcomePage extends React.Component {
           }
         `}
         </style>
-        <NavBar/>
+        <NavBar />
         <AboutSection />
         <FeaturedSection />
         <WelcomeSection />
@@ -456,10 +457,6 @@ class WelcomePage extends React.Component {
             </Col>
           </Row>
         </Container>
-
-
-
-
       </div>
     );
   }
