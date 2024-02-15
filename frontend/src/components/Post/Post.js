@@ -15,18 +15,18 @@ import {
   addCommentByPostId,
 } from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
-import { BsSuitHeart } from "react-icons/bs";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import CloseButton from "react-bootstrap/CloseButton";
 import { IoCameraOutline } from "react-icons/io5";
-import { AiOutlineLike } from "react-icons/ai";
-import { BiSolidLike } from "react-icons/bi";
+
 import { FcLike } from "react-icons/fc";
-import { IoSend } from "react-icons/io5";
+
+import Dropdown from "react-bootstrap/Dropdown";
+
 function Post() {
   const [toggleLike, setToggleLike] = useState(false);
-  const [inputAddComment,setInputAddComment] = useState("")
+  const [inputAddComment, setInputAddComment] = useState("");
   const [togComment, setTogComment] = useState(false);
   const [x, setX] = useState(false);
   const [IDPost, setIDPost] = useState("");
@@ -144,7 +144,6 @@ function Post() {
         },
       })
       .then((result) => {
-      
         dispatch(
           setCommentByPostId({ id: PostID, comments: result.data.result })
         );
@@ -160,20 +159,24 @@ function Post() {
       });
   };
 
-  const addComment = (id)=>{
-    axios.post(`http://localhost:5000/comments/${id}`, {content:inputAddComment},{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((result)=>{
+  const addComment = (id) => {
+    axios
+      .post(
+        `http://localhost:5000/comments/${id}`,
+        { content: inputAddComment },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((result) => {
         console.log(result);
-    }).catch((err)=>{
+      })
+      .catch((err) => {
         console.log(err);
-    })
-  }
-
-
-
+      });
+  };
 
   useEffect(() => {
     axios
@@ -353,7 +356,6 @@ function Post() {
         </Container>
         {/* =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
         {posts?.map((elm, i) => {
-          
           return (
             <>
               <Container className="containerPosts">
@@ -370,32 +372,55 @@ function Post() {
                         roundedCircle
                       />
                     </Col>
-                    <Col style={{ height: "10px" }} xs={6}>
+                    <Col style={{ height: "10px" }} xs={10}>
                       <span className="usernameLap">{elm.username}</span>
                       <p className="xx">{elm.created_at} pm</p>
                     </Col>
-
-                    <Col className="navPostsDot">
-                      <svg
-                        style={{ cursor: "pointer" }}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="feather feather-more-vertical"
+                    <Dropdown xs={2} style={{width:"20px" }}>
+                      <Dropdown.Toggle
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          margin:"0px",
+                          padding:"0px",
+                          height:"0px",
+                       
+                          
+                        }}
                       >
-                        <circle cx="12" cy="12" r="1"></circle>
-                        <circle cx="12" cy="5" r="1"></circle>
-                        <circle cx="12" cy="19" r="1"></circle>
-                      </svg>
-                    </Col>
+                        <Col className="navPostsDot">
+                          <svg
+                            style={{ cursor: "pointer" }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="feather feather-more-vertical"
+                          >
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="12" cy="5" r="1"></circle>
+                            <circle cx="12" cy="19" r="1"></circle>
+                          </svg>
+                        </Col>
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+                        <Dropdown.Item href="#/action-2">
+                          delete post
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-3">
+                          Close
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </Row>
-                  
+
                   <Row
                     className="bodyPost"
                     style={{ justifyContent: "center" }}
@@ -429,10 +454,8 @@ function Post() {
                             setTogComment(!togComment);
                             if (IDPost === elm.id) {
                               setIDPost("");
-                             
                             } else {
                               getCommentsByPostId(elm.id);
-                             
                             }
                           }}
                           className="icn-comment"
@@ -527,103 +550,102 @@ function Post() {
                   </Row>
                 </Col>
                 {IDPost === elm.id && (
-                   
-                   <>
-                     <Container className="cont_comment_box">
-                       <Row style={{ paddingBottom: "15px" }}>
-                         <Col className="com-text">comments ({elm.comment_count})</Col>
-                         <Col></Col>
-                         <CloseButton
-                           className="CloseButton_x"
-                           style={{ paddingRight: "10px" }}
-                           onClick={() => {
-                             setTogComment(!togComment);
+                  <>
+                    <Container className="cont_comment_box">
+                      <Row style={{ paddingBottom: "15px" }}>
+                        <Col className="com-text">
+                          comments ({elm.comment_count})
+                        </Col>
+                        <Col></Col>
+                        <CloseButton
+                          className="CloseButton_x"
+                          style={{ paddingRight: "10px" }}
+                          onClick={() => {
+                            setTogComment(!togComment);
 
-                             setIDPost("");
-                           }}
-                         />
-                       </Row>
-                       {elm.commentsByPostId?.map((comment, index) => {
-                          
-                         return (
-                           <Container className="containerAllComment">
-                             <Row className="commentsAll">
-                               <Col
-                                 md={2}
-                                 xs={6}
-                                 style={{
-                                   maxHeight: "100%",
-                                   maxWidth: "70px",
-                                   margin:"0px",
-                                   display:"flex",
-                                   paddingRight:"5px",
-                                   justifyContent:"center",
-                                   alignItems:"center"
-                                   
-                                 }}
-                               >
-                                 <Image
-                                   style={{ width: "80%", height: "80%"}}
-                                   src={comment.profile_picture_url}
-                                   roundedCircle
-                                 />
-                               </Col>
-                               <Col style={{paddingLeft:"3px"}}>
-                                 <span className="usernameLap">
-                                   {comment.username}
-                                 </span>
-                                 <br />
-                                 <p className="xx">{comment.created_at}</p>
-                               </Col>
-                             </Row>
+                            setIDPost("");
+                          }}
+                        />
+                      </Row>
+                      {elm.commentsByPostId?.map((comment, index) => {
+                        return (
+                          <Container className="containerAllComment">
+                            <Row className="commentsAll">
+                              <Col
+                                md={2}
+                                xs={6}
+                                style={{
+                                  maxHeight: "100%",
+                                  maxWidth: "70px",
+                                  margin: "0px",
+                                  display: "flex",
+                                  paddingRight: "5px",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  style={{ width: "80%", height: "80%" }}
+                                  src={comment.profile_picture_url}
+                                  roundedCircle
+                                />
+                              </Col>
+                              <Col style={{ paddingLeft: "3px" }}>
+                                <span className="usernameLap">
+                                  {comment.username}
+                                </span>
+                                <br />
+                                <p className="xx">{comment.created_at}</p>
+                              </Col>
+                            </Row>
 
-                             <Row>
-                               <span
-                                 className="cont_comment_box_x"
-                                 style={{
-                                   margin: "0",
-                                   width: "500px"
-                                 }}
-                               >
-                                 {comment.content}
-                               </span>
+                            <Row>
+                              <span
+                                className="cont_comment_box_x"
+                                style={{
+                                  margin: "0",
+                                  width: "500px",
+                                }}
+                              >
+                                {comment.content}
+                              </span>
 
-                               <span className="const_like">
-                                 <span className=" line"></span>
-                               </span>
-                             </Row>
-                           </Container>
-                         );
-                       })}
+                              <span className="const_like">
+                                <span className=" line"></span>
+                              </span>
+                            </Row>
+                          </Container>
+                        );
+                      })}
 
-                       <div>
-                         <div class="mt-2">
-                           <textarea onChange={(e)=>{
-                               setInputAddComment(e.target.value)
-                           }}
-                           
-                             type="text"
-                             name="inputname"
-                             placeholder="Create Comment ..."
-                           />
-                           <Col style={{ position: "relative" }}>
-                             <a  onClick={()=>{
-                               if(inputAddComment ){
-
-                                 addComment(elm.id)
-                               }
-
-                               
-                             }} class="button is-solid primary-button raised">
-                               Post Comment
-                             </a>
-                           </Col>
-                         </div>
-                       </div>
-                     </Container>
-                   </>
-                 )}
-                  {/* <div class="post-container">
+                      <div>
+                        <div class="mt-2">
+                          <textarea
+                            onChange={(e) => {
+                              setInputAddComment(e.target.value);
+                            }}
+                            type="text"
+                            name="inputname"
+                            placeholder="Create Comment ..."
+                          />
+                          <Col style={{ position: "relative" }}>
+                            <a
+                              onClick={() => {
+                                if (inputAddComment) {
+                                  addComment(elm.id);
+                                }
+                              }}
+                              class="button is-solid primary-button raised"
+                            >
+                              Post Comment
+                            </a>
+                          </Col>
+                        </div>
+                      </div>
+                    </Container>
+                  </>
+                )}
+                {/* <div class="post-container">
     <textarea placeholder="Enter post content..."></textarea>
     <input type="text" placeholder="Enter image URL..."/>
     <button>Update Post</button>
