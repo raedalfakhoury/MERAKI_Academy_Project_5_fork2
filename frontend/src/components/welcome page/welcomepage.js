@@ -1,4 +1,6 @@
 import React from "react";
+import NavBar from "../Navbar/Navbar";
+import welcomepage from "../welcome page/welcomepage.css"
 import {
   Carousel,
   Card,
@@ -136,12 +138,15 @@ function AboutSection() {
   return (
     <div className="containers">
       <Container>
+        
         <Row className="gx-lg-5 align-items-center mb-5">
+          
           <Col
             lg={6}
             style={{ zIndex: 10, top: "60%", left: "30%" }}
             className="mb-5 mb-lg-0"
           >
+            
             <img
               src="https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
               alt=""
@@ -185,6 +190,7 @@ function AboutSection() {
 function WelcomeSection() {
   return (
     <div className="about-section text-center bg-light py-5">
+      
       <Container>
         <h1
           className="display-4 mb-4"
@@ -230,6 +236,10 @@ function WelcomeSection() {
   );
 }
 
+
+
+
+
 class WelcomePage extends React.Component {
   render() {
     return (
@@ -245,7 +255,7 @@ class WelcomePage extends React.Component {
             width: 100%;
             height: 100vh;
 
-            background : linear-gradient(to left bottom, #659BDC 57%, #ffff 53%)
+            background : linear-gradient(to left bottom, #659BDC 60%, #ffff 10%)
           }
           
           .split {
@@ -272,6 +282,7 @@ class WelcomePage extends React.Component {
           }
         `}
         </style>
+        <NavBar/>
         <AboutSection />
         <FeaturedSection />
         <WelcomeSection />

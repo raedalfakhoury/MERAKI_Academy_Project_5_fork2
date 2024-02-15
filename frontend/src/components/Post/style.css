@@ -232,7 +232,7 @@ circle {
   /* padding: 0 10px 0 10px; */
   margin: 0;
 
-  border-top: 1px solid #e8e8e8;
+  border-top: 1px solid hwb(0 91% 9%);
   background-color: transparent;
   border-top: 1px solid #ffffff;
   align-items: stretch;

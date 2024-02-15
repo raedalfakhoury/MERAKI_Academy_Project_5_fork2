@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
 import Weather from "../Weather/Weather";
 import RecommendedFreind from "../recommendedFreind/recommendedFreind";
 import Register from "../Rigester/index";
