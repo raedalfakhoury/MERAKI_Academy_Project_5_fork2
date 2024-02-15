@@ -11,7 +11,7 @@ body {
 
 .containerPosts {
   margin-top: 10px;
-  width: 50%;
+  width:50%;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
   background-color: #fff;
@@ -176,6 +176,7 @@ textarea {
   border: none;
   padding-left: 10px;
 }
+
 .imageClodx {
   border-radius: 20px;
   padding: 5px 15px 5px 15px;
@@ -192,21 +193,21 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .postsUserNav {
   padding: 16px 16px 0;
 }
- 
-.postsUserNav:last-child{
+
+.postsUserNav:last-child {
   justify-content: flex-end;
- 
 }
 circle {
   color: #757a91;
 }
 
 .bodyPostImage {
-  padding: 10px;
+  padding-top: 10px;
   color: #757a91;
   font-size: 0.9rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
@@ -228,9 +229,9 @@ circle {
   justify-content: flex-start;
   align-items: center;
   border: none;
-  padding: 16px;
+  padding: 0 10px 0 10px ;
   margin: 0;
-  margin: 8px 16px 16px;
+
   border-top: 1px solid #e8e8e8;
   background-color: transparent;
   border-top: 1px solid #ffffff;
@@ -242,6 +243,7 @@ circle {
 .comment-ic {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   flex-wrap: nowrap;
   flex: 1;
 }
@@ -308,3 +310,166 @@ circle {
   align-items: center;
   justify-content: flex-end;
 }
+
+.cont_comment_box {
+  background-color: rgb(255, 255, 255);
+  max-width: 41%;
+
+  position: absolute;
+  z-index: 5;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid rgb(189, 189, 189);
+  padding: 12px;
+}
+
+.com-text {
+  font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, segoe ui,
+    helvetica neue, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #757a91;
+}
+.input-file {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background-color: rgb(247, 247, 247);
+  color: rgb(136, 141, 185);
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 30px; /* Adjust as needed to accommodate the icon */
+  border-radius: 500px;
+}
+
+.ic {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.file-label:hover {
+  background-color: #f2f2f2;
+}.containerss {
+  position: absolute;
+  top: 99%;
+  left: 95%;
+  transform: translate(-50%, -50%);
+}
+
+.containerss .preloader {
+  animation: rotate 4s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+}
+
+@keyframes rotate {
+  50% {
+    transform: rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(720deg);
+  }
+}
+
+.preloader span {
+  --c: #f23f3f;
+  position: absolute;
+  display: block;
+  height: 24px; /* تعديل حجم النقاط */
+  width: 24px; /* تعديل حجم النقاط */
+  background: var(--c);
+  border: 1px solid var(--c);
+  border-radius: 50%;
+}
+
+.preloader span:nth-child(1) {
+  transform: translate(-10px, -10px); /* تعديل حجم النقاط */
+  animation: shape_1 4s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+}
+
+@keyframes shape_1 {
+  60% {
+    transform: scale(0.4);
+  }
+}
+
+.preloader span:nth-child(2) {
+  transform: translate(10px, -10px); /* تعديل حجم النقاط */
+  animation: shape_2 4s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+}
+
+@keyframes shape_2 {
+  40% {
+    transform: scale(0.4);
+  }
+}
+
+.preloader span:nth-child(3) {
+  position: relative;
+  border-radius: 0px;
+  transform: scale(0.6) rotate(-45deg); /* تعديل حجم النقاط وزاوية الدوران */
+  animation: shape_3 4s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+}
+
+@keyframes shape_3 {
+  50% {
+    border-radius: 50%;
+    transform: scale(0.6) rotate(-45deg);
+  }
+
+  100% {
+    transform: scale(0.6) rotate(-45deg);
+  }
+}
+
+.shadow {
+  position: relative;
+  top: 10px; /* تعديل المسافة العمودية */
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  height: 4px; /* تعديل حجم الظل */
+  width: 24px; /* تعديل حجم الظل */
+  border-radius: 50%;
+  background-color: #d9d9d9;
+  border: 1px solid #d9d9d9;
+  animation: shadow 4s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+}
+
+@keyframes shadow {
+  50% {
+    transform: translateX(-50%) scale(0.5);
+    border-color: #f2f2f2;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

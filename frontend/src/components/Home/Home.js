@@ -12,7 +12,9 @@ import WelcomePage from "../welcome page/welcomepage";
 function Home() {
   return (
     <>
-        
+
+ 
+
 
       <Routes>
         // <Route path="/users/register" element={<Register />} />
@@ -29,7 +31,7 @@ function Home() {
       {/* <Weather/> */}
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
-      {/* <div>Home</div>   */}
+ 
       {/* <Post/>   */}
     </>
   );

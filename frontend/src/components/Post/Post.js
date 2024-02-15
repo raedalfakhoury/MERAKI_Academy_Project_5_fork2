@@ -12,9 +12,19 @@ import { GiSelfLove } from "react-icons/gi";
 import { BsSuitHeart } from "react-icons/bs";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import CloseButton from "react-bootstrap/CloseButton";
+import { IoCameraOutline } from "react-icons/io5";
+import { AiOutlineLike } from "react-icons/ai";
+import { BiSolidLike } from "react-icons/bi";
+import { FcLike } from "react-icons/fc";
 function Post() {
-  // const [tog, setTog] = useState(false);
-
+  const [togComment, setTogComment] = useState(false);
+  const [x, setX] = useState(false);
+  const [IDPost, setIDPost] = useState("");
+  localStorage.setItem(
+    "countLikeComment",
+    localStorage.getItem("countLikeComment") || `0`
+  );
   const [image_url, setImage_url] = useState("");
   const [ContentPost, setContentPost] = useState("");
   const pr_key = "rllytlm7";
@@ -47,32 +57,30 @@ function Post() {
   });
   console.log(posts);
   // ! posts  data=>
-//  comment_count: "2"
-// comments: (2) [{…}, {…}]
-// content :"Creating a storyteller's circle where women share their joy, pain, and experience, the poems in this collection are lyrical vignettes"
-// created_at:"2024-02-10T16:55:56.635Z"
-// id:12
-// like_count:"2"
-// media_url: "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
-// profile_picture_url:"https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png"
-// username":username"
+  //  comment_count: "2"
+  // comments: (2) [{…}, {…}]
+  // content :"Creating a storyteller's circle where women share their joy, pain, and experience, the poems in this collection are lyrical vignettes"
+  // created_at:"2024-02-10T16:55:56.635Z"
+  // id:12
+  // like_count:"2"
+  // media_url: "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
+  // profile_picture_url:"https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png"
+  // username":username"
 
+  // ! ????????????
+  // comment_count:"0"
+  // comments:[]
+  // like_count:"0"
+  // profile_picture_url ?
+  //username:username ?
 
-// ! ????????????
-// comment_count:"0"
-// comments:[]
-// like_count:"0"
-// profile_picture_url ?
-//username:username ?
-
- // ! create post data =>
-// content: ""
-// created_at: "2024-02-13T14:19:21.326Z"
-// id:25
-// is_deleted: 0
-// media_url:"https://res.cloudinary.com/dmmo3zzyc/image/upload/v1707844756/si581g2sj4iazi6cl1zb.png"
-// user_id:30
-
+  // ! create post data =>
+  // content: ""
+  // created_at: "2024-02-13T14:19:21.326Z"
+  // id:25
+  // is_deleted: 0
+  // media_url:"https://res.cloudinary.com/dmmo3zzyc/image/upload/v1707844756/si581g2sj4iazi6cl1zb.png"
+  // user_id:30
 
   const createNewPost = () => {
     axios
@@ -81,7 +89,7 @@ function Post() {
         { content: ContentPost, media_url: image_url },
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzA4MzQsImV4cCI6MTcwNzk1MjQzNH0.7ZO7-Ei9NSthBGORaJFQUw17PlpP7Ti4Bhrw6OFYweo`,
           },
         }
       )
@@ -103,7 +111,7 @@ function Post() {
         {},
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzA4MzQsImV4cCI6MTcwNzk1MjQzNH0.7ZO7-Ei9NSthBGORaJFQUw17PlpP7Ti4Bhrw6OFYweo`,
           },
         }
       )
@@ -112,7 +120,7 @@ function Post() {
         axios
           .get(`http://localhost:5000/likes/${id}`, {
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzA4MzQsImV4cCI6MTcwNzk1MjQzNH0.7ZO7-Ei9NSthBGORaJFQUw17PlpP7Ti4Bhrw6OFYweo`,
             },
           })
           .then((result) => {
@@ -134,7 +142,7 @@ function Post() {
     axios
       .get("http://localhost:5000/post/1/getAllPostsMyFollower", {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc4NDM5NDgsImV4cCI6MTcwNzg2NTU0OH0.lvSso6qBWbi13zC79mMy__qzxFhyMEqOhZRRVu0FcQ8`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5NTI3NzYsImV4cCI6MTcwNzk3NDM3Nn0.hbg9_hZUjT9p6u-vBYnkKA9fmecz0uUE_xsxv9kX9Io`,
         },
       })
       .then((result) => {
@@ -255,62 +263,45 @@ function Post() {
                       placeholder="Write something about you..."
                     ></textarea>
                   </div>
+                  {image_url && (
+                    <Image
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "10px",
+                      }}
+                      src={image_url}
+                    />
+                  )}
                 </Col>
               </Row>
-              {image_url && (
-                <Image
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "10px",
-                  }}
-                  src={image_url}
-                />
-              )}
-              <Col className="imageClod">
-                <div
-                  onClick={(e) => {
-                    console.log(e.target);
-                  }}
-                  type="file"
-                  class="imageClodx"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="feather feather-camera"
-                  >
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                    <circle cx="12" cy="13" r="4"></circle>
-                  </svg>
-                  <span>Media</span>
-                  {image_url && (
-                    <Button
-                      onClick={() => {
-                        createNewPost();
-                      }}
-                      style={{ marginLeft: "10px" }}
-                      variant="primary"
-                    >
-                      publish
-                    </Button>
-                  )}
-                </div>
 
-                <input
-                  onChange={(e) => {
-                    console.log(e);
-                    handleFile(e);
-                  }}
-                  type="file"
-                />
+              <Col
+                style={{ justifyContent: "space-between" }}
+                className="imageClod"
+              >
+                <label class="file-label">
+                  <input
+                    onChange={(e) => {
+                      handleFile(e);
+                    }}
+                    type="file"
+                    class="input-file"
+                  />
+                  <IoCameraOutline />
+                  <span class="ic"> Media</span>
+                </label>
+                {image_url && (
+                  <Button
+                    onClick={() => {
+                      createNewPost();
+                    }}
+                    style={{ marginLeft: "10px", borderRadius: "500px" }}
+                    variant="primary"
+                  >
+                    publish
+                  </Button>
+                )}
               </Col>
             </Col>
           </Row>
@@ -358,45 +349,115 @@ function Post() {
                       </svg>
                     </Col>
                   </Row>
+                  {IDPost === elm.id && (
+                    <>
+                      <Container className="cont_comment_box">
+                        <Row style={{ paddingBottom: "15px" }}>
+                          <Col className="com-text">comments (8)</Col>
+                          <Col></Col>
+                          <CloseButton
+                            style={{ paddingRight: "10px" }}
+                            onClick={() => {
+                              setTogComment(!togComment);
+                              setIDPost("");
+                            }}
+                          />
+                        </Row>
+                        <Row className="commentsAll">
+                          <Col
+                            md={2}
+                            xs={6}
+                            style={{ maxHeight: "40px", maxWidth: "70px" }}
+                          >
+                            <Image
+                              style={{ width: "100%", height: "100%" }}
+                              src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                              roundedCircle
+                            />
+                          </Col>
+                          <Col>
+                            <span className="usernameLap">Dan Walker </span>
+                            <br />
+                            <p className="xx">time </p>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <span
+                            
+                            style={{ paddingTop: "10px" ,margin:"0" ,fontWeight:"inherit" }}
+                          >
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit, sed do eiusmod tempo incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris consequat.
+                          </span>
+
+                     
+                        </Row>
+                      </Container>
+                    </>
+                  )}
                   <Row
                     className="bodyPost"
                     style={{ justifyContent: "center" }}
                   >
                     <Row className="bodyPostImage">
                       {" "}
-                      <p>{elm.content}</p>
+                      <p style={{margin:"5px"}}>{elm.content}</p>
                     </Row>
                     <Row>
                       {" "}
                       <Col style={{ position: "relative" }} xs={12}>
                         <Image
-                          style={{ width: "100%", height: "50vh" }}
+                          style={{ width: "100%", height: "50vh" ,borderRadius:"600px", border:"solid 1px #e8e8e8"}}
                           src={elm.media_url}
                           rounded
                         />
                         <FaRegComment
-                          onClick={() => {}}
+                          onClick={() => {
+                            setTogComment(!togComment);
+                            setIDPost(elm.id);
+                          }}
                           className="icn-comment"
                         />
-                        <BsSuitHeart
-                          onClick={(e) => {
-                            setToggleLike(!toggleLike);
-                            if (!toggleLike) {
-                              Like(elm.id);
 
-                              // e.target.style.backgroundColor = "#6ba4e9";
-                            } else {
-                              Like(elm.id);
+                        {localStorage.getItem(`${elm.id}`) * 1 !== elm.id ? (
+                          <FcLike
+                            style={{ backgroundColor: "#fff" }}
+                            onClick={(e) => {
+                              setToggleLike(!toggleLike);
 
-                              // e.target.style.color = "#fff";
-                              // e.target.style.backgroundColor = "red";
-                            }
-                          }}
-                          className="icn-like"
-                        />
+                              Like(elm.id);
+                              localStorage.setItem(`${elm.id}`, `${elm.id}`);
+                            }}
+                            className="icn-like"
+                          />
+                        ) : (
+                          <>
+                            <div
+                              onClick={(e) => {
+                                setToggleLike(!toggleLike);
+
+                                Like(elm.id);
+
+                                localStorage.removeItem(`${elm.id}`);
+                              }}
+                              class="containerss"
+                            >
+                              <div class="preloader">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                              </div>
+                              <div class="shadow"></div>
+                            </div>
+                            {/* <FcLike className="icn-like" /> */}
+                          </>
+                        )}
                       </Col>
                     </Row>
                   </Row>
+
                   <Row className="card-footer-post">
                     <Col
                       xs={3}
@@ -438,26 +499,7 @@ function Post() {
                         })}
                       </div>
                     </Col>
-                    <Col style={{ alignItems: "center" }}>
-                      <span
-                        class="usernameLap"
-                        style={{
-                          fontSize: "10px",
-                          fontFamily: "cursive",
-                          fontWeight: "bold",
-                          paddingTop: "25px",
-                        }}
-                      >
-                        {elm.comments[0]?.commenter_name}{" "}
-                        {elm.comments[0] && <span>and</span>}{" "}
-                        {elm.comments[1]?.commenter_name}
-                      </span>
-                      {elm.comments[0] && (
-                        <p style={{ marginLeft: "" }} class="xx">
-                          and {elm.comment_count} more comment this
-                        </p>
-                      )}
-                    </Col>
+                  
                     <Col className="comment-ic" style={{ paddingTop: "7px" }}>
                       <FaRegComment className="num" />
                       <span className="num">{elm.comment_count}</span>
