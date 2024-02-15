@@ -30,7 +30,7 @@ const createNewComment = (req, res) => {
 
 const getCommentsByPostId = (req, res) => {
   const post_id = req.params.id;
-  const query = `SELECT * FROM Comments WHERE post_id = '${post_id}'`
+  const query = `SELECT Comments.post_id, Comments.created_at,Comments.content, u.username , u.profile_picture_url  FROM Comments JOIN Users u ON u.id = Comments.user_id WHERE post_id = ${post_id}`
   pool
     .query(query)
     .then((result) => {
