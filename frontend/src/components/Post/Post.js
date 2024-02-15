@@ -598,19 +598,13 @@ function Post() {
 
                        <div>
                          <div class="mt-2">
-                           <input onChange={(e)=>{
+                           <textarea onChange={(e)=>{
                                setInputAddComment(e.target.value)
                            }}
-                             style={{
-                               width: "100%",
-                               height: "8vh",
-                               borderRadius: "10px",
-                               borderColor: "#FF94",
-                             }}
+                           
                              type="text"
                              name="inputname"
                              placeholder="Create Comment ..."
-                             className="block w-56 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800"
                            />
                            <Col style={{ position: "relative" }}>
                              <a  onClick={()=>{
@@ -629,6 +623,11 @@ function Post() {
                      </Container>
                    </>
                  )}
+                  {/* <div class="post-container">
+    <textarea placeholder="Enter post content..."></textarea>
+    <input type="text" placeholder="Enter image URL..."/>
+    <button>Update Post</button>
+  </div> */}
               </Container>
             </>
           );
