@@ -9,7 +9,7 @@ const initialState = {
 
 export const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState ,
   reducers: {
     setLogin: (state, action) => {
       state.token = action.payload;
@@ -26,7 +26,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = false;
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
-      localStorage.clear()
+      // localStorage.clear()
     },
   },
 });

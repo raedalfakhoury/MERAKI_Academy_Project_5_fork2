@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+import {Button,Form,Container,Row,Col} from "react-bootstrap";
+
 
 export default function Rigester() {
+  const [userLastName, setUserFirstName] = useState("");
+  const [userFirstName, setUserLastName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [userCountry, setUserCountry] = useState("");
+  const [userAge, setUserAge] = useState(0);
+  const [result, setUserResult] = useState("");
+  const [status, setStatus] = useState(false);
+  const redirect = useNavigate();
 
   return (
     <section className="background-radial-gradient overflow-hidden">
@@ -128,25 +134,49 @@ export default function Rigester() {
                     <Col md={6} className="mb-4">
                       <Form.Group>
                         <Form.Label>First name</Form.Label>
-                        <Form.Control type="text" id="form3Example1" />
+                        <Form.Control
+                          type="text"
+                          placeholder="First Name"
+                          onChange={(e) => {
+                            setUserFirstName(e.target.value);
+                          }}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={6} className="mb-4">
                       <Form.Group>
                         <Form.Label>Last name</Form.Label>
-                        <Form.Control type="text" id="form3Example2" />
+                        <Form.Control
+                          type="text"
+                          placeholder="Last Name"
+                          onChange={(e) => {
+                            setUserLastName(e.target.value);
+                          }}
+                        />{" "}
                       </Form.Group>
                     </Col>
                   </Row>
 
                   <Form.Group className="mb-4">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" id="form3Example3" />
+                    <Form.Control
+                      type="email"
+                      placeholder="Email"
+                      onChange={(e) => {
+                        setUserEmail(e.target.value);
+                      }}
+                    />{" "}
                   </Form.Group>
 
                   <Form.Group className="mb-4">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" id="form3Example4" />
+                    <Form.Control
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) => {
+                        setUserPassword(e.target.value);
+                      }}
+                    />{" "}
                   </Form.Group>
 
                   <Form.Group className="mb-4">
@@ -159,13 +189,31 @@ export default function Rigester() {
                   </Form.Group>
 
                   <Button
-                    variant="primary"
-                    type="submit"
-                    className="btn-block mb-4 w-100"
-                  >
-                    Sign up
-                  </Button>
+                  variant="outline-primary w-100"
+                  id="Register_btn"
+                  onClick={() => {
+                    axios
+                      .post("http://localhost:5000/users/register", {
+                        username: `${userFirstName} ${userLastName}`,
+                        email: userEmail,
+                        password_hash: userPassword
+                      })
+                      .then((res) => {
+                        setStatus(true)
+                        setUserResult(res.data.message);
+                        redirect("/users/login");
 
+                      })
+                      .catch((err) => {
+                        setUserResult(err.response.data.message)
+                      });
+                  }}
+                >
+                  Register
+                </Button>
+                {status
+              ? result && <div className="SuccessMessage">{result}</div>
+              : result && <div className="ErrorMessage">{result}</div>}
                   <div className="text-center">
                     <p>or sign up with:</p>
                     <Button variant="link" className="btn-floating mx-1">
