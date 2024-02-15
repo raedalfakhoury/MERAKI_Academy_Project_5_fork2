@@ -263,7 +263,7 @@ INNER JOIN Users ON Posts.user_id = Users.id
 WHERE 
   Posts.is_deleted = 0
   AND
-  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =30) OR  Posts.user_id IN (SELECT follower_id  FROM Follows WHERE follower_id =30)`;
+  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =${user_id}) OR  Posts.user_id IN (SELECT follower_id  FROM Follows WHERE follower_id =${user_id})`;
 //  SELECT Posts.* , Users.username ,Users.profile_picture_url
 //   FROM Posts
 //   JOIN Follows ON Posts.user_id = Follows.followed_id 

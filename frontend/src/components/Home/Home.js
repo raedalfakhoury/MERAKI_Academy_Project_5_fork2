@@ -17,7 +17,7 @@ function Home() {
    {/* <Register/> */}
    {/* <LoginPage/> */}
 //    <Post/>  
-//    <WelcomePage/>   
+{/* //    <WelcomePage/>    */}
 
     </>
   

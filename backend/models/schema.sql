@@ -191,3 +191,34 @@ SELECT Posts.*
 FROM Posts
 JOIN Follows ON Posts.user_id = Follows.followed_id
 WHERE Follows.follower_id = 1;
+
+
+
+
+
+
+
+     كل الاشخاص الي متابعهم
+SELECT * 
+    FROM Users
+    INNER JOIN Follows ON Follows.follower_id  =  30  AND  Follows.followed_id = Users.id
+
+
+
+
+
+
+     كل الاشخاص الي متابعيني
+
+    SELECT * 
+    FROM Users
+    INNER JOIN Follows ON Follows.follower_id  =  Users.id  AND  Follows.followed_id = 30
+
+
+
+     كل الاشخاص الي مش ضايفهم
+
+    SELECT *
+FROM Users
+WHERE id != 30
+AND id NOT IN (SELECT followed_id FROM Follows WHERE follower_id = 30);
