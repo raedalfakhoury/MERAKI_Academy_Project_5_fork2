@@ -15,7 +15,7 @@ const authorization = require("../middlewares/authorization");
 const commentsRouter = express.Router();
 
 commentsRouter.post("/:id",authentication,createNewComment);
-commentsRouter.get("/:id", getCommentsByPostId);
+commentsRouter.get("/:id",authentication ,getCommentsByPostId);
 
 commentsRouter.put("/:id", authentication,updateCommentsById);
 

@@ -7,24 +7,29 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import { FaRegComment } from "react-icons/fa";
-import { setPosts, filter_like, addPost } from "../redux/reducers/Posts";
+import {
+  setPosts,
+  filter_like,
+  addPost,
+  setCommentByPostId,
+  addCommentByPostId,
+} from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
-import { BsSuitHeart } from "react-icons/bs";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import CloseButton from "react-bootstrap/CloseButton";
 import { IoCameraOutline } from "react-icons/io5";
-import { AiOutlineLike } from "react-icons/ai";
-import { BiSolidLike } from "react-icons/bi";
+
 import { FcLike } from "react-icons/fc";
+
+import Dropdown from "react-bootstrap/Dropdown";
+
 function Post() {
+  const [toggleLike, setToggleLike] = useState(false);
+  const [inputAddComment, setInputAddComment] = useState("");
   const [togComment, setTogComment] = useState(false);
   const [x, setX] = useState(false);
   const [IDPost, setIDPost] = useState("");
-  localStorage.setItem(
-    "countLikeComment",
-    localStorage.getItem("countLikeComment") || `0`
-  );
   const [image_url, setImage_url] = useState("");
   const [ContentPost, setContentPost] = useState("");
   const pr_key = "rllytlm7";
@@ -50,12 +55,7 @@ function Post() {
   };
 
   const dispatch = useDispatch();
-  const { posts } = useSelector((state) => {
-    return {
-      posts: state.posts.posts,
-    };
-  });
-  console.log(posts);
+
   // ! posts  data=>
   //  comment_count: "2"
   // comments: (2) [{…}, {…}]
@@ -89,7 +89,7 @@ function Post() {
         { content: ContentPost, media_url: image_url },
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzA4MzQsImV4cCI6MTcwNzk1MjQzNH0.7ZO7-Ei9NSthBGORaJFQUw17PlpP7Ti4Bhrw6OFYweo`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -111,7 +111,7 @@ function Post() {
         {},
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzA4MzQsImV4cCI6MTcwNzk1MjQzNH0.7ZO7-Ei9NSthBGORaJFQUw17PlpP7Ti4Bhrw6OFYweo`,
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -120,7 +120,7 @@ function Post() {
         axios
           .get(`http://localhost:5000/likes/${id}`, {
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzA4MzQsImV4cCI6MTcwNzk1MjQzNH0.7ZO7-Ei9NSthBGORaJFQUw17PlpP7Ti4Bhrw6OFYweo`,
+              Authorization: `Bearer ${token}`,
             },
           })
           .then((result) => {
@@ -136,13 +136,53 @@ function Post() {
       });
   };
 
-  const [toggleLike, setToggleLike] = useState(false);
+  const getCommentsByPostId = (PostID) => {
+    axios
+      .get(`http://localhost:5000/comments/${PostID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        dispatch(
+          setCommentByPostId({ id: PostID, comments: result.data.result })
+        );
+
+        setIDPost("");
+        setIDPost(PostID);
+
+        // console.log(PostID)
+        // console.log(result.data.result)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const addComment = (id) => {
+    axios
+      .post(
+        `http://localhost:5000/comments/${id}`,
+        { content: inputAddComment },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/post/1/getAllPostsMyFollower", {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwibmFtZSI6Inh4IiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5NTI3NzYsImV4cCI6MTcwNzk3NDM3Nn0.hbg9_hZUjT9p6u-vBYnkKA9fmecz0uUE_xsxv9kX9Io`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((result) => {
@@ -153,6 +193,14 @@ function Post() {
         console.log(err);
       });
   }, [dispatch]);
+  const { posts, token, userId } = useSelector((state) => {
+    return {
+      posts: state.posts.posts,
+      userId: state.auth.userId,
+      token: state.auth.token,
+    };
+  });
+  console.log(posts);
 
   return (
     <>
@@ -324,87 +372,55 @@ function Post() {
                         roundedCircle
                       />
                     </Col>
-                    <Col style={{ height: "10px" }} xs={6}>
+                    <Col style={{ height: "10px" }} xs={10}>
                       <span className="usernameLap">{elm.username}</span>
                       <p className="xx">{elm.created_at} pm</p>
                     </Col>
-
-                    <Col className="navPostsDot">
-                      <svg
-                        style={{ cursor: "pointer" }}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="feather feather-more-vertical"
+                    <Dropdown xs={2} style={{width:"20px" }}>
+                      <Dropdown.Toggle
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          margin:"0px",
+                          padding:"0px",
+                          height:"0px",
+                       
+                          
+                        }}
                       >
-                        <circle cx="12" cy="12" r="1"></circle>
-                        <circle cx="12" cy="5" r="1"></circle>
-                        <circle cx="12" cy="19" r="1"></circle>
-                      </svg>
-                    </Col>
+                        <Col className="navPostsDot">
+                          <svg
+                            style={{ cursor: "pointer" }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="feather feather-more-vertical"
+                          >
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="12" cy="5" r="1"></circle>
+                            <circle cx="12" cy="19" r="1"></circle>
+                          </svg>
+                        </Col>
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+                        <Dropdown.Item href="#/action-2">
+                          delete post
+                        </Dropdown.Item>
+                        <Dropdown.Item href="#/action-3">
+                          Close
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </Row>
-                  {IDPost === elm.id && (
-                    <>
-                      <Container className="cont_comment_box">
-                        <Row style={{ paddingBottom: "15px" }}>
-                          <Col className="com-text">comments (8)</Col>
-                          <Col></Col>
-                          <CloseButton className="CloseButton_x"
-                            style={{ paddingRight: "10px" }}
-                            onClick={() => {
-                              setTogComment(!togComment);
-                              setIDPost("");
-                            }}
-                          />
-                        </Row>
-                        <Row className="commentsAll">
-                          <Col
-                            md={2}
-                            xs={6}
-                            style={{ maxHeight: "40px", maxWidth: "70px" }}
-                          >
-                            <Image
-                              style={{ width: "100%", height: "100%" }}
-                              src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                              roundedCircle
-                            />
-                          </Col>
-                          <Col>
-                            <span className="usernameLap">Dan Walker </span>
-                            <br />
-                            <p className="xx">time </p>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <span className="cont_comment_box_x"
-                            style={{
-                           
-                              margin: "0",
-                            
-                            }}
-                          >
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit, sed do eiusmod tempo incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris consequat.
-                          
-                          </span>
 
-
-
-                          <span className="const_like"><span className=" line"></span></span>
-                          
-                  
-                        </Row>
-                      </Container>
-                    </>
-                  )}
                   <Row
                     className="bodyPost"
                     style={{ justifyContent: "center" }}
@@ -436,7 +452,11 @@ function Post() {
                         <FaRegComment
                           onClick={() => {
                             setTogComment(!togComment);
-                            setIDPost(elm.id);
+                            if (IDPost === elm.id) {
+                              setIDPost("");
+                            } else {
+                              getCommentsByPostId(elm.id);
+                            }
                           }}
                           className="icn-comment"
                         />
@@ -529,6 +549,107 @@ function Post() {
                     </Col>
                   </Row>
                 </Col>
+                {IDPost === elm.id && (
+                  <>
+                    <Container className="cont_comment_box">
+                      <Row style={{ paddingBottom: "15px" }}>
+                        <Col className="com-text">
+                          comments ({elm.comment_count})
+                        </Col>
+                        <Col></Col>
+                        <CloseButton
+                          className="CloseButton_x"
+                          style={{ paddingRight: "10px" }}
+                          onClick={() => {
+                            setTogComment(!togComment);
+
+                            setIDPost("");
+                          }}
+                        />
+                      </Row>
+                      {elm.commentsByPostId?.map((comment, index) => {
+                        return (
+                          <Container className="containerAllComment">
+                            <Row className="commentsAll">
+                              <Col
+                                md={2}
+                                xs={6}
+                                style={{
+                                  maxHeight: "100%",
+                                  maxWidth: "70px",
+                                  margin: "0px",
+                                  display: "flex",
+                                  paddingRight: "5px",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  style={{ width: "80%", height: "80%" }}
+                                  src={comment.profile_picture_url}
+                                  roundedCircle
+                                />
+                              </Col>
+                              <Col style={{ paddingLeft: "3px" }}>
+                                <span className="usernameLap">
+                                  {comment.username}
+                                </span>
+                                <br />
+                                <p className="xx">{comment.created_at}</p>
+                              </Col>
+                            </Row>
+
+                            <Row>
+                              <span
+                                className="cont_comment_box_x"
+                                style={{
+                                  margin: "0",
+                                  width: "500px",
+                                }}
+                              >
+                                {comment.content}
+                              </span>
+
+                              <span className="const_like">
+                                <span className=" line"></span>
+                              </span>
+                            </Row>
+                          </Container>
+                        );
+                      })}
+
+                      <div>
+                        <div class="mt-2">
+                          <textarea
+                            onChange={(e) => {
+                              setInputAddComment(e.target.value);
+                            }}
+                            type="text"
+                            name="inputname"
+                            placeholder="Create Comment ..."
+                          />
+                          <Col style={{ position: "relative" }}>
+                            <a
+                              onClick={() => {
+                                if (inputAddComment) {
+                                  addComment(elm.id);
+                                }
+                              }}
+                              class="button is-solid primary-button raised"
+                            >
+                              Post Comment
+                            </a>
+                          </Col>
+                        </div>
+                      </div>
+                    </Container>
+                  </>
+                )}
+                {/* <div class="post-container">
+    <textarea placeholder="Enter post content..."></textarea>
+    <input type="text" placeholder="Enter image URL..."/>
+    <button>Update Post</button>
+  </div> */}
               </Container>
             </>
           );

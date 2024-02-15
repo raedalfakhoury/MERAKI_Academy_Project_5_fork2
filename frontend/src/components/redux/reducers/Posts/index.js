@@ -19,10 +19,29 @@ export const postsSlice = createSlice({
             }
             return post
         })
+    },
+    setCommentByPostId:(state,action)=>{
+      state.posts.map((post,index)=>{
+        if(post.id === action.payload.id){
+          post.commentsByPostId = action.payload.comments
+        }
+      })
+    },
+    addCommentByPostId: (state,action) => {
+      state.posts.map((post,index)=>{
+        if(post.id === action.payload.id ){
+          if(!post.commentsByPostId){
+            post.commentsByPostId = action.payload.comment
+          }else{
+            post.commentsByPostId.push(action.payload.comment)
+          }
+         
+        }
+      })
     }
   },
 });
 
-export const { setPosts,filter_like,addPost } = postsSlice.actions;
+export const { setPosts,filter_like,addPost ,setCommentByPostId,addCommentByPostId} = postsSlice.actions;
 
 export default postsSlice.reducer;
