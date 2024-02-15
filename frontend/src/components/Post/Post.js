@@ -355,7 +355,7 @@ function Post() {
                         <Row style={{ paddingBottom: "15px" }}>
                           <Col className="com-text">comments (8)</Col>
                           <Col></Col>
-                          <CloseButton
+                          <CloseButton className="CloseButton_x"
                             style={{ paddingRight: "10px" }}
                             onClick={() => {
                               setTogComment(!togComment);
@@ -382,17 +382,25 @@ function Post() {
                           </Col>
                         </Row>
                         <Row>
-                          <span
+                          <span className="cont_comment_box_x"
+                            style={{
+                           
+                              margin: "0",
                             
-                            style={{ paddingTop: "10px" ,margin:"0" ,fontWeight:"inherit" }}
+                            }}
                           >
                             Lorem ipsum dolor sit amet, consectetur adipisicing
                             elit, sed do eiusmod tempo incididunt ut labore et
                             dolore magna aliqua. Ut enim ad minim veniam, quis
                             nostrud exercitation ullamco laboris consequat.
+                          
                           </span>
 
-                     
+
+
+                          <span className="const_like"><span className=" line"></span></span>
+                          
+                  
                         </Row>
                       </Container>
                     </>
@@ -403,13 +411,25 @@ function Post() {
                   >
                     <Row className="bodyPostImage">
                       {" "}
-                      <p style={{margin:"5px"}}>{elm.content}</p>
+                      <p style={{ margin: "5px" }}>{elm.content}</p>
                     </Row>
                     <Row>
                       {" "}
-                      <Col style={{ position: "relative" }} xs={12}>
+                      <span
+                        style={{
+                          position: "relative",
+                          margin: "0px",
+                          padding: "0px",
+                        }}
+                      >
                         <Image
-                          style={{ width: "100%", height: "50vh" ,borderRadius:"600px", border:"solid 1px #e8e8e8"}}
+                          className="imagePosts"
+                          style={{
+                            width: "100%",
+                            height: "50vh",
+                            borderRadius: "600px",
+                            border: "solid 1px #e8e8e8",
+                          }}
                           src={elm.media_url}
                           rounded
                         />
@@ -451,23 +471,22 @@ function Post() {
                               </div>
                               <div class="shadow"></div>
                             </div>
-                            {/* <FcLike className="icn-like" /> */}
                           </>
                         )}
-                      </Col>
+                      </span>
                     </Row>
                   </Row>
 
                   <Row className="card-footer-post">
                     <Col
-                      xs={3}
+                      xs={5}
                       style={{
                         display: "flex",
                         flexDirection: "row",
-
+                        padding: "0",
                         height: "60px",
                         minWidth: "100px",
-                        paddingTop: "5px",
+                        paddingTop: "10px",
                         flexWrap: "nowrap",
                       }}
                     >
@@ -499,7 +518,7 @@ function Post() {
                         })}
                       </div>
                     </Col>
-                  
+
                     <Col className="comment-ic" style={{ paddingTop: "7px" }}>
                       <FaRegComment className="num" />
                       <span className="num">{elm.comment_count}</span>
