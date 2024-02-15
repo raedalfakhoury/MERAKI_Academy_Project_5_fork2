@@ -12,10 +12,6 @@ import WelcomePage from "../welcome page/welcomepage";
 function Home() {
   return (
     <>
-
- 
-
-
       <Routes>
         // <Route path="/users/register" element={<Register />} />
         // <Route path="/users/login" element={<LoginPage />} />

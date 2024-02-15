@@ -12,20 +12,20 @@ const is_deleted = 0;
 const SEC = process.env.SEC;
 
 const register = async (req, res) => {
-  const { username, email, password_hash, bio, profile_picture_url } = req.body;
+  const { username, email, password_hash, bio = "bio" } = req.body;
 
   const salt = 5;
   const password = await bcryptjs.hash(password_hash, salt);
   const Email = email.toLowerCase();
   console.log(Email);
   console.log(password);
-
+    
+  let result = username.replace(/^\s+|\s+$/gm,'');
   const VALUES = [
-    username,
+    result,
     Email,
     password,
-    bio,
-    profile_picture_url,
+    bio  , 
     role_id,
     is_deleted,
   ]; // 7 elm
@@ -34,11 +34,10 @@ const register = async (req, res) => {
             username,
             email,
             password_hash,
-            bio,
-            profile_picture_url,
+            bio, 
             role_id,
             is_deleted) VALUES
-        ($1,$2,$3,$4,$5,$6,$7) RETURNING *`;
+        ($1,$2,$3,$4,$5,$6) RETURNING *`;
 
   pool
     .query(query, VALUES)

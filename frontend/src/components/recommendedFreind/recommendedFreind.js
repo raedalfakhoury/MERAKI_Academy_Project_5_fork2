@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -9,10 +10,13 @@ import { SiNike } from "react-icons/si";
 
 const RecommendedFreind = () => {
   const [toggle, setToggle] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [follower_id, setFollower_id] = useState({});
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => {
+  const { users, token } = useSelector((state) => {
     return {
       users: state.users.users,
+      token: state.auth.token,
     };
   });
 
@@ -64,7 +68,28 @@ const RecommendedFreind = () => {
             </div>
           </div>
           {toggle[i] ? (
-            <GoPersonAdd onClick={() => handleToggle(i) } className="person" />
+            <GoPersonAdd
+              onClick={async () => {
+                handleToggle(i);
+                try {
+                  const result = await axios.post(
+                    `http://localhost:5000/followers/add`,
+                    { followed_id: item.id },
+                    {
+                      headers: {
+                        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMiwibmFtZSI6ImphbWFsIiwiaW1hZ2UiOiJodHRwczovL2ltYWdlcy5jdGZhc3NldHMubmV0L2g2Z29vOWd3MWhoNi8yc05adEZBV09kUDFsbVEzM1Z3Uk4zLzI0ZTk1M2I5MjBhOWNkMGZmMmUxZDU4Nzc0MmEyNDcyLzEtaW50cm8tcGhvdG8tZmluYWwuanBnP3c9MTIwMCZoPTk5MiZxPTcwJmZtPXdlYnAiLCJyb2xlIjoxLCJpc19kZWxldGVkIjowLCJpYXQiOjE3MDc5MzUwODIsImV4cCI6MTcwNzk1NjY4Mn0.VaBvOzS8mx6fSzKX666JIxiNVi46igat5ki6WCmMXQk`,
+                        // لما تنتهي صفحة login
+                        // Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+                  console.log(result.data);
+                } catch (error) {
+                  console.log("from add followed", error);
+                }
+              }}
+              className="person"
+            />
           ) : (
             <SiNike onClick={() => handleToggle(i)} className="nike" />
           )}
