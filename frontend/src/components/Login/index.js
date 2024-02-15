@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import store from "../redux/store";
-import authSlice, { setLogin } from "../redux/reducers/auth/index";
+import authSlice, { setLogin, setUserId } from "../redux/reducers/auth/index";
 import {
   Container,
   Row,
@@ -139,9 +139,10 @@ function LoginPage() {
                                     })
                                     .then((res) => {
                                       setStatus(true);
-                                      console.log(res.data.massage);
+                                      console.log(res.data);
                                       setUserResult(res.data.massage);
                                       dispatch(setLogin(res.data.token));
+                                      dispatch(setUserId(res.data.userId))
 
                                       // redirect("/users/dashboard");
                                     })
