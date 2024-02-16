@@ -65,8 +65,33 @@ const deleteFollowed = async (req, res) => {
   };
 
 
+  const suggestedFreings = async (req, res) => {
+    // const {id} = req.token.user_id;
+    try {
+       
+      // const data = [id]
+      const result = await pool.query(` SELECT *
+      FROM Users
+      WHERE id != 112
+      AND id NOT IN (SELECT followed_id FROM Follows WHERE follower_id = 112);` );
+  
+      res.status(200).json({ 
+        success: true,
+        message: "get suggested freinds",
+        length: result.rows.length,
+        result: result.rows,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: error,
+      });
+    }
+  };
+  
 
 
 
-
-module.exports = { addFollowers , getAllFollwers ,deleteFollowed};
+module.exports = { addFollowers , getAllFollwers ,deleteFollowed , suggestedFreings};
