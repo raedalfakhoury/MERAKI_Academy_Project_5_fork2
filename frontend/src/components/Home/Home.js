@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
@@ -7,21 +8,35 @@ import Register from "../Rigester/index";
 import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
-import NavBar from "../Navbar/Navbar";
+
+
+
+import Loader from "../Loader/Loader";
+import Profile from "../Profile/Profile";
+
+
 function Home() {
+  
   return (
     <>
-      <Routes>
+      {/* <Routes>
         // <Route path="/users/register" element={<Register />} />
         // <Route path="/users/login" element={<LoginPage />} />
-        // <Route path="/" element={<WelcomePage />} />
-        // <Route path="/home/Posts" element={<Post />} />
-      </Routes>
+
+
+
+        // <Route path="/" element={<WelcomePage/>} />
+        // <Route path="/home/Posts" element={<Post/>} />
+
+        
+      </Routes> */}
+
 
       {/* <WelcomePage/>  */}
 
       {/* <NavBar/> */}
       {/* <Weather/> */}
+      <Profile/>
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
 
