@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import store from "../redux/store";
-import authSlice, { setLogin, setUserId } from "../redux/reducers/auth/index";
+import authSlice, {
+  setLogin,
+  setUserId,
+  setImageAndName,
+} from "../redux/reducers/auth/index";
+import { jwtDecode } from "jwt-decode";
+import { GoogleLogin } from "@react-oauth/google";
+
 import {
   Container,
   Row,
@@ -28,6 +35,70 @@ function LoginPage() {
       token: state.auth.token,
     };
   });
+
+  const loginWithGoogle = (data) => {
+    const name = data.name;
+    const password = data.sub;
+    const email = data.email;
+
+    axios
+      .post("http://localhost:5000/users/register", {
+        username: name,
+        email: email,
+        password_hash: password,
+      })
+      .then((res) => {
+        axios
+          .post("http://localhost:5000/users/login", {
+            email: email,
+            password: password,
+          })
+          .then((res) => {
+            setStatus(true);
+            console.log(res.data);
+            setUserResult(res.data.massage);
+            dispatch(setLogin(res.data.token));
+            dispatch(setUserId(res.data.userId));
+            dispatch(
+              setImageAndName({ name: res.data.name, image: res.data.image })
+            );
+          })
+          .catch((err) => {
+            console.log(err.response.data.massage);
+            setUserResult(err.response.data.massage);
+            setVariant("danger");
+          });
+      })
+      .catch((err) => {
+        if (
+          err.response.data.message === "The email or username already exists"
+        ) {
+          axios
+            .post("http://localhost:5000/users/login", {
+              email: email,
+              password: password,
+            })
+            .then((res) => {
+              setStatus(true);
+              console.log(res.data);
+              setUserResult(res.data.massage);
+              dispatch(setLogin(res.data.token));
+              dispatch(setUserId(res.data.userId));
+              dispatch(
+                setImageAndName({ name: res.data.name, image: res.data.image })
+              );
+            })
+            .catch((err) => {
+              console.log(err.response.data.massage);
+              setUserResult(err.response.data.massage);
+              setVariant("danger");
+            });
+        } else {
+          console.log(err);
+        }
+      });
+  };
+
   return (
     <section className="bg-light p-3 p-md-4 p-xl-5">
       <Container>
@@ -71,7 +142,7 @@ function LoginPage() {
                       <Row>
                         <Col xs={12}>
                           <div className="d-flex gap-3 flex-column">
-                            <Button
+                            {/* <Button
                               href="#!"
                               className="btn btn-lg btn-outline-dark"
                             >
@@ -88,7 +159,21 @@ function LoginPage() {
                               <span className="ms-2 fs-6">
                                 Log in with Google
                               </span>
-                            </Button>
+                            </Button> */}
+                            <div className="Container_Google_Login" style={{width:"100%",display:"flex",justifyContent:"center"}}>
+                              <GoogleLogin
+                                onSuccess={(credentialResponse) => {
+                                  const credentialResponseDecode = jwtDecode(
+                                    credentialResponse.credential
+                                  );
+
+                                  loginWithGoogle(credentialResponseDecode);
+                                }}
+                                onError={() => {
+                                  console.log("Login Failed");
+                                }}
+                              />
+                            </div>
                           </div>
                           <p className="text-center mt-4 mb-5">
                             Or sign in with
@@ -142,7 +227,13 @@ function LoginPage() {
                                       console.log(res.data);
                                       setUserResult(res.data.massage);
                                       dispatch(setLogin(res.data.token));
-                                      dispatch(setUserId(res.data.userId))
+                                      dispatch(setUserId(res.data.userId));
+                                      dispatch(
+                                        setImageAndName({
+                                          name: res.data.name,
+                                          image: res.data.image,
+                                        })
+                                      );
 
                                       // redirect("/users/dashboard");
                                     })
@@ -157,16 +248,15 @@ function LoginPage() {
                               </Button>
                               {status
                                 ? result && (
-                                  <Alert key={variant} variant={variant}>
-                                  {result}
-                                </Alert>
+                                    <Alert key={variant} variant={variant}>
+                                      {result}
+                                    </Alert>
                                   )
                                 : result && (
-                                  <Alert key={variant} variant={variant}>
-                                  {result}
-                                </Alert>
+                                    <Alert key={variant} variant={variant}>
+                                      {result}
+                                    </Alert>
                                   )}
-
                             </div>
                           </Col>
                         </Row>

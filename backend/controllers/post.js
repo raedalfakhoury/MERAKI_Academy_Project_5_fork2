@@ -178,22 +178,20 @@ const getAllPosts = (req, res) => {
 
 const deletePostById = (req, res) => {
   const id = req.params.id;
-  const query = `UPDATE Posts SET is_deleted=1 WHERE user_id=$1;`;
-  const values = [id];
+  const query = `UPDATE Posts SET is_deleted=0 WHERE id= ${id} RETURNING *;`;
+
   pool
-    .query(query, values)
+    .query(query)
     .then((result) => {
       res.status(200).json({
         success: true,
         result: result.rows,
       });
-
-      throw Error;
     })
     .catch((err) => {
-      res.status(409).json({
+      res.status(500).json({
         success: false,
-        err,
+        err:err,
       });
     });
 };
@@ -224,13 +222,12 @@ WHERE
     Posts.is_deleted = 0;
 */
 
-
-
 // كل المنشورات للاشخاص الذي اتابعهم مع منشوراتي
 const getAllPostsMyFriends = (req, res) => {
   const user_id = req.token.user_id;
   const query = `SELECT 
   Posts.id,
+  Posts.user_id,
   Posts.content,
   Posts.media_url,
   Posts.created_at,
@@ -263,12 +260,12 @@ INNER JOIN Users ON Posts.user_id = Users.id
 WHERE 
   Posts.is_deleted = 0
   AND
-  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =${user_id}) OR  Posts.user_id IN (SELECT follower_id  FROM Follows WHERE follower_id =${user_id})`;
-//  SELECT Posts.* , Users.username ,Users.profile_picture_url
-//   FROM Posts
-//   JOIN Follows ON Posts.user_id = Follows.followed_id 
-//   JOIN Users ON Posts.user_id = Users.id
-//   WHERE Follows.follower_id =${user_id} AND Posts.is_deleted = 0
+  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =${user_id}) OR Posts.user_id = ${user_id}  OR  Posts.user_id IN (SELECT follower_id  FROM Follows WHERE follower_id =${user_id})`;
+  //  SELECT Posts.* , Users.username ,Users.profile_picture_url
+  //   FROM Posts
+  //   JOIN Follows ON Posts.user_id = Follows.followed_id
+  //   JOIN Users ON Posts.user_id = Users.id
+  //   WHERE Follows.follower_id =${user_id} AND Posts.is_deleted = 0
   pool
     .query(query)
     .then((result) => {

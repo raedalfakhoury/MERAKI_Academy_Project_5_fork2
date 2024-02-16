@@ -13,6 +13,7 @@ import {
   addPost,
   setCommentByPostId,
   addCommentByPostId,
+  deletePost,
 } from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
 import axios from "axios";
@@ -178,6 +179,22 @@ function Post() {
       });
   };
 
+  const deletePostById = (id) => {
+    axios
+      .delete(`http://localhost:5000/post/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log(result);
+        dispatch(deletePost(id));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/post/1/getAllPostsMyFollower", {
@@ -192,7 +209,7 @@ function Post() {
       .catch((err) => {
         console.log(err);
       });
-  }, [dispatch]);
+  }, []);
   const { posts, token, userId } = useSelector((state) => {
     return {
       posts: state.posts.posts,
@@ -362,9 +379,12 @@ function Post() {
                 <Col>
                   <Row className="postsUserNav">
                     <Col
-                      md={2}
-                      xs={6}
-                      style={{ maxHeight: "40px", maxWidth: "70px" }}
+                      style={{
+                        maxHeight: "40px",
+                        maxWidth: "70px",
+                        display: "flex",
+                        justifyContent: "space-around",
+                      }}
                     >
                       <Image
                         style={{ width: "100%", height: "100%" }}
@@ -372,53 +392,55 @@ function Post() {
                         roundedCircle
                       />
                     </Col>
-                    <Col style={{ height: "10px" }} xs={10}>
+                    <Col style={{ height: "10px" }}>
                       <span className="usernameLap">{elm.username}</span>
                       <p className="xx">{elm.created_at} pm</p>
                     </Col>
-                    <Dropdown xs={2} style={{width:"20px" }}>
-                      <Dropdown.Toggle
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "none",
-                          margin:"0px",
-                          padding:"0px",
-                          height:"0px",
-                       
-                          
-                        }}
-                      >
-                        <Col className="navPostsDot">
-                          <svg
-                            style={{ cursor: "pointer" }}
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="feather feather-more-vertical"
-                          >
-                            <circle cx="12" cy="12" r="1"></circle>
-                            <circle cx="12" cy="5" r="1"></circle>
-                            <circle cx="12" cy="19" r="1"></circle>
-                          </svg>
-                        </Col>
-                      </Dropdown.Toggle>
+                    {elm.user_id === localStorage.getItem("userId") * 1 && (
+                      <Dropdown xs={2} style={{ width: "20px" }}>
+                        <Dropdown.Toggle
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                            margin: "0px",
+                            padding: "0px",
+                            height: "0px",
+                          }}
+                        >
+                          <Col className="navPostsDot">
+                            <svg
+                              style={{ cursor: "pointer" }}
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="feather feather-more-vertical"
+                            >
+                              <circle cx="12" cy="12" r="1"></circle>
+                              <circle cx="12" cy="5" r="1"></circle>
+                              <circle cx="12" cy="19" r="1"></circle>
+                            </svg>
+                          </Col>
+                        </Dropdown.Toggle>
 
-                      <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">
-                          delete post
-                        </Dropdown.Item>
-                        <Dropdown.Item href="#/action-3">
-                          Close
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
+                        <Dropdown.Menu>
+                          <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              deletePostById(elm.id);
+                            }}
+                          >
+                            delete post
+                          </Dropdown.Item>
+                          <Dropdown.Item href="#/action-3">Close</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    )}
                   </Row>
 
                   <Row
