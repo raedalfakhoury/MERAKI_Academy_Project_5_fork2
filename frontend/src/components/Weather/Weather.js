@@ -5,9 +5,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GiPositionMarker } from "react-icons/gi";
 import "../Weather/Weather.css";
-import {  useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import forecastSlice, { setForecast } from "../redux/reducers/weather";
+import Loader from "../Loader/Loader";
 
 function Weather() {
   const dispatch = useDispatch();
@@ -17,7 +18,6 @@ function Weather() {
     };
   });
   const [loader, setLoader] = useState(true);
-  // const [forecast, setForecast] = useState();
 
   const dayOfWeek = (date) => {
     const currentDate = new Date(date);
@@ -51,7 +51,8 @@ function Weather() {
 
     try {
       const result = await axios.get(url);
-      console.log(result.data);
+      
+
       if (result.data) {
         setLoader(false);
       }
@@ -77,7 +78,8 @@ function Weather() {
     const day = String(currentDate.getDate()).padStart(2, "0");
 
     const formattedDate = `${dayOfWeek}, ${day}-${month}-${year}`;
-    console.log(formattedDate);
+    
+    
     return formattedDate;
   };
   const getClimatePrediction = (currentCity) => {
@@ -107,69 +109,73 @@ function Weather() {
 
   return (
     <>
-      <div className="background">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+      {" "}
+      {loader ? (
+        <Loader />
+      ) : (
+        <div className="background">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
 
-        <div className="tempreture">
-          
-          <h1>{forecast?.current?.temp_c} </h1>°
-        </div>
-        <img id="img" alt="" src={forecast?.current?.condition?.icon}></img>
-        <h3>{forecast?.current?.condition?.text}</h3>
-        <div className="reelFeel">
-          <p className="p">Real Feal : {forecast?.current?.feelslike_c} °</p>
-          <p className="p">humidity : {forecast?.current?.humidity} %</p>
-        </div>
+          <div className="tempreture">
+            <h1>{forecast?.current?.temp_c} </h1>°
+          </div>
+          <img id="img" alt="" src={forecast?.current?.condition?.icon}></img>
+          <h3>{forecast?.current?.condition?.text}</h3>
+          <div className="reelFeel">
+            <p className="p">Real Feal : {forecast?.current?.feelslike_c} °</p>
+            <p className="p">humidity : {forecast?.current?.humidity} %</p>
+          </div>
 
-        <div className="forThreeDays">
-          {forecast?.forecast?.forecastday?.map((day, i) => {
-            return (
-              <div key={i} className="forOneDay">
-                <h5>{dayOfWeek(day?.date).slice(0, 3)}</h5>
-                <img alt="" src={day?.day?.condition?.icon}></img>
-                <h5>{day?.day?.maxtemp_c}°</h5>
-              </div>
-            );
-          })}
-        </div>
+          <div className="forThreeDays">
+            {forecast?.forecast?.forecastday?.map((day, i) => {
+              return (
+                <div key={i} className="forOneDay">
+                  <h5>{dayOfWeek(day?.date).slice(0, 3)}</h5>
+                  <img alt="" src={day?.day?.condition?.icon}></img>
+                  <h5>{day?.day?.maxtemp_c}°</h5>
+                </div>
+              );
+            })}
+          </div>
 
-        <h4>{currentDay()}</h4>
-        <div className="position">
-          <GiPositionMarker />
-          <p>{forecast?.location?.country}</p> ,
-          <p>{forecast?.location?.name}</p>
+          <h4>{currentDay()}</h4>
+          <div className="position">
+            <GiPositionMarker />
+            <p className="country">{forecast?.location?.country}</p> ,
+            <p className="country">{forecast?.location?.name}</p>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
