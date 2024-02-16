@@ -33,6 +33,9 @@ import { IoCameraOutline } from "react-icons/io5";
 import { FcLike } from "react-icons/fc";
 
 import Dropdown from "react-bootstrap/Dropdown";
+
+
+
 import Spinner from "react-bootstrap/Spinner";
 // import Button from '@mui/material/Button';
 import Dialog from "@mui/material/Dialog";
@@ -42,6 +45,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
+
 
 function Post() {
   const [toggleLike, setToggleLike] = useState(false);
@@ -300,6 +304,7 @@ dispatch(UpdatePost(inputUpdate))
   };
   return (
     <>
+     <NavBarPost/>
       <Container>
         <Container className="containerPosts">
           <Row>
