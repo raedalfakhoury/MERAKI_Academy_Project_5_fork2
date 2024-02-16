@@ -560,7 +560,7 @@ function Post() {
                             }}
                             href="#/action-1"
                           >
-                            adit
+                            Edit
                           </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
