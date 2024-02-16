@@ -55,6 +55,16 @@
   width: fit-content;
   border: 1px solid #e8e8e8;
   border-radius: 0.85rem;
+  overflow-y: auto; /* إضافة التمرير الرأسي */
+  max-height: 350px;
+}
+.mainRecommended.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainRecommended.empty::after {
+  content: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ005FVmrmBkzdv_knzuKcpMZbhFL4L1vTzpZjhWyOj_w&s');  
 }
 #friend {
   color: #8b7a91;

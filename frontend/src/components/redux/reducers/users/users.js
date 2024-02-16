@@ -1,17 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
 
-export const usersSlice = createSlice({
-  name: "users",
+export const suggestedFreindsSlice = createSlice({
+  name: "suggestedFreinds",
   initialState: {
-    users: [],
+    suggestedFreinds: [],
   },
   reducers: {
-    setUsers: (state, action) => {
-      state.users = action.payload;
+    setSuggestedFreinds: (state, action) => {
+      state.suggestedFreinds = action.payload;
     },
   },
 });
 
-export const { setUsers } = usersSlice.actions;
-export default usersSlice.reducer;
+export const { setSuggestedFreinds } = suggestedFreindsSlice.actions;
+export default suggestedFreindsSlice.reducer;
