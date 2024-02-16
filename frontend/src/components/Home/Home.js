@@ -8,8 +8,12 @@ import Register from "../Rigester/index";
 import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
+
+
+
 import Loader from "../Loader/Loader";
 import Profile from "../Profile/Profile";
+
 
 function Home() {
   
@@ -18,6 +22,9 @@ function Home() {
       {/* <Routes>
         // <Route path="/users/register" element={<Register />} />
         // <Route path="/users/login" element={<LoginPage />} />
+
+
+
         // <Route path="/" element={<WelcomePage/>} />
         // <Route path="/home/Posts" element={<Post/>} />
 
@@ -27,7 +34,7 @@ function Home() {
 
       {/* <WelcomePage/>  */}
 
-      {/* <Navbar/> */}
+      {/* <NavBar/> */}
       {/* <Weather/> */}
       <Profile/>
       {/* <RecommendedFreind/> */}
