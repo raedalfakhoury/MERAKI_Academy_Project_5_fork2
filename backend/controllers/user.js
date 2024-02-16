@@ -197,6 +197,26 @@ const getAllUser = (req, res) => {
       });
     });
 };
-module.exports = { register, login, deleteUser, updateUser, getAllUser };
+const getUserById = (req, res) => {
+  const id = req.token.user_id; 
+  const data = [id]
+  const query = `SELECT * FROM Users WHERE id = $1 ;` ;
+  pool
+    .query(query,data)
+    .then((result) => {
+      res.status(200).json({
+        message: "User get Successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => { 
+      res.status(500).json({
+        message: "Server error",
+        err: err,
+      });
+    });
+};
+
+module.exports = { register, login, deleteUser, updateUser, getAllUser , getUserById};
 
 

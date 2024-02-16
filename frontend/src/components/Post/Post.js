@@ -1,4 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  ReactElement,
+  Ref,
+} from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
@@ -14,6 +21,8 @@ import {
   setCommentByPostId,
   addCommentByPostId,
   deletePost,
+  deleteCommentByPostId,
+  UpdatePost,
 } from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
 import axios from "axios";
@@ -24,7 +33,19 @@ import { IoCameraOutline } from "react-icons/io5";
 import { FcLike } from "react-icons/fc";
 
 import Dropdown from "react-bootstrap/Dropdown";
-import NavBarPost from "../Navbar/NavBarPost";
+
+
+
+import Spinner from "react-bootstrap/Spinner";
+// import Button from '@mui/material/Button';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { FaLongArrowAltLeft } from "react-icons/fa";
+import { MdOutlineTipsAndUpdates } from "react-icons/md";
+
 
 function Post() {
   const [toggleLike, setToggleLike] = useState(false);
@@ -33,23 +54,58 @@ function Post() {
   const [x, setX] = useState(false);
   const [IDPost, setIDPost] = useState("");
   const [image_url, setImage_url] = useState("");
+  const [image_url_update, setImage_url_update] = useState("");
   const [ContentPost, setContentPost] = useState("");
+  const [ToggleSpinnerCloudInN, setToggleSpinnerCloudInN] = useState(false);
+  const [ToggleSpinnerCloudInNUpdate, setToggleSpinnerCloudInUpdate] =
+    useState(false);
+
   const pr_key = "rllytlm7";
   const cloud_name = "dmmo3zzyc";
 
+  const [inputUpdate, setInputUpdate] = useState({
+    ID_post: "",
+    content: "",
+    image: "",
+  });
+
   const handleFile = (e) => {
+    setToggleSpinnerCloudInN(true);
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", pr_key);
+
     axios
       .post(
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         formData
       )
       .then((result) => {
-        // console.log(result.data.secure_url);
         setImage_url(result.data.secure_url);
+        setToggleSpinnerCloudInN(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleFileUpdatePost = (e) => {
+    setInputUpdate({ ...inputUpdate, image: "" });
+    setToggleSpinnerCloudInUpdate(true);
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        formData
+      )
+      .then((result) => {
+        setInputUpdate({ ...inputUpdate, image: result.data.secure_url });
+        setToggleSpinnerCloudInUpdate(false);
       })
       .catch((err) => {
         console.log(err);
@@ -57,32 +113,6 @@ function Post() {
   };
 
   const dispatch = useDispatch();
-
-  // ! posts  data=>
-  //  comment_count: "2"
-  // comments: (2) [{…}, {…}]
-  // content :"Creating a storyteller's circle where women share their joy, pain, and experience, the poems in this collection are lyrical vignettes"
-  // created_at:"2024-02-10T16:55:56.635Z"
-  // id:12
-  // like_count:"2"
-  // media_url: "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
-  // profile_picture_url:"https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png"
-  // username":username"
-
-  // ! ????????????
-  // comment_count:"0"
-  // comments:[]
-  // like_count:"0"
-  // profile_picture_url ?
-  //username:username ?
-
-  // ! create post data =>
-  // content: ""
-  // created_at: "2024-02-13T14:19:21.326Z"
-  // id:25
-  // is_deleted: 0
-  // media_url:"https://res.cloudinary.com/dmmo3zzyc/image/upload/v1707844756/si581g2sj4iazi6cl1zb.png"
-  // user_id:30
 
   const createNewPost = () => {
     axios
@@ -96,8 +126,16 @@ function Post() {
         }
       )
       .then((result) => {
-        console.log(result.data.result);
-        // dispatch(addPost(result.data.result))
+        const dataPostMax = {
+          ...result.data.result,
+          like_count: "0",
+          comment_count: "0",
+          comments: [],
+          profile_picture_url: image,
+          username: name,
+        };
+
+        dispatch(addPost(dataPostMax));
         setImage_url("");
         setContentPost("");
       })
@@ -105,7 +143,7 @@ function Post() {
         console.log(err);
       });
   };
-  // console.log(posts.like_count);
+
   const Like = (id) => {
     axios
       .post(
@@ -118,7 +156,6 @@ function Post() {
         }
       )
       .then((result) => {
-        console.log("true  like =>", result);
         axios
           .get(`http://localhost:5000/likes/${id}`, {
             headers: {
@@ -126,7 +163,6 @@ function Post() {
             },
           })
           .then((result) => {
-            console.log("cunt =>>>>>>", result.data.LikesCounter);
             dispatch(filter_like({ id: id, num: result.data.LikesCounter }));
           })
           .catch((err) => {
@@ -149,12 +185,10 @@ function Post() {
         dispatch(
           setCommentByPostId({ id: PostID, comments: result.data.result })
         );
+        console.log(result);
 
         setIDPost("");
         setIDPost(PostID);
-
-        // console.log(PostID)
-        // console.log(result.data.result)
       })
       .catch((err) => {
         console.log(err);
@@ -173,7 +207,30 @@ function Post() {
         }
       )
       .then((result) => {
+        const dataCommentMax = {
+          ...result.data.result,
+          profile_picture_url: image,
+          username: name,
+        };
+        dispatch(addCommentByPostId({ id: id, comment: dataCommentMax }));
+        setInputAddComment("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const deletedComment = (commentID, PostID) => {
+    axios
+      .delete(`http://localhost:5000/comments/${commentID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
         console.log(result);
+        dispatch(
+          deleteCommentByPostId({ commentID: commentID, postID: PostID })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -188,7 +245,6 @@ function Post() {
         },
       })
       .then((result) => {
-        console.log(result);
         dispatch(deletePost(id));
       })
       .catch((err) => {
@@ -204,22 +260,48 @@ function Post() {
         },
       })
       .then((result) => {
-        console.log(result.data.result);
         dispatch(setPosts(result.data.result));
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  const { posts, token, userId } = useSelector((state) => {
+  const { posts, token, userId, name, image } = useSelector((state) => {
     return {
       posts: state.posts.posts,
       userId: state.auth.userId,
       token: state.auth.token,
+      name: state.auth.name,
+      image: state.auth.image,
     };
   });
+
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   console.log(posts);
 
+  const updatePostAPI = () => {
+    console.log(inputUpdate);
+    axios.put(`http://localhost:5000/post/update/${inputUpdate.ID_post}`, {
+      content: inputUpdate.content,
+      media_url: inputUpdate.image,
+    },{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((result)=>{
+        console.log(result);
+dispatch(UpdatePost(inputUpdate))
+    }).catch((err)=>{
+      console.log(err);
+    })
+  };
   return (
     <>
      <NavBarPost/>
@@ -330,6 +412,9 @@ function Post() {
                       placeholder="Write something about you..."
                     ></textarea>
                   </div>
+                  {ToggleSpinnerCloudInN && (
+                    <Spinner animation="border" variant="secondary" />
+                  )}
                   {image_url && (
                     <Image
                       style={{
@@ -380,20 +465,21 @@ function Post() {
               <Container className="containerPosts">
                 <Col>
                   <Row className="postsUserNav">
-                    <Col
+                    {/* <Col
                       style={{
-                        maxHeight: "40px",
-                        maxWidth: "70px",
+                        maxHeight: "50px",
+                        maxWidth: "50px",
                         display: "flex",
                         justifyContent: "space-around",
+                        padding: "0px",
                       }}
-                    >
-                      <Image
-                        style={{ width: "100%", height: "100%" }}
-                        src={elm.profile_picture_url}
-                        roundedCircle
-                      />
-                    </Col>
+                    > */}
+                    <Image
+                      style={{ width: "50px", height: "50px", padding: "0px" }}
+                      src={elm.profile_picture_url}
+                      roundedCircle
+                    />
+                    {/* </Col> */}
                     <Col style={{ height: "10px" }}>
                       <span className="usernameLap">{elm.username}</span>
                       <p className="xx">{elm.created_at} pm</p>
@@ -431,7 +517,21 @@ function Post() {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                          <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              handleClickOpen();
+                              setInputUpdate({
+                                ...inputUpdate,
+                                content: elm.content,
+                                image: elm.media_url,
+                                ID_post: elm.id,
+                              });
+                              // dataUpdatePost(elm.content, elm.media_url);
+                            }}
+                            href="#/action-1"
+                          >
+                            adit
+                          </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => {
                               deletePostById(elm.id);
@@ -578,7 +678,7 @@ function Post() {
                     <Container className="cont_comment_box">
                       <Row style={{ paddingBottom: "15px" }}>
                         <Col className="com-text">
-                          comments ({elm.comment_count})
+                          comments ({elm.commentsByPostId.length})
                         </Col>
                         <Col></Col>
                         <CloseButton
@@ -597,7 +697,7 @@ function Post() {
                             <Row className="commentsAll">
                               <Col
                                 md={2}
-                                xs={6}
+                                xs={3}
                                 style={{
                                   maxHeight: "100%",
                                   maxWidth: "70px",
@@ -620,6 +720,69 @@ function Post() {
                                 </span>
                                 <br />
                                 <p className="xx">{comment.created_at}</p>
+                              </Col>
+                              <Col xs={1}>
+                                {elm.user_id ===
+                                  localStorage.getItem("userId") * 1 && (
+                                  <Dropdown style={{ width: "20px" }}>
+                                    <Dropdown.Toggle
+                                      style={{
+                                        backgroundColor: "transparent",
+                                        border: "none",
+                                        margin: "0px",
+                                        padding: "0px",
+                                        height: "0px",
+                                      }}
+                                    >
+                                      <Col className="navPostsDot">
+                                        <svg
+                                          style={{ cursor: "pointer" }}
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          stroke-width="2"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          class="feather feather-more-vertical"
+                                        >
+                                          <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="1"
+                                          ></circle>
+                                          <circle cx="12" cy="5" r="1"></circle>
+                                          <circle
+                                            cx="12"
+                                            cy="19"
+                                            r="1"
+                                          ></circle>
+                                        </svg>
+                                      </Col>
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu>
+                                      <Dropdown.Item href="#/action-1">
+                                        Edit
+                                      </Dropdown.Item>
+                                      <Dropdown.Item
+                                        onClick={() => {
+                                          deletedComment(
+                                            comment.comment_id,
+                                            elm.id
+                                          );
+                                        }}
+                                      >
+                                        delete comment
+                                      </Dropdown.Item>
+                                      <Dropdown.Item href="#/action-3">
+                                        Close
+                                      </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                )}
                               </Col>
                             </Row>
 
@@ -645,6 +808,7 @@ function Post() {
                       <div>
                         <div class="mt-2">
                           <textarea
+                            value={inputAddComment}
                             onChange={(e) => {
                               setInputAddComment(e.target.value);
                             }}
@@ -669,17 +833,100 @@ function Post() {
                     </Container>
                   </>
                 )}
-                {/* <div class="post-container">
-    <textarea placeholder="Enter post content..."></textarea>
-    <input type="text" placeholder="Enter image URL..."/>
-    <button>Update Post</button>
-  </div> */}
               </Container>
             </>
           );
         })}
       </Container>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {`Update Post `} <MdOutlineTipsAndUpdates />
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              <textarea
+                value={inputUpdate.content}
+                onChange={(e) => {
+                  setInputUpdate({ ...inputUpdate, content: e.target.value });
+                }}
+              />
+              <div className="updateImage">
+                {inputUpdate.image !== "" && (
+                  <img
+                    style={{ width: "120px", height: "120px" }}
+                    src={inputUpdate.image}
+                  ></img>
+                )}
+                {ToggleSpinnerCloudInNUpdate && (
+                  <div
+                    style={{
+                      width: "120px",
+                      height: "120px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Spinner animation="border" variant="secondary" />
+                  </div>
+                )}
+                <div
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {" "}
+                  <h4
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <FaLongArrowAltLeft />
+                    <FaLongArrowAltLeft />
+                    <FaLongArrowAltLeft />
+                  </h4>
+                </div>
 
+                <label class="file-label">
+                  <input
+                    onChange={(e) => {
+                      handleFileUpdatePost(e);
+                    }}
+                    type="file"
+                    class="input-file"
+                  />
+                  <IoCameraOutline />
+                  <span class="ic"> Media</span>
+                </label>
+              </div>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                handleClose();
+                updatePostAPI();
+              }}
+            >
+              Update
+            </Button>
+            <Button onClick={handleClose}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
       <br />
       <br />
       <br />
