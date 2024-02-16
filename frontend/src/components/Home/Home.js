@@ -16,16 +16,18 @@ function Home() {
         // <Route path="/users/login" element={<LoginPage />} />
         // <Route path="/" element={<WelcomePage/>} />
 
-    
+        
       </Routes> */}
+
+
       {/* <WelcomePage/>  */}
 
       {/* <Navbar/> */}
       {/* <Weather/> */}
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
- 
-      <Post/>  
+
+      {/* <Post/>   */}
     </>
   );
 }

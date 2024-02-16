@@ -95,6 +95,8 @@ const login = (req, res) => {
             massage: "Valid login credentials",
             token: token,
             userId: data.id,
+            image: data.profile_picture_url,
+            name: data.username,
           });
         } else {
           res.status(403).json({
