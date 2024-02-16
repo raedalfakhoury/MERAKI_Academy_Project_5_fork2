@@ -1,13 +1,13 @@
-const {pool} = require("../models/db");
+const { pool } = require("../models/db");
 
 const createNewComment = (req, res) => {
   const post_id = req.params.id;
   const user_id = req.token.user_id;
   const { content } = req.body;
-//   const currentDate = new Date();
-//   const created_at = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '') + ' +0000';
+  //   const currentDate = new Date();
+  //   const created_at = currentDate.toISOString().replace(/T/, ' ').replace(/\..+/, '') + ' +0000';
   const query = `INSERT INTO comments (user_id,post_id,content) VALUES ($1,$2,$3) RETURNING *`;
-  const data = [user_id,post_id,content];
+  const data = [user_id, post_id, content];
 
   pool
     .query(query, data)
@@ -19,7 +19,7 @@ const createNewComment = (req, res) => {
       });
     })
     .catch((err) => {
-        console.log(err);
+      console.log(err);
       res.status(404).json({
         success: false,
         message: "Server error",
@@ -30,7 +30,7 @@ const createNewComment = (req, res) => {
 
 const getCommentsByPostId = (req, res) => {
   const post_id = req.params.id;
-  const query = `SELECT Comments.post_id, Comments.created_at,Comments.content, u.username , u.profile_picture_url  FROM Comments JOIN Users u ON u.id = Comments.user_id WHERE post_id = ${post_id}`
+  const query = `SELECT Comments.comment_id , Comments.post_id,Comments.user_id, Comments.created_at,Comments.content, u.username , u.profile_picture_url  FROM Comments JOIN Users u ON u.id = Comments.user_id WHERE post_id = ${post_id}`;
   pool
     .query(query)
     .then((result) => {
@@ -39,39 +39,6 @@ const getCommentsByPostId = (req, res) => {
         message: `All comments for post: ${post_id}`,
         result: result.rows,
       });
-    })
-    .catch((err) => {
-        console.log(err);
-      res.status(500).json({
-        success: false,
-        message: "Server error",
-        err: err,
-      });
-    });
-};
-
-
-const updateCommentsById = (req, res) => {
-  const comment_id = req.params.id;
-  const user_id = req.token.user_id;
-  let {comment} = req.body;
-  const query = `UPDATE Comments SET content = '${comment}' WHERE comment_id='${comment_id}' AND user_id = '${user_id}' RETURNING *;`;
-  pool
-    .query(query)
-    .then((result) => {
-      if (result.rows.length !== 0) {
-        
-        res.status(200).json({
-          success: true,
-          message: `Comment with id: ${comment_id} updated successfully `,
-          result: result.rows[0],
-        });
-      } 
-        else {
-          throw new Error("Error happened while updating Comment");
-
-        }
-      
     })
     .catch((err) => {
       console.log(err);
@@ -83,11 +50,39 @@ const updateCommentsById = (req, res) => {
     });
 };
 
+const updateCommentsById = (req, res) => {
+  const comment_id = req.params.id;
+  const user_id = req.token.user_id;
+  let { comment } = req.body;
+  const query = `UPDATE Comments SET content = '${comment}' WHERE comment_id='${comment_id}' AND user_id = '${user_id}' RETURNING *;`;
+  pool
+    .query(query)
+    .then((result) => {
+      if (result.rows.length !== 0) {
+        res.status(200).json({
+          success: true,
+          message: `Comment with id: ${comment_id} updated successfully `,
+          result: result.rows[0],
+        });
+      } else {
+        throw new Error("Error happened while updating Comment");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err,
+      });
+    });
+};
 
 const deleteCommentsById = (req, res) => {
   const comment_id = req.params.id;
-  const query = `UPDATE Comments SET 	is_deleted= 1 WHERE comment_id='${comment_id} RETURNING *'`;
-  console.log(comment_id);
+
+  const query = `DELETE FROM Comments WHERE comment_id=${comment_id} RETURNING *`;
+
 
   pool
     .query(query)
@@ -102,6 +97,7 @@ const deleteCommentsById = (req, res) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).json({
         success: false,
         message: "Server error",
@@ -114,7 +110,5 @@ module.exports = {
   createNewComment,
   getCommentsByPostId,
   updateCommentsById,
-  deleteCommentsById
+  deleteCommentsById,
 };
-
-

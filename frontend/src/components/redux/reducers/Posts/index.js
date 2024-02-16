@@ -13,8 +13,20 @@ export const postsSlice = createSlice({
       state.posts.unshift(action.payload);
     },
     deletePost: (state, action) => {
-      const filters =state.posts.filter((post, index) => action.payload !== post.id );
-      state.posts =filters
+      const filters = state.posts.filter(
+        (post, index) => action.payload !== post.id
+      );
+      state.posts = filters;
+    },
+    UpdatePost: (state, action) => {
+      const UpdatePost = state.posts.map((elm, index) => {
+        if (elm.id === action.payload.ID_post) {
+          elm.media_url = action.payload.image;
+          elm.content = action.payload.content;
+        }
+        return elm;
+      });
+      state.posts = UpdatePost;
     },
     filter_like: (state, action) => {
       state.posts.map((post, i) => {
@@ -42,6 +54,16 @@ export const postsSlice = createSlice({
         }
       });
     },
+    deleteCommentByPostId: (state, action) => {
+      state.posts = state.posts.map((post) => {
+        if (post.id === action.payload.postID) {
+          post.commentsByPostId = post.commentsByPostId.filter(
+            (comment) => comment.comment_id !== action.payload.commentID
+          );
+        }
+        return post;
+      });
+    },
   },
 });
 
@@ -52,6 +74,8 @@ export const {
   setCommentByPostId,
   addCommentByPostId,
   deletePost,
+  deleteCommentByPostId,
+  UpdatePost,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;
