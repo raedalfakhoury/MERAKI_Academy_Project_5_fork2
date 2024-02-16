@@ -8,6 +8,7 @@ import Register from "../Rigester/index";
 import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
+import Loader from "../Loader/Loader";
 
 function Home() {
   return (
@@ -26,6 +27,7 @@ function Home() {
 
       {/* <Navbar/> */}
       <Weather/>
+      
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
 
