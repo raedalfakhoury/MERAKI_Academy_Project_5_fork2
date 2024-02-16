@@ -169,6 +169,8 @@ function Weather() {
           <p>{forecast?.location?.country}</p> ,
           <p>{forecast?.location?.name}</p>
         </div>
+
+        
       </div>
     </>
   );

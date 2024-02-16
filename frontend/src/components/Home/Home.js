@@ -25,8 +25,8 @@ function Home() {
       {/* <WelcomePage/>  */}
 
       {/* <Navbar/> */}
-      {/* <Weather/> */}
-      <RecommendedFreind/>
+      <Weather/>
+      {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
 
       {/* <Post/>   */}
