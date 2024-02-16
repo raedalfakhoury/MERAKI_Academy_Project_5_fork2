@@ -96,7 +96,7 @@ const getAllFollowing = async (req, res) => {
     const id = req.token.user_id;
     const query = `  SELECT DISTINCT Users.* 
     FROM Users
-    INNER JOIN Follows ON Follows.follower_id = $1 AND Follows.following_id = Users.id;
+    INNER JOIN Follows ON Follows.follower_id = $1 AND Follows.followed_id = Users.id;
     ;`;
     const data = [id];
     const result = await pool.query(query, data);
@@ -122,7 +122,7 @@ const getAllFollowers = async (req, res) => {
     const query = `SELECT DISTINCT Users.*
     FROM Users
     INNER JOIN Follows ON Follows.follower_id = Users.id
-    WHERE Follows.following_id = $1
+    WHERE Follows.followed_id = $1
     ;`;
     const data = [id];
     const result = await pool.query(query, data);
@@ -144,8 +144,7 @@ const getAllFollowers = async (req, res) => {
 };
 
 module.exports = {
-  addFollowers,
-  getAllFollwers,
+  addFollowers, 
   deleteFollowed,
   suggestedFreings,
   getAllFollowing,
