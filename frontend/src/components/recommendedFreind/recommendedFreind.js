@@ -20,12 +20,20 @@ const RecommendedFreind = () => {
       token: state.auth.token,
     };
   });
- console.log(length);
+  console.log(suggestedFreinds);
   const getSuggesterFreinds = async () => {
     try {
-      const result = await axios.get(`http://localhost:5000/followers/suggested`);
+      const result = await axios.get(
+        `http://localhost:5000/followers/suggested`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(result.data);
       shuffleProduct(result?.data?.result ?? []);
-      setLength(result?.data?.result.length)
+      setLength(result?.data?.result.length);
     } catch (error) {
       console.log("from getting users", error);
     }
@@ -54,50 +62,58 @@ const RecommendedFreind = () => {
 
   return (
     <div className="mainRecommended">
-      <h3 className="suggested-freinds">Suggested Friends {length}</h3>
-      {suggestedFreinds?.map((item, i) => (
-        <div key={item.id} className="panel">
-          <div className="all-info">
-            <img onClick={()=>{console.log(item);}}
-              className="profileImg"
-              alt=""
-              src={item.profile_picture_url}
-              style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-            />
-            <div className="name-bio">
-              <p className="name">{item.username}</p>
-              <p className="bio">{item.bio}</p>
+      <div className="count">
+        <h3 className="suggested-freinds">Suggested Friends </h3>
+        <h6>{length}</h6>
+      </div>
+      {length === 0 ? (
+        <h1>No Suggested Friends</h1>
+      ) : (
+        suggestedFreinds?.slice(0, 5).map((item, i) => (
+          <div key={item.id} className="panel">
+            <div className="all-info">
+              <img
+                onClick={() => {
+                  console.log(item);
+                }}
+                className="profileImg"
+                alt=""
+                src={item.profile_picture_url}
+                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+              />
+              <div className="name-bio">
+                <p className="name">{item.username}</p>
+                <p className="bio">{item.bio}</p>
+              </div>
             </div>
+            {toggle[i] ? (
+              <GoPersonAdd
+                onClick={async () => {
+                  handleToggle(i);
+                  try {
+                    const result = await axios.post(
+                      `http://localhost:5000/followers/add`,
+                      { followed_id: item.id },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    );
+                    console.log(result.data);
+                    getSuggesterFreinds();
+                  } catch (error) {
+                    console.log("from add followed", error);
+                  }
+                }}
+                className="person"
+              />
+            ) : (
+              <SiNike onClick={() => handleToggle(i)} className="nike" />
+            )}
           </div>
-          {toggle[i] ? (
-            <GoPersonAdd
-              onClick={async () => {
-                handleToggle(i);
-                try {
-                  const result = await axios.post(
-                    `http://localhost:5000/followers/add`,
-                    { followed_id: item.id },
-                    {
-                      headers: {
-                        
-                        // لما تنتهي صفحة login
-                        Authorization: `Bearer ${token}`,
-                      },
-                    }
-                  );
-                  console.log(result.data);
-                  getSuggesterFreinds()
-                } catch (error) {
-                  console.log("from add followed", error);
-                }
-              }}
-              className="person"
-            />
-          ) : (
-            <SiNike onClick={() => handleToggle(i)} className="nike" />
-          )}
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

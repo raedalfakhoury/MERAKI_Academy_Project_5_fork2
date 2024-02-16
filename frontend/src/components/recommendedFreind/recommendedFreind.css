@@ -52,11 +52,21 @@
   display: flex;
   flex-direction: column;
   background-color: #ffffff; 
-  width: fit-content;
+  width: 100;
   border: 1px solid #e8e8e8;
   border-radius: 0.85rem;
-  overflow-y: auto; /* إضافة التمرير الرأسي */
-  max-height: 350px;
+  /* overflow-y: auto; إضافة التمرير الرأسي */
+  height: 400px;
+  overflow: hidden;
+
+}
+.count{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e8e8e8;
+      padding: 0px 16px;
+      align-items: center;
+      color: #757a91;
 }
 .mainRecommended.empty {
   display: flex;
@@ -72,8 +82,7 @@
 .suggested-freinds{
   font-size: .9rem;
   color: #757a91;
-  font-weight: 400;
-  border-bottom: 1px solid #e8e8e8;
+  font-weight: 400; 
   padding: 16px;
   font-family: Roboto,-apple-system,system-ui,BlinkMacSystemFont,segoe ui,helvetica neue,Arial,sans-serif;
   font-weight: 600;
