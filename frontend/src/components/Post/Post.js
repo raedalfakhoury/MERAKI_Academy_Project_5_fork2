@@ -313,7 +313,6 @@ function Post() {
   };
   return (
     <>
-     <NavBarPost/>
       <Container>
         <Container className="containerPosts">
           <Row>
