@@ -24,6 +24,7 @@ import { IoCameraOutline } from "react-icons/io5";
 import { FcLike } from "react-icons/fc";
 
 import Dropdown from "react-bootstrap/Dropdown";
+import NavBarPost from "../Navbar/NavBarPost";
 
 function Post() {
   const [toggleLike, setToggleLike] = useState(false);
@@ -221,6 +222,7 @@ function Post() {
 
   return (
     <>
+     <NavBarPost/>
       <Container>
         <Container className="containerPosts">
           <Row>
