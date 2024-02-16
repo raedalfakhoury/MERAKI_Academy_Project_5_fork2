@@ -20,7 +20,19 @@ function Weather() {
   const [loader, setLoader] = useState(true);
 
   const dayOfWeek = (date) => {
-    const currentDate = new Date(date);
+    const now = new Date();
+
+// Getting various components of the date and time
+// const year = now.getFullYear();
+// const month = now.getMonth() + 1; // Note: January is 0
+// const day = now.getDate();
+const hours = now.getHours();
+console.log(hours);
+const minutes = now.getMinutes();
+const seconds = now.getSeconds();
+const milliseconds = now.getMilliseconds();
+    const currentDate = new Date(date) ;
+    
     const days = [
       "Sunday",
       "Monday",
