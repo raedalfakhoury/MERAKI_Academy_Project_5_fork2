@@ -51,7 +51,8 @@ function Weather() {
 
     try {
       const result = await axios.get(url);
-      console.log(result.data);
+      
+
       if (result.data) {
         setLoader(false);
       }
@@ -77,7 +78,8 @@ function Weather() {
     const day = String(currentDate.getDate()).padStart(2, "0");
 
     const formattedDate = `${dayOfWeek}, ${day}-${month}-${year}`;
-    console.log(formattedDate);
+    
+    
     return formattedDate;
   };
   const getClimatePrediction = (currentCity) => {

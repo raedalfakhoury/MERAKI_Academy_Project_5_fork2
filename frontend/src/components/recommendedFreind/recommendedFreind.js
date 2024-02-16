@@ -20,7 +20,7 @@ const RecommendedFreind = () => {
       token: state.auth.token,
     };
   });
-  console.log(suggestedFreinds);
+  
   const getSuggesterFreinds = async () => {
     try {
       const result = await axios.get(
@@ -31,7 +31,7 @@ const RecommendedFreind = () => {
           },
         }
       );
-      console.log(result.data);
+      
       shuffleProduct(result?.data?.result ?? []);
       setLength(result?.data?.result.length);
     } catch (error) {
@@ -73,9 +73,8 @@ const RecommendedFreind = () => {
           <div key={item.id} className="panel">
             <div className="all-info">
               <img
-                onClick={() => {
-                  console.log(item);
-                }}
+               
+               
                 className="profileImg"
                 alt=""
                 src={item.profile_picture_url}
@@ -100,7 +99,7 @@ const RecommendedFreind = () => {
                         },
                       }
                     );
-                    console.log(result.data);
+                    
                     getSuggesterFreinds();
                   } catch (error) {
                     console.log("from add followed", error);

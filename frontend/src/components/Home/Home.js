@@ -9,8 +9,10 @@ import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
 import Loader from "../Loader/Loader";
+import Profile from "../Profile/Profile";
 
 function Home() {
+  
   return (
     <>
       {/* <Routes>
@@ -26,8 +28,8 @@ function Home() {
       {/* <WelcomePage/>  */}
 
       {/* <Navbar/> */}
-      <Weather/>
-      
+      {/* <Weather/> */}
+      <Profile/>
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
 
