@@ -482,6 +482,16 @@ function Post() {
                         justifyContent: "space-around",
                         padding: "0px",
                       }}
+ 
+                    >
+                      <Image
+                      
+                        style={{ width: "100%", height: "100%" }}
+                        src={elm.profile_picture_url}
+                        roundedCircle
+                      />
+                    </Col>
+ 
                     > */}
                     <Image
                       onClick={() => {
@@ -500,6 +510,7 @@ function Post() {
                       roundedCircle
                     />
                     {/* </Col> */}
+ 
                     <Col style={{ height: "10px" }}>
                       <span className="usernameLap">{elm.username}</span>
                       <p className="xx">{elm.created_at} pm</p>

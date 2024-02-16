@@ -93,12 +93,12 @@ const suggestedFreings = async (req, res) => {
 };
 const getAllFollowing = async (req, res) => {
   try {
-    const id = req.token.user_id; 
+    const id = req.token.user_id;
     const query = `  SELECT DISTINCT Users.* 
     FROM Users
     INNER JOIN Follows ON Follows.follower_id = $1 AND Follows.following_id = Users.id;
     ;`;
-    const data = [id ];
+    const data = [id];
     const result = await pool.query(query, data);
 
     res.status(200).json({
@@ -118,13 +118,13 @@ const getAllFollowing = async (req, res) => {
 };
 const getAllFollowers = async (req, res) => {
   try {
-    const id = req.token.user_id; 
+    const id = req.token.user_id;
     const query = `SELECT DISTINCT Users.*
     FROM Users
     INNER JOIN Follows ON Follows.follower_id = Users.id
     WHERE Follows.following_id = $1
     ;`;
-    const data = [id ];
+    const data = [id];
     const result = await pool.query(query, data);
 
     res.status(200).json({
@@ -149,5 +149,5 @@ module.exports = {
   deleteFollowed,
   suggestedFreings,
   getAllFollowing,
-  getAllFollowers
+  getAllFollowers,
 };

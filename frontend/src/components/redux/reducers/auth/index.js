@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {

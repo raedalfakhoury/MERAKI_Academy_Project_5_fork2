@@ -36,11 +36,11 @@ function Home() {
 
       {/* <NavBar/> */}
       {/* <Weather/> */}
-      <Profile/>
+      {/* <Profile/> */}
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
 
-      {/* <Post/>   */}
+      <Post/>  
     </>
   );
 }
