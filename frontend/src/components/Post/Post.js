@@ -31,7 +31,7 @@ import CloseButton from "react-bootstrap/CloseButton";
 import { IoCameraOutline } from "react-icons/io5";
 
 import { FcLike } from "react-icons/fc";
-
+import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Spinner from "react-bootstrap/Spinner";
 // import Button from '@mui/material/Button';
@@ -44,6 +44,8 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
 
 function Post() {
+  const Navigate = useNavigate();
+
   const [toggleLike, setToggleLike] = useState(false);
   const [inputAddComment, setInputAddComment] = useState("");
   const [togComment, setTogComment] = useState(false);
@@ -284,19 +286,26 @@ function Post() {
 
   const updatePostAPI = () => {
     console.log(inputUpdate);
-    axios.put(`http://localhost:5000/post/update/${inputUpdate.ID_post}`, {
-      content: inputUpdate.content,
-      media_url: inputUpdate.image,
-    },{
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((result)=>{
+    axios
+      .put(
+        `http://localhost:5000/post/update/${inputUpdate.ID_post}`,
+        {
+          content: inputUpdate.content,
+          media_url: inputUpdate.image,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((result) => {
         console.log(result);
-dispatch(UpdatePost(inputUpdate))
-    }).catch((err)=>{
-      console.log(err);
-    })
+        dispatch(UpdatePost(inputUpdate));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>
@@ -470,7 +479,18 @@ dispatch(UpdatePost(inputUpdate))
                       }}
                     > */}
                     <Image
-                      style={{ width: "50px", height: "50px", padding: "0px" }}
+                      onClick={() => {
+                        Navigate({
+                          pathname: "/profile",
+                          search: `?prf=${elm.user_id}`,
+                        });
+                      }}
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        padding: "0px",
+                        cursor: "pointer",
+                      }}
                       src={elm.profile_picture_url}
                       roundedCircle
                     />

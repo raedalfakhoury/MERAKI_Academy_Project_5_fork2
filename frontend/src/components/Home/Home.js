@@ -7,23 +7,20 @@ import Register from "../Rigester/index";
 import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
-
+import NavBar from "../Navbar/Navbar";
 function Home() {
   return (
     <>
       <Routes>
         // <Route path="/users/register" element={<Register />} />
         // <Route path="/users/login" element={<LoginPage />} />
-        // <Route path="/" element={<WelcomePage/>} />
-        // <Route path="/home/Posts" element={<Post/>} />
-
-        
+        // <Route path="/" element={<WelcomePage />} />
+        // <Route path="/home/Posts" element={<Post />} />
       </Routes>
-
 
       {/* <WelcomePage/>  */}
 
-      {/* <Navbar/> */}
+      {/* <NavBar/> */}
       {/* <Weather/> */}
       {/* <RecommendedFreind/> */}
       {/* <LoginPage /> */}
