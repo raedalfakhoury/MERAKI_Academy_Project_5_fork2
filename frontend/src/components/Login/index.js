@@ -62,6 +62,7 @@ function LoginPage() {
             dispatch(
               setImageAndName({ name: res.data.name, image: res.data.image })
             );
+            redirect("/home/posts");
           })
           .catch((err) => {
             console.log(err.response.data.massage);
@@ -87,6 +88,7 @@ function LoginPage() {
               dispatch(
                 setImageAndName({ name: res.data.name, image: res.data.image })
               );
+              redirect("/home/posts");
             })
             .catch((err) => {
               console.log(err.response.data.massage);
@@ -235,7 +237,7 @@ function LoginPage() {
                                         })
                                       );
 
-                                      // redirect("/users/dashboard");
+                                      redirect("/home/posts");
                                     })
                                     .catch((err) => {
                                       console.log(err.response.data.massage);
