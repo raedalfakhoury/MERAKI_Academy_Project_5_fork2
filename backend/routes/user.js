@@ -19,7 +19,7 @@ userRouter.post("/login", login);
 userRouter.delete("/delete", authentication, deleteUser);
 userRouter.put("/update", authentication, updateUser);
 userRouter.get("/", getAllUser);
-userRouter.get("/Profile", authentication, getUserById);
+userRouter.get("/:id", getUserById);
 
 module.exports = userRouter;
 

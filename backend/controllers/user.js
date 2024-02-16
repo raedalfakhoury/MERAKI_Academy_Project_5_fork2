@@ -198,7 +198,7 @@ const getAllUser = (req, res) => {
     });
 };
 const getUserById = (req, res) => {
-  const id = req.token.user_id; 
+  const {id} = req.params; 
   const data = [id]
   const query = `SELECT * FROM Users WHERE id = $1 ;` ;
   pool

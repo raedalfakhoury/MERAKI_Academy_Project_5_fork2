@@ -387,6 +387,7 @@ function Post() {
                       }}
                     >
                       <Image
+                      
                         style={{ width: "100%", height: "100%" }}
                         src={elm.profile_picture_url}
                         roundedCircle
