@@ -411,7 +411,7 @@ export default function NavBarPost() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{ bgcolor: "#ffff", color: "black", height: "55px" }}
       >
         <Toolbar>
@@ -572,7 +572,7 @@ export default function NavBarPost() {
           <AccountCircle  style={{
                 color: "black",
                 width: "40px",
-                height: "50px",
+                height: "35px",
                 borderRadius: "20px",
               }}/>
 
