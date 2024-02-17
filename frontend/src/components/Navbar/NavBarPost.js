@@ -24,6 +24,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import { useNavigate } from "react-router-dom";
 
 import "./style.css";
 
@@ -98,6 +99,8 @@ export default function NavBarPost() {
 
   const handleLogout = (event) => {
     dispatch(setLogout());
+    redirect("/");
+
   };
 
   const menuId = "primary-search-account-menu";
@@ -122,6 +125,7 @@ export default function NavBarPost() {
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
+  const redirect = useNavigate();
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
