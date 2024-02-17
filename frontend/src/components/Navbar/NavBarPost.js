@@ -263,6 +263,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import "./style.css";
 
 const Search = styled("div")(({ theme }) => ({
@@ -406,7 +407,10 @@ export default function NavBarPost() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: "#ffff", color: "black" }}>
+      <AppBar
+        position="static"
+        sx={{ bgcolor: "#ffff", color: "black", height: "55px" }}
+      >
         <Toolbar>
           {/* <IconButton
             size="large"
@@ -421,65 +425,63 @@ export default function NavBarPost() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block", color: "blue" } }}
+            sx={{ display: { xs: "none", sm: "block", color: "#659BDC" } }}
           >
             TALAGI
           </Typography>
 
           {/* Notifications Box */}
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{ display: { xs: "none", md: "flex", paddingLeft: "70px" } }}
+          >
             {/* Likes Notifications */}
             <IconButton
               sx={{ "&:hover": { backgroundColor: "red" } }}
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
-              startIcone={<AddAPhotoIcon />}
-              endIcone={<FavoriteBorderIcon />}
             >
               <Badge badgeContent={8} color="error">
-                <AddAPhotoIcon />
+                <FavoriteBorderIcon  />
               </Badge>
             </IconButton>
 
-            {/* Message Notifications */}
+            {/* Bell Notifications */}
             <IconButton
-              sx={{ "&:hover": { backgroundColor: "red" } }}
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={8} color="error">
-                <FavoriteBorderIcon />
-              </Badge>
-            </IconButton>
-
-            {/* Bill Notifications */}
-            <IconButton
+              sx={{ "&:hover": { backgroundColor: "#659BDC" } }}
               size="large"
               aria-label="show 4 new mails"
               color="inhert"
             >
               <Badge badgeContent={8} color="error">
-                <MailOutlineIcon />
+                <NotificationsNoneOutlinedIcon />
               </Badge>
             </IconButton>
 
             {/* Chat Notifications */}
             <IconButton
-              sx={{ "&:hover": { backgroundColor: "red" } }}
+              sx={{ "&:hover": { backgroundColor: "#659BDC" } }}
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="#ffff"
+              stroke="black"
+              stroke-width="4"
             >
               <Badge badgeContent={17} color="info">
-                <ChatBubbleOutlineIcon />
+                <MailOutlineIcon />
               </Badge>
             </IconButton>
 
             {/* Message Notifications */}
             <IconButton
-              sx={{ "&:hover": { backgroundColor: "red" } }}
+              sx={{
+                "&:hover": { backgroundColor: "#659BDC" }
+                
+              }}
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
@@ -487,7 +489,7 @@ export default function NavBarPost() {
               <Badge
                 badgeContent={17}
                 color="info"
-                style={{ "&:hover": { backgroundColor: "green" } }}
+                style={{ "&:hover": { backgroundColor: "#659BDC" } }}
               >
                 <ChatBubbleOutlineIcon />
               </Badge>
