@@ -548,19 +548,35 @@ export default function NavBarPost() {
           {/* Space Box */}
           <Box sx={{ flexGrow: 1 }} />
           {/* Search */}
-          <Search>
-            <SearchIconWrapper>
+          <Search  style={{
+                backgroundColor: "#F7F7F7",
+                color: "black",
+                width: "400px",
+                border: "solid",
+                borderRadius: "20px",
+              }}>
+            <SearchIconWrapper
+              
+            >
               <SearchIcon />
             </SearchIconWrapper>
+
             <StyledInputBase
+              sx={{ ml: 2, flex: 1 }}
+             
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
           {/* Profile Picture */}
-          <AccountCircle />
+          <AccountCircle  style={{
+                color: "black",
+                width: "40px",
+                height: "50px",
+                borderRadius: "20px",
+              }}/>
 
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          {/* <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
@@ -571,7 +587,7 @@ export default function NavBarPost() {
             >
               <MoreIcon />
             </IconButton>
-          </Box>
+          </Box> */}
         </Toolbar>
       </AppBar>
 
