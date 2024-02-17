@@ -253,6 +253,8 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import { SvgIcon } from "@mui/material";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -264,6 +266,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+
 import "./style.css";
 
 const Search = styled("div")(({ theme }) => ({
@@ -432,7 +435,7 @@ export default function NavBarPost() {
 
           {/* Notifications Box */}
           <Box
-            sx={{ display: { xs: "none", md: "flex", paddingLeft: "70px" } }}
+            sx={{ display: { xs: "none", md: "flex", paddingLeft: "40px" } }}
           >
             {/* Likes Notifications */}
             <IconButton
@@ -442,7 +445,19 @@ export default function NavBarPost() {
               color="inherit"
             >
               <Badge badgeContent={8} color="error">
-                <FavoriteBorderIcon  />
+                {/* <FavoriteBorderIcon /> */}
+                <SvgIcon
+                  viewBox="0 0 24 24"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    fill: "#ffff",
+                    stroke: "black",
+                    strokeWidth: 1,
+                  }}
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </SvgIcon>
               </Badge>
             </IconButton>
 
@@ -454,7 +469,20 @@ export default function NavBarPost() {
               color="inhert"
             >
               <Badge badgeContent={8} color="error">
-                <NotificationsNoneOutlinedIcon />
+                {/* <NotificationsNoneOutlinedIcon /> */}
+                <SvgIcon
+                  viewBox="0 0 24 24"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    fill: "#ffff",
+                    stroke: "black",
+                    strokeWidth: 1,
+                  }}
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>{" "}
+                </SvgIcon>
               </Badge>
             </IconButton>
 
@@ -472,15 +500,25 @@ export default function NavBarPost() {
               stroke-width="4"
             >
               <Badge badgeContent={17} color="info">
-                <MailOutlineIcon />
+                <SvgIcon
+                  viewBox="0 0 24 24"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    fill: "#ffff",
+                    stroke: "black",
+                    strokeWidth: 1,
+                  }}
+                >
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </SvgIcon>{" "}
               </Badge>
             </IconButton>
 
             {/* Message Notifications */}
             <IconButton
               sx={{
-                "&:hover": { backgroundColor: "#659BDC" }
-                
+                "&:hover": { backgroundColor: "#659BDC" },
               }}
               size="large"
               aria-label="show 17 new notifications"
@@ -491,7 +529,19 @@ export default function NavBarPost() {
                 color="info"
                 style={{ "&:hover": { backgroundColor: "#659BDC" } }}
               >
-                <ChatBubbleOutlineIcon />
+                <SvgIcon
+                  viewBox="0 0 24 24"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    fill: "#ffff",
+                    stroke: "black",
+                    strokeWidth: 1,
+                  }}
+                >
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </SvgIcon>{" "}
               </Badge>
             </IconButton>
           </Box>
