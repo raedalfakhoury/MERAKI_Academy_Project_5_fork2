@@ -425,7 +425,7 @@ export default function NavBarPost() {
             <MenuIcon />
           </IconButton> */}
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block", color: "#659BDC" } }}
@@ -552,7 +552,6 @@ export default function NavBarPost() {
                 backgroundColor: "#F7F7F7",
                 color: "black",
                 width: "400px",
-                border: "solid",
                 borderRadius: "20px",
               }}>
             <SearchIconWrapper
