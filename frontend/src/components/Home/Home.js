@@ -9,7 +9,7 @@ import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
 import NavBarPost from "../Navbar/NavBarPost"
-
+import Stories from "../Stories/Stories" 
 
 import Loader from "../Loader/Loader";
 import Profile from "../Profile/Profile";
@@ -35,7 +35,7 @@ function Home() {
         
       </Routes>
 
-
+<Stories/>
       {/* <WelcomePage/>  */}
       {/* <NavBar/> */}
       {/* <Weather/> */}
