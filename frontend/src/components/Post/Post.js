@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, {
   useEffect,
   useState,
@@ -34,8 +35,6 @@ import { FcLike } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 
-
-
 import Spinner from "react-bootstrap/Spinner";
 // import Button from '@mui/material/Button';
 import Dialog from "@mui/material/Dialog";
@@ -45,7 +44,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
-
 
 function Post() {
   const Navigate = useNavigate();
@@ -492,24 +490,51 @@ function Post() {
                     </Col>
  
                     > */}
-                    <Image
-                      onClick={() => {
-                        Navigate({
-                          pathname: "/profile",
-                          search: `?prf=${elm.user_id}`,
-                        });
-                      }}
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        padding: "0px",
-                        cursor: "pointer",
-                      }}
-                      src={elm.profile_picture_url}
-                      roundedCircle
-                    />
+                    {localStorage.getItem("userId") == elm.user_id ? (
+                      <div className="status">
+                        <Image
+                          onClick={() => {
+                            Navigate({
+                              pathname: "/profile",
+                              search: `?prf=${elm.user_id}`,
+                            });
+                          }}
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            padding: "0px",
+                            cursor: "pointer",
+                          }}
+                          src={elm.profile_picture_url}
+                          roundedCircle
+                        />
+                        
+                        <div className="roundCircle"></div>
+                      </div>
+                    ) : (
+                      <div className="statusOffline">
+                      <Image
+                        onClick={() => {
+                          Navigate({
+                            pathname: "/profile",
+                            search: `?prf=${elm.user_id}`,
+                          });
+                        }}
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          padding: "0px",
+                          cursor: "pointer",
+                        }}
+                        src={elm.profile_picture_url}
+                        roundedCircle
+                      />
+                      
+                      <div className="greyCircle"></div>
+                    </div>
+                    )}
                     {/* </Col> */}
- 
+
                     <Col style={{ height: "10px" }}>
                       <span className="usernameLap">{elm.username}</span>
                       <p className="xx">{elm.created_at} pm</p>
