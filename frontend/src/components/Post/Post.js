@@ -258,6 +258,7 @@ function Post() {
         },
       })
       .then((result) => {
+        console.log(result);
         dispatch(deletePost(id));
       })
       .catch((err) => {
@@ -470,7 +471,7 @@ function Post() {
 
                 <Col>
                   <div class="controlCreateText">
-                    <textarea
+                    <textarea value={ContentPost}
                       onChange={(e) => {
                         setContentPost(e.target.value);
                       }}
@@ -632,6 +633,7 @@ function Post() {
                           <Dropdown.Item
                             onClick={() => {
                               deletePostById(elm.id);
+                              console.log(" delete post");
                             }}
                           >
                             delete post
