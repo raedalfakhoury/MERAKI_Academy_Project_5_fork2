@@ -40,7 +40,7 @@ function Home() {
         
       </Routes>
 
-<Stories/>
+{/* <Stories/> */}
       {/* <WelcomePage/>  */}
       {/* <NavBar/> */}
       {/* <Weather/> */}
