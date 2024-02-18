@@ -66,7 +66,7 @@ const getPostById = (req, res) => {
 };
 
 const getpostByuserId = (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.userId;
 
   const query = `
           SELECT * FROM 
@@ -74,12 +74,11 @@ const getpostByuserId = (req, res) => {
           JOIN Users ON Posts.user_id = Users.id 
           WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
         ` 
- 
- 
+  
   const data = [userId];
 
   pool
-    .query(query)
+    .query(query,data)
     .then((result) => {
       if (result.rows.length === 0) {
         res.status(404).json({
@@ -90,7 +89,7 @@ const getpostByuserId = (req, res) => {
         res.status(200).json({
           success: true,
           message: `All Posts for the user: ${userId}`,
-          result: result,
+          result: result.rows,
         });
       }
     })
@@ -99,7 +98,7 @@ const getpostByuserId = (req, res) => {
       res.status(500).json({
         success: false,
         message: "Server error",
-        err: err.message,
+        err: err,
       });
     });
 };
