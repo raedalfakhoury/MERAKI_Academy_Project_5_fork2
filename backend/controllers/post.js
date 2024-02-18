@@ -66,7 +66,7 @@ const getPostById = (req, res) => {
 };
 
 const getpostByuserId = (req, res) => {
-  const { userId } = req.params;
+  const userId = req.params.id;
 
   const query = `
           SELECT * FROM 
@@ -74,10 +74,12 @@ const getpostByuserId = (req, res) => {
           JOIN Users ON Posts.user_id = Users.id 
           WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
         ` 
+ 
+ 
   const data = [userId];
 
   pool
-    .query(query, data)
+    .query(query)
     .then((result) => {
       if (result.rows.length === 0) {
         res.status(404).json({
@@ -88,7 +90,7 @@ const getpostByuserId = (req, res) => {
         res.status(200).json({
           success: true,
           message: `All Posts for the user: ${userId}`,
-          result: result.rows,
+          result: result,
         });
       }
     })
@@ -174,7 +176,7 @@ const getAllPosts = (req, res) => {
 
 const deletePostById = (req, res) => {
   const id = req.params.id;
-  const query = `UPDATE Posts SET is_deleted=0 WHERE id= ${id} RETURNING *;`;
+  const query = `UPDATE Posts SET is_deleted=1 WHERE id= ${id} RETURNING *;`;
 
   pool
     .query(query)
@@ -256,7 +258,7 @@ INNER JOIN Users ON Posts.user_id = Users.id
 WHERE 
   Posts.is_deleted = 0
   AND
-  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =${user_id}) OR Posts.user_id = ${user_id} `;
+  Posts.user_id IN (SELECT followed_id FROM Follows WHERE follower_id =${user_id}) OR Posts.user_id = ${user_id}  AND Posts.is_deleted = 0  ORDER BY  Posts.created_at DESC`;
   //  SELECT Posts.* , Users.username ,Users.profile_picture_url
   //   FROM Posts
   //   JOIN Follows ON Posts.user_id = Follows.followed_id
@@ -302,6 +304,3 @@ module.exports = {
 //     FOREIGN KEY (user_id) REFERENCES Users (id)
 // );
 
-
-// Find the Missing Number:
-// Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, write a function to find the missing number. For example, for the input [3, 0, 1, 5], the function should return [2, 4].

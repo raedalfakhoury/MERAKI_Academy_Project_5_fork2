@@ -1,4 +1,8 @@
-/* .navbar:hover {
-    background-color: red;
-  } */
+.iconButton:hover {
+  background-color: blue; /* Change to the desired background color */
+}
+
+.iconButton:hover .badge {
+  background-color: green; /* Change to the desired background color */
+}
 

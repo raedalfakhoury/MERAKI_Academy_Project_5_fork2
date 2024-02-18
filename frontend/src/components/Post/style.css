@@ -61,7 +61,7 @@ body {
 
 .containerPosts {
   margin-top: 10px;
-  width: 50%;
+  width: 40%;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
   background-color: #fff;
@@ -219,7 +219,7 @@ textarea {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 8px;
+  padding: 5px 8px;
   border-radius: 0 0 0.85rem 0.85rem;
   background: #fff;
 
@@ -410,8 +410,9 @@ circle {
 }
 
 .file-label {
+ 
   display: inline-block;
-  padding: 8px 20px;
+  padding: 6px 20px;
   background-color: rgb(247, 247, 247);
   color: rgb(136, 141, 185);
   cursor: pointer;
@@ -536,7 +537,7 @@ circle {
   }
 }
 .cont_comment_box_x {
-  padding: 0px 10px 10px 80px;
+  padding: 0px 10px 10px 70px;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   font-size: 14px;
   line-height: 1.6;

@@ -64,6 +64,19 @@ export const postsSlice = createSlice({
         return post;
       });
     },
+    UpdateCommentByPostId: (state, action) => {
+      state.posts = state.posts.map((post) => {
+        if (post.id === action.payload.id_post) {
+          post.commentsByPostId = post.commentsByPostId.map((comment) => {
+            if (comment.comment_id === action.payload.id_comment) {
+              comment.content = action.payload.content;
+            }
+            return comment;
+          });
+        }
+        return post;
+      });
+    }
   },
 });
 
@@ -76,6 +89,7 @@ export const {
   deletePost,
   deleteCommentByPostId,
   UpdatePost,
+  UpdateCommentByPostId
 } = postsSlice.actions;
 
 export default postsSlice.reducer;
