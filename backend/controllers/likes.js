@@ -8,7 +8,8 @@ const createNewLike = (req, res) => {
   const checkQuery = `SELECT * FROM Likes WHERE user_id = '${user_id}' AND post_id = '${post_id}';`;
   const checkData = [user_id, post_id];
 
-  pool.query(checkQuery)
+  pool
+    .query(checkQuery)
     .then((checkResult) => {
       if (checkResult.rows.length > 0) {
         // Like already exists, delete the like
@@ -38,31 +39,56 @@ const createNewLike = (req, res) => {
     });
 };
 
-
-const counterOfLikes = (req,res)=>{
+const counterOfLikes = (req, res) => {
   const post_id = req.params.id;
-  const query = `SELECT COUNT(likes_count) FROM Likes WHERE post_id='${post_id}';`
+  const query = `SELECT COUNT(likes_count) FROM Likes WHERE post_id='${post_id}';`;
   pool
-  .query(query)
-  .then((result) => {
-    const likes_counter = result.rows[0].count
-    res.status(200).json({
-      success: true,
-      message: `All Likes for post: ${post_id} =   ${likes_counter}`,
-      LikesCounter: result.rows[0].count * 1,
-    });
-  })
-  .catch((err) => {
+    .query(query)
+    .then((result) => {
+      const likes_counter = result.rows[0].count;
+      res.status(200).json({
+        success: true,
+        message: `All Likes for post: ${post_id} =   ${likes_counter}`,
+        LikesCounter: result.rows[0].count * 1,
+      });
+    })
+    .catch((err) => {
       console.log(err);
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      err: err,
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err,
+      });
     });
-  });
-}
+};
+const GetAllUserLikedPost = (req, res) => {
+  const id = req.params.id;
+  const query = `select Users.profile_picture_url , Users.id , Users.username ,Users.bio from Users 
+  join Likes on Likes.user_id = Users.id
+  join Posts on  Posts.id = Likes.post_id
+  where Posts.id = ${id}`;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "All user For Likes Post",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err,
+      });
+    });
+};
 
 module.exports = {
   createNewLike,
-  counterOfLikes
+  counterOfLikes,
+  GetAllUserLikedPost,
 };

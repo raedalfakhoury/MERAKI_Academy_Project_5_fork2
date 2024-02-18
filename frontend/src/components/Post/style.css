@@ -61,7 +61,7 @@ body {
 
 .containerPosts {
   margin-top: 10px;
-  width: 50%;
+  width: 40%;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
   background-color: #fff;
@@ -536,7 +536,7 @@ circle {
   }
 }
 .cont_comment_box_x {
-  padding: 0px 10px 10px 80px;
+  padding: 0px 10px 10px 70px;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   font-size: 14px;
   line-height: 1.6;

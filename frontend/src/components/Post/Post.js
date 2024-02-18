@@ -6,7 +6,7 @@ import React, {
   ReactElement,
   Ref,
 } from "react";
-
+import NavBarPost from "../Navbar/NavBarPost";
 import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
@@ -24,9 +24,11 @@ import {
   deletePost,
   deleteCommentByPostId,
   UpdatePost,
+  UpdateCommentByPostId,
 } from "../redux/reducers/Posts";
 import { GiSelfLove } from "react-icons/gi";
 import axios from "axios";
+import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 import CloseButton from "react-bootstrap/CloseButton";
 import { IoCameraOutline } from "react-icons/io5";
@@ -44,9 +46,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
-
+// import {FontAwesomeIcon } from "react-icons/fa"
 function Post() {
   const Navigate = useNavigate();
+  const [showF, setShowF] = useState(false);
+
+  const handleCloseF = () => setShowF(false);
+  const handleShowF = () => setShowF(true);
 
   const [toggleLike, setToggleLike] = useState(false);
   const [inputAddComment, setInputAddComment] = useState("");
@@ -59,7 +65,8 @@ function Post() {
   const [ToggleSpinnerCloudInN, setToggleSpinnerCloudInN] = useState(false);
   const [ToggleSpinnerCloudInNUpdate, setToggleSpinnerCloudInUpdate] =
     useState(false);
-
+  const [toggleUpdateComment, settToggleUpdateComment] = useState(false);
+  const [ToggleUpdatePost, setToggleUpdatePost] = useState(false);
   const pr_key = "rllytlm7";
   const cloud_name = "dmmo3zzyc";
 
@@ -68,6 +75,12 @@ function Post() {
     content: "",
     image: "",
   });
+  const [UpdateComment, setUpdateComment] = useState({
+    id_post: "",
+    id_comment: "",
+    content: "",
+  });
+  // console.log(UpdateComment);
 
   const handleFile = (e) => {
     setToggleSpinnerCloudInN(true);
@@ -275,8 +288,10 @@ function Post() {
       image: state.auth.image,
     };
   });
-
+  console.log(posts);
   const [open, setOpen] = useState(false);
+  const [openCommentUpdate, setOpenCommentUpdate] = useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -284,7 +299,13 @@ function Post() {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(posts);
+  const handleClickOpenUpComment = () => {
+    setOpenCommentUpdate(true);
+  };
+
+  const handleCloseUpComment = () => {
+    setOpenCommentUpdate(false);
+  };
 
   const updatePostAPI = () => {
     console.log(inputUpdate);
@@ -309,8 +330,48 @@ function Post() {
         console.log(err);
       });
   };
+
+  const updateCommentAPI = () => {
+    axios
+      .put(
+        `http://localhost:5000/comments/${UpdateComment.id_comment}`,
+        {
+          comment: UpdateComment.content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+        dispatch(UpdateCommentByPostId(UpdateComment));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const GetAllLikesByPostID = (id) => {
+    axios
+      .get(`http://localhost:5000/likes/AllLikeByPost/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log(result.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // localhost:5000/likes/AllLikeByPost/43
+  // GetAllLikesByPostID(elm.id)
   return (
     <>
+      {/* <NavBarPost /> */}
       <Container>
         <Container className="containerPosts">
           <Row>
@@ -402,10 +463,11 @@ function Post() {
                 >
                   <Image
                     style={{ width: "100%", height: "100%" }}
-                    src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    src={image}
                     roundedCircle
                   />
                 </Col>
+
                 <Col>
                   <div class="controlCreateText">
                     <textarea
@@ -471,27 +533,8 @@ function Post() {
               <Container className="containerPosts">
                 <Col>
                   <Row className="postsUserNav">
-                    {/* <Col
-                      style={{
-                        maxHeight: "50px",
-                        maxWidth: "50px",
-                        display: "flex",
-                        justifyContent: "space-around",
-                        padding: "0px",
-                      }}
- 
-                    >
-                      <Image
-                      
-                        style={{ width: "100%", height: "100%" }}
-                        src={elm.profile_picture_url}
-                        roundedCircle
-                      />
-                    </Col>
- 
-                    > */}
-                    {localStorage.getItem("userId") == elm.user_id ? (
-                      <div className="status">
+                    {userId == elm.user_id ? (
+                      <div style={{ width: "70px" }} className="status">
                         <Image
                           onClick={() => {
                             Navigate({
@@ -508,36 +551,36 @@ function Post() {
                           src={elm.profile_picture_url}
                           roundedCircle
                         />
-                        
-                        <div className="roundCircle"></div>
+
+                        <span className="roundCircle"></span>
                       </div>
                     ) : (
                       <div className="statusOffline">
-                      <Image
-                        onClick={() => {
-                          Navigate({
-                            pathname: "/profile",
-                            search: `?prf=${elm.user_id}`,
-                          });
-                        }}
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          padding: "0px",
-                          cursor: "pointer",
-                        }}
-                        src={elm.profile_picture_url}
-                        roundedCircle
-                      />
-                      
-                      <div className="greyCircle"></div>
-                    </div>
+                        <Image
+                          onClick={() => {
+                            Navigate({
+                              pathname: "/profile",
+                              search: `?prf=${elm.user_id}`,
+                            });
+                          }}
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            padding: "0px",
+                            cursor: "pointer",
+                          }}
+                          src={elm.profile_picture_url}
+                          roundedCircle
+                        />
+
+                        <div className="greyCircle"></div>
+                      </div>
                     )}
                     {/* </Col> */}
 
                     <Col style={{ height: "10px" }}>
                       <span className="usernameLap">{elm.username}</span>
-                      <p className="xx">{elm.created_at} pm</p>
+                      <p className="xx">{elm.created_at.slice(0, 10)}</p>
                     </Col>
                     {elm.user_id === localStorage.getItem("userId") * 1 && (
                       <Dropdown xs={2} style={{ width: "20px" }}>
@@ -581,7 +624,6 @@ function Post() {
                                 image: elm.media_url,
                                 ID_post: elm.id,
                               });
-                              // dataUpdatePost(elm.content, elm.media_url);
                             }}
                             href="#/action-1"
                           >
@@ -641,35 +683,37 @@ function Post() {
                         />
 
                         {localStorage.getItem(`${elm.id}`) * 1 !== elm.id ? (
-                          <FcLike
+                          <svg
                             style={{ backgroundColor: "#fff" }}
-                            onClick={(e) => {
+                            onClick={() => {
                               setToggleLike(!toggleLike);
 
                               Like(elm.id);
                               localStorage.setItem(`${elm.id}`, `${elm.id}`);
                             }}
-                            className="icn-like"
-                          />
+                            class=" containerss"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+                          </svg>
                         ) : (
                           <>
-                            <div
-                              onClick={(e) => {
+                            <svg
+                              style={{ backgroundColor: "red" }}
+                              onClick={() => {
                                 setToggleLike(!toggleLike);
 
                                 Like(elm.id);
 
                                 localStorage.removeItem(`${elm.id}`);
                               }}
-                              class="containerss"
+                              class=" containerss"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
                             >
-                              <div class="preloader">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                              </div>
-                              <div class="shadow"></div>
-                            </div>
+                              <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+                            </svg>
                           </>
                         )}
                       </span>
@@ -719,11 +763,26 @@ function Post() {
                     </Col>
 
                     <Col className="comment-ic" style={{ paddingTop: "7px" }}>
-                      <FaRegComment className="num" />
+                      {/* <FaRegComment className="num" />
                       <span className="num">{elm.comment_count}</span>
                       <GiSelfLove className="num" />
                       <span style={{ marginLeft: "10px" }} className="num">
                         {elm.like_count}
+                      </span> */}
+
+                      <span
+                        onClick={() => {
+                          handleShowF();
+                          GetAllLikesByPostID(elm.id);
+                        }}
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {" "}
+                        {elm.like_count} likes
                       </span>
                     </Col>
                   </Row>
@@ -764,7 +823,17 @@ function Post() {
                                 }}
                               >
                                 <Image
-                                  style={{ width: "80%", height: "80%" }}
+                                  onClick={() => {
+                                    Navigate({
+                                      pathname: "/profile",
+                                      search: `?prf=${elm.user_id}`,
+                                    });
+                                  }}
+                                  style={{
+                                    width: "80%",
+                                    height: "80%",
+                                    cursor: "pointer",
+                                  }}
                                   src={comment.profile_picture_url}
                                   roundedCircle
                                 />
@@ -774,11 +843,13 @@ function Post() {
                                   {comment.username}
                                 </span>
                                 <br />
-                                <p className="xx">{comment.created_at}</p>
+                                <p className="xx">
+                                  {comment.created_at.slice(0, 10)}
+                                </p>
                               </Col>
                               <Col xs={1}>
-                                {elm.user_id ===
-                                  localStorage.getItem("userId") * 1 && (
+                                {/* delete And Update comment for my comment */}
+                                {comment.user_id * 1 === userId * 1 && (
                                   <Dropdown style={{ width: "20px" }}>
                                     <Dropdown.Toggle
                                       style={{
@@ -819,7 +890,17 @@ function Post() {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                      <Dropdown.Item href="#/action-1">
+                                      <Dropdown.Item
+                                        onClick={() => {
+                                          handleClickOpenUpComment();
+                                          setUpdateComment({
+                                            ...UpdateComment,
+                                            id_post: elm.id,
+                                            id_comment: comment.comment_id,
+                                            content: comment.content,
+                                          });
+                                        }}
+                                      >
                                         Edit
                                       </Dropdown.Item>
                                       <Dropdown.Item
@@ -838,6 +919,69 @@ function Post() {
                                     </Dropdown.Menu>
                                   </Dropdown>
                                 )}
+                                {/* delete comment for my post */}
+                                {elm.user_id * 1 === userId * 1 &&
+                                  comment.user_id * 1 !== userId * 1 && (
+                                    <Dropdown style={{ width: "20px" }}>
+                                      <Dropdown.Toggle
+                                        style={{
+                                          backgroundColor: "transparent",
+                                          border: "none",
+                                          margin: "0px",
+                                          padding: "0px",
+                                          height: "0px",
+                                        }}
+                                      >
+                                        <Col className="navPostsDot">
+                                          <svg
+                                            style={{ cursor: "pointer" }}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="feather feather-more-vertical"
+                                          >
+                                            <circle
+                                              cx="12"
+                                              cy="12"
+                                              r="1"
+                                            ></circle>
+                                            <circle
+                                              cx="12"
+                                              cy="5"
+                                              r="1"
+                                            ></circle>
+                                            <circle
+                                              cx="12"
+                                              cy="19"
+                                              r="1"
+                                            ></circle>
+                                          </svg>
+                                        </Col>
+                                      </Dropdown.Toggle>
+
+                                      <Dropdown.Menu>
+                                        <Dropdown.Item
+                                          onClick={() => {
+                                            deletedComment(
+                                              comment.comment_id,
+                                              elm.id
+                                            );
+                                          }}
+                                        >
+                                          delete comment
+                                        </Dropdown.Item>
+                                        <Dropdown.Item href="#/action-3">
+                                          Close
+                                        </Dropdown.Item>
+                                      </Dropdown.Menu>
+                                    </Dropdown>
+                                  )}
                               </Col>
                             </Row>
 
@@ -846,7 +990,7 @@ function Post() {
                                 className="cont_comment_box_x"
                                 style={{
                                   margin: "0",
-                                  width: "500px",
+                                  width: "490px",
                                 }}
                               >
                                 {comment.content}
@@ -893,6 +1037,8 @@ function Post() {
           );
         })}
       </Container>
+      {/* /* {updatePost}*/}
+
       <React.Fragment>
         <Dialog
           open={open}
@@ -909,6 +1055,7 @@ function Post() {
                 value={inputUpdate.content}
                 onChange={(e) => {
                   setInputUpdate({ ...inputUpdate, content: e.target.value });
+                  setToggleUpdatePost(true);
                 }}
               />
               <div className="updateImage">
@@ -970,18 +1117,97 @@ function Post() {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
+            {ToggleUpdatePost && (
+              <Button
+                onClick={() => {
+                  handleClose();
+                  updatePostAPI();
+                  setToggleUpdatePost(false);
+                }}
+              >
+                Update
+              </Button>
+            )}
             <Button
               onClick={() => {
                 handleClose();
-                updatePostAPI();
+                setToggleUpdatePost(false);
               }}
             >
-              Update
+              Close
             </Button>
-            <Button onClick={handleClose}>Close</Button>
           </DialogActions>
         </Dialog>
       </React.Fragment>
+      {/* /* {updateComment}*/}
+      <React.Fragment>
+        <Dialog
+          open={openCommentUpdate}
+          keepMounted
+          onClose={handleCloseUpComment}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle style={{ width: "1000px" }}>
+            {`Update Comment `} <MdOutlineTipsAndUpdates />
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              <textarea
+                value={UpdateComment.content}
+                onChange={(e) => {
+                  setUpdateComment({
+                    ...UpdateComment,
+                    content: e.target.value,
+                  });
+
+                  settToggleUpdateComment(true);
+                }}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            {toggleUpdateComment && (
+              <Button
+                onClick={() => {
+                  settToggleUpdateComment(false);
+                  handleCloseUpComment();
+                  updateCommentAPI();
+                }}
+              >
+                Update
+              </Button>
+            )}
+            <Button
+              onClick={() => {
+                settToggleUpdateComment(false);
+                handleCloseUpComment();
+              }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
+      {/* {all user Likes post} */}
+
+      {/* <Button variant="primary" onClick={handleShowF}>
+        Launch demo modal
+      </Button> */}
+
+      <Modal style={{ top: "30%" }} show={showF} onHide={handleCloseF}>
+        <Modal.Header closeButton>
+          <Modal.Title>Likes</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Container>
+            <Row>
+              <Col xs={2}>dsad</Col>
+              <Col>dsadsdasdsa</Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
       <br />
       <br />
       <br />
