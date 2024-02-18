@@ -1106,6 +1106,7 @@ function Post() {
                   <input
                     onChange={(e) => {
                       handleFileUpdatePost(e);
+                      setToggleUpdatePost(true);
                     }}
                     type="file"
                     class="input-file"
