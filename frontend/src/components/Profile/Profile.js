@@ -1,6 +1,7 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef} from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
@@ -11,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const Profile = () => {
+  const  arr  = useRef([]);
+
   const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
@@ -29,8 +32,10 @@ const Profile = () => {
   const [myPostsLength, setMyPostsLength] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
   const [followers, setFollowers] = useState();
-  console.log(profileInfo);
+  const [following, setFollowing] = useState();
+  console.log(following);
   window.scrollTo(0, 0);
+
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/${searchQuery}`)
@@ -72,11 +77,20 @@ const Profile = () => {
       .then((result) => {
         setCountFollowing(result.data.length);
         setLoader(false);
+        setFollowing(result?.data?.result);
+        console.log(result.data.result);
+
+        result.data.result.forEach((element) => {
+          console.log(element.id);
+           arr.current.push(element.id)
+          
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
   function MyVerticallyCenteredModal(props) {
     return (
       <Modal
@@ -85,7 +99,7 @@ const Profile = () => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton style={{borderBottom:"0px"}}>
+        <Modal.Header closeButton style={{ borderBottom: "0px" }}>
           <Modal.Title id="contained-modal-title-vcenter">
             <h3>Followers</h3>
           </Modal.Title>
@@ -95,36 +109,40 @@ const Profile = () => {
             console.log(item);
             return (
               <div key={i} className="pop-main">
-              <div style={{display:"flex"}}>
-              <img
-                  className="pop-img"
-                  alt=""
-                  src={item.profile_picture_url}
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    borderRadius: "50%",
-                  }}
-                />
-               <div className="name-bio-pop">
-                <p className="name-pop">{item.username}</p>
-                <p className="bio-pop">{item.bio}</p>
-              </div>
-              </div>
-              {/* <div> */}
-              <button className="button-pop">Follow</button>
-              {/* </div> */}
+                <div style={{ display: "flex" }}>
+                  <img
+                    className="pop-img"
+                    alt=""
+                    src={item.profile_picture_url}
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <div className="name-bio-pop">
+                    <p className="name-pop">{item.username}</p>
+                    <p className="bio-pop">{item.bio}</p>
+                  </div>
+                </div>
+                {/* <div> */}
+                {arr.current?.includes(item.id) ? (
+                  <button className="button-pop">Follow</button>
+                ) : (
+                  <button className="button-pop">UnFollow</button>
+                )}
+                {/* </div> */}
               </div>
             );
           })}
         </Modal.Body>
-        <Modal.Footer style={{borderBottom:"0px"}}>
+        <Modal.Footer style={{ borderBottom: "0px" }}>
           <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
   }
-
+console.log(arr.current);
   return (
     <div id="mainPage">
       {loader ? (
