@@ -7,6 +7,9 @@
  body{
   background-color: white;
  }
+ .none{
+  display: none;
+ }
 .colum {
   display: flex;
   flex-direction: column;
@@ -20,7 +23,7 @@
   background-color: white;
   /* height:100vmax; */
   width: 100%;
-  padding: 20px 150px 0px 150px;
+  /* padding: 20px 150px 0px 150px; */
   
 }
 
@@ -95,11 +98,19 @@
 }
 .level2{
   display: flex;
-  width: 100%;
+  width: 50%;
   border-top: 1px solid grey;
   margin: 30px 0px;
   justify-content: center;
   align-items: center;
+}
+.wrapping{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 75px;
 }
 .posts-saved{
   padding: 0px 8px;
@@ -134,4 +145,92 @@
   height: 200px;
   border-radius: 10px;
   filter: drop-shadow(5px 5px 4px #727274);
+}
+#contained-modal-title-vcenter{
+   
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.pop-main{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #dee2e6;
+}
+.pop-img{
+  height: 40px;
+  width: 40px; 
+  border-radius: 50%;
+  
+}
+#Modal.Body{
+  padding: 0px;
+}
+.name-bio-pop {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5; 
+  padding-left: 20px;
+
+}
+
+.name-pop {
+  padding: 0px;
+  margin: 0px;
+  font-size: 22px;
+  color: black;
+  font-weight: 600;
+}
+.bio-pop {
+  padding: 0px;
+  margin: 0px;
+  padding: 0px;
+  font-size: 18px;
+  color: #757A91;
+}
+
+.button-pop {
+   background-color: rgb(232,232,232);
+  font-family: inherit;
+  display: inline-block;
+  width: 6em;
+  height: 2.6em;
+  /* line-height: 2.5em; */
+  overflow: hidden;
+  cursor: pointer;
+  margin: 20px;
+  font-size: 17px;
+  z-index: 1;
+  color: #0077ff;
+  border: 2px solid var(--color);
+  border-radius: 6px;
+  position: relative;
+  font-weight: 700;
+}
+
+.button-pop::before {
+  position: absolute;
+  content: "";
+  background: #0077ff;
+  width: 150px;
+  height: 200px;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+.button-pop:hover {
+  color: white;
+}
+
+.button-pop:before {
+  top: 100%;
+  left: 100%;
+  transition: 0.3s all;
+}
+
+.button-pop:hover::before {
+  top: -30px;
+  left: -30px;
 }

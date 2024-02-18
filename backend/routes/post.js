@@ -20,7 +20,7 @@ PostRouter.post("/create", authentication, createNewPost);
 PostRouter.get("/:postbyid", authentication, getPostById);
 
  
-PostRouter.get("/mypost/:userId", authentication, getpostByuserId);
+PostRouter.get("/mypost/:userId",   getpostByuserId);
  
  
 PostRouter.put("/update/:id", authentication, updatepostById);
