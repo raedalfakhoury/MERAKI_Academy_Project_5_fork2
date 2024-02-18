@@ -19,7 +19,7 @@ PostRouter.post("/create", authentication, createNewPost);
 
 PostRouter.get("/:postbyid", authentication, getPostById);
 
-PostRouter.get("/:userId", authentication, getpostByuserId);
+PostRouter.get("/id", authentication, getpostByuserId);
  
 PostRouter.put("/update/:id", authentication, updatepostById);
 PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
