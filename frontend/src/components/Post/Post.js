@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, {
   useEffect,
@@ -508,30 +509,30 @@ function Post() {
                           src={elm.profile_picture_url}
                           roundedCircle
                         />
-                        
+
                         <div className="roundCircle"></div>
                       </div>
                     ) : (
                       <div className="statusOffline">
-                      <Image
-                        onClick={() => {
-                          Navigate({
-                            pathname: "/profile",
-                            search: `?prf=${elm.user_id}`,
-                          });
-                        }}
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          padding: "0px",
-                          cursor: "pointer",
-                        }}
-                        src={elm.profile_picture_url}
-                        roundedCircle
-                      />
-                      
-                      <div className="greyCircle"></div>
-                    </div>
+                        <Image
+                          onClick={() => {
+                            Navigate({
+                              pathname: "/profile",
+                              search: `?prf=${elm.user_id}`,
+                            });
+                          }}
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            padding: "0px",
+                            cursor: "pointer",
+                          }}
+                          src={elm.profile_picture_url}
+                          roundedCircle
+                        />
+
+                        <div className="greyCircle"></div>
+                      </div>
                     )}
                     {/* </Col> */}
 

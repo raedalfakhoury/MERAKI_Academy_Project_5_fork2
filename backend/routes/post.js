@@ -19,21 +19,16 @@ PostRouter.post("/create", authentication, createNewPost);
 
 PostRouter.get("/:postbyid", authentication, getPostById);
 
-PostRouter.get("/:userId", authentication, getpostByuserId);
+PostRouter.get("/mypost/:userId", authentication, getpostByuserId);
  
 PostRouter.put("/update/:id", authentication, updatepostById);
 PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
  
 
-PostRouter.put("/update/:id", authentication, updatepostById);
 
 PostRouter.get("/allpost", authentication, getAllPosts);
 
 PostRouter.delete("/:id", authentication,deletePostById );
-
-
-
-
 
 
 PostRouter.get("/:id/getAllPostsMyFollower", authentication, getAllPostsMyFriends);

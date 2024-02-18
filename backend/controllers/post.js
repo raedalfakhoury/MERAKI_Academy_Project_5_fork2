@@ -46,7 +46,7 @@ const getPostById = (req, res) => {
         res.status(200).json({
           success: true,
           message: `Post with ID ${post_id} retrieved successfully`,
-          post: result.rows[0],
+          post: result.rows,
         });
       } else {
         res.status(404).json({
@@ -72,8 +72,8 @@ const getpostByuserId = (req, res) => {
           SELECT * FROM 
           Posts
           JOIN Users ON Posts.user_id = Users.id 
-          WHERE Posts.user_id=$1 AND Users.is_deleted=0;
-        `;
+          WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
+        ` 
   const data = [userId];
 
   pool
@@ -301,3 +301,7 @@ module.exports = {
 //     is_deleted INT,
 //     FOREIGN KEY (user_id) REFERENCES Users (id)
 // );
+
+
+// Find the Missing Number:
+// Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, write a function to find the missing number. For example, for the input [3, 0, 1, 5], the function should return [2, 4].

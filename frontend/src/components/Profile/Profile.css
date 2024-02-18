@@ -1,4 +1,137 @@
-.mainPage{
-    display: flex;
-    flex-direction: column;
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+   
+}
+ body{
+  background-color: white;
+ }
+.colum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+#mainPage {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  background-color: white;
+  /* height:100vmax; */
+  width: 100%;
+  padding: 20px 150px 0px 150px;
+  
+}
+
+.panel2 {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 5%;
+  justify-content: center;
+}
+.ProfilePicture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  padding: 5px;
+  border: 1px solid gray;
+}
+.follower {
+  display: flex;
+  width: 100%;
+  /* justify-content: space-between; */
+  gap: 40px;
+}
+.followerr {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 40px;
+}
+.followers{
+  background-color: #EFEFEF;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 600;
+}
+ 
+.username {
+  padding: 12px;
+  font-weight: 600;
+}
+.bio{
+  width: 40px;
+  font-weight: 500;
+}
+.edit {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+.po {
+  background-color: rgb(168, 159, 159);
+  border-radius: 50%;
+  padding: 30px;
+}
+.camera {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  position: absolute;
+  left: -20px;
+  top: 50px;
+  z-index: 20;
+  /* background-color: rgb(168, 159, 159) ; */
+  cursor: pointer;
+}
+.edit div {
+  position: relative;
+  z-index: 10;
+}
+.level2{
+  display: flex;
+  width: 100%;
+  border-top: 1px solid grey;
+  margin: 30px 0px;
+  justify-content: center;
+  align-items: center;
+}
+.posts-saved{
+  padding: 0px 8px;
+  font-weight: 500;
+  color: #8A90A3;
+}
+.p-s{
+  display: flex;
+  padding: 0px 50px;
+  /* margin-top: 10px; */
+}
+.p-s:hover{
+  border-top: 1px solid gray;
+ cursor: pointer;
+}
+.posts-saved:hover{
+  
+  color: black;
+}
+.grid-media{
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: self-start;
+  /* height: 100%; */
+
+}
+.img-post{
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  filter: drop-shadow(5px 5px 4px #727274);
 }

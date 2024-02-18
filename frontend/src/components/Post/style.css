@@ -22,13 +22,13 @@ body {
   position: absolute;
   left: 50px;
   top: 30px;
-  z-index: 20; /* ضع قيمة أعلى لـ z-index لجعلها في الطبقة العلوية */
+  z-index: 20;  
   margin: 2px;
 }
 
 .status img {
-  position: relative; /* تأكد من أن الصورة لديها موقف نسبي */
-  z-index: 10; /* ضع قيمة أقل لـ z-index للصورة */
+  position: relative; 
+  z-index: 10;  
 }
 
 
@@ -47,13 +47,13 @@ body {
   position: absolute;
   left: 50px;
   top: 30px;
-  z-index: 20; /* ضع قيمة أعلى لـ z-index لجعلها في الطبقة العلوية */
+  z-index: 20;  
   margin: 2px;
 }
 
 .statusOffline img {
-  position: relative; /* تأكد من أن الصورة لديها موقف نسبي */
-  z-index: 10; /* ضع قيمة أقل لـ z-index للصورة */
+  position: relative; 
+  z-index: 10; 
 }
 
 

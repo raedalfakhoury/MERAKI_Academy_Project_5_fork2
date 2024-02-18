@@ -20,7 +20,7 @@ const RecommendedFreind = () => {
       token: state.auth.token,
     };
   });
-  
+ 
   const getSuggesterFreinds = async () => {
     try {
       const result = await axios.get(

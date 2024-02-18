@@ -72,7 +72,9 @@ const suggestedFreings = async (req, res) => {
     const query = `  SELECT *
     FROM Users
     WHERE id != $1
-    AND id NOT IN (SELECT followed_id FROM Follows WHERE follower_id = $2);`;
+    AND id NOT IN (SELECT followed_id FROM Follows WHERE follower_id = $2)
+    ORDER BY Users.username;
+    `;
     const data = [id, id];
     const result = await pool.query(query, data);
 
@@ -91,14 +93,18 @@ const suggestedFreings = async (req, res) => {
     });
   }
 };
+// الاشخاص الذين اتابعهم
 const getAllFollowing = async (req, res) => {
   try {
-    const id = req.token.user_id;
-    const query = `  SELECT DISTINCT Users.* 
-    FROM Users
-    INNER JOIN Follows ON Follows.follower_id = $1 AND Follows.followed_id = Users.id;
-    ;`;
+    const { id } = req.params;
     const data = [id];
+    const query = `SELECT DISTINCT Users.*
+    FROM Users
+    INNER JOIN Follows ON Follows.followed_id = Users.id
+    WHERE Follows.follower_id = $1
+    AND Users.id <> $1  
+    ORDER BY Users.username;`;
+
     const result = await pool.query(query, data);
 
     res.status(200).json({
@@ -116,20 +122,22 @@ const getAllFollowing = async (req, res) => {
     });
   }
 };
+// الاشخاص الذين يتابعونني
 const getAllFollowers = async (req, res) => {
   try {
-    const id = req.token.user_id;
+    const { id } = req.params;
+    const data = [id];
     const query = `SELECT DISTINCT Users.*
     FROM Users
     INNER JOIN Follows ON Follows.follower_id = Users.id
     WHERE Follows.followed_id = $1
-    ;`;
-    const data = [id];
+    AND Users.id <> $1;`;
+
     const result = await pool.query(query, data);
 
     res.status(200).json({
       success: true,
-      message: "get Following",
+      message: "get Followers",
       length: result.rows.length,
       result: result.rows,
     });
@@ -144,7 +152,7 @@ const getAllFollowers = async (req, res) => {
 };
 
 module.exports = {
-  addFollowers, 
+  addFollowers,
   deleteFollowed,
   suggestedFreings,
   getAllFollowing,
