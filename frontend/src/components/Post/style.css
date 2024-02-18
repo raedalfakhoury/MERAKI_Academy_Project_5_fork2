@@ -22,16 +22,14 @@ body {
   position: absolute;
   left: 50px;
   top: 30px;
-  z-index: 20;  
+  z-index: 20;
   margin: 2px;
 }
 
 .status img {
-  position: relative; 
-  z-index: 10;  
+  position: relative;
+  z-index: 10;
 }
-
-
 
 .statusOffline {
   display: flex;
@@ -47,22 +45,19 @@ body {
   position: absolute;
   left: 50px;
   top: 30px;
-  z-index: 20;  
+  z-index: 20;
   margin: 2px;
 }
 
 .statusOffline img {
-  position: relative; 
-  z-index: 10; 
+  position: relative;
+  z-index: 10;
 }
-
-
-
 
 .containerPosts {
   margin-top: 10px;
   width: 40%;
-  border: 1px solid #e8e8e8;
+  border: 1px ridge #e8e8e8;
   border-radius: 10px;
   background-color: #fff;
 
@@ -318,6 +313,7 @@ circle {
   height: 50x;
   padding: 10px;
   cursor: pointer;
+  flex: 1px;
 }
 .imagePosts {
   box-shadow: 0 14px 26px -12px rgba(154, 154, 154, 0.42),
@@ -410,7 +406,6 @@ circle {
 }
 
 .file-label {
- 
   display: inline-block;
   padding: 6px 20px;
   background-color: rgb(247, 247, 247);
@@ -440,7 +435,7 @@ circle {
   z-index: 1;
   bottom: -12px;
   right: 65px;
-  background: #fff3f3;
+  background: #fff;
   box-shadow: 0 14px 26px -12px rgba(85, 150, 230, 0.42),
     0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 150, 230, 0.2) !important;
   display: flex;
@@ -458,9 +453,36 @@ circle {
   cursor: pointer;
 }
 
+.containerssCommnet {
+  position: absolute;
+  top: 97.4%;
+  left: 94.4%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  z-index: 1;
+  bottom: -12px;
+  right: 65px;
+  background: #6ba4e9;
+  box-shadow: 0 14px 26px -12px rgba(85, 150, 230, 0.42),
+    0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 150, 230, 0.2) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  color: #fcfcfc;
+  opacity: 1;
+  transition: all 0.3s;
+  width: 50px;
+  height: 50x;
+  padding: 10px;
+  cursor: pointer;
+}
+/* 
 .containerss .preloader {
   animation: rotate 4s cubic-bezier(0.75, 0, 0.5, 1) infinite;
-}
+} */
 
 @keyframes rotate {
   50% {
@@ -638,4 +660,10 @@ button:hover {
   height: 120px;
   width: 120px;
   border-radius: 10px;
+}
+.containerss:hover {
+  background-color: #cfcfcf;
+}
+.containerss:active {
+  background-color: #515152;
 }

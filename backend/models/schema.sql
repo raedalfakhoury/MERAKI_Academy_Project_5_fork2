@@ -35,8 +35,8 @@ CREATE TABLE Users (
     is_deleted INT DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES Roles (id)
 );
- 
- -- Table: Follows (Many-to-Many)
+
+-- Table: Follows (Many-to-Many)
 CREATE TABLE Follows (
     follow_id SERIAL PRIMARY KEY,
     follower_id INT,
@@ -80,8 +80,6 @@ CREATE TABLE Likes (
     FOREIGN KEY (post_id) REFERENCES Posts (id)
 );
 
-
-
 -- Table: Notifications
 CREATE TABLE Notifications (
     notification_id SERIAL PRIMARY KEY,
@@ -100,7 +98,9 @@ CREATE TABLE Stories (
     video_url TEXT,
     created_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES Users (id),
-    CONSTRAINT story_duration CHECK (created_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours')
+    CONSTRAINT story_duration CHECK (
+        created_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+    )
 );
 
 -- Table: Reels
@@ -172,53 +172,49 @@ const
 values
     = [title, description];
 
-
-
-
-
-
-
-
-    -- git followed_id الشخص الي انا متابعه صاحب ال  =>id   =>=> image && name
-    SELECT Users.username, Users.profile_picture_url
-FROM Users
-JOIN Follows ON Users.id = Follows.follower_id
-WHERE Follows.followed_id = 12;
-
+-- git followed_id الشخص الي انا متابعه صاحب ال  =>id   =>=> image && name
+SELECT
+    Users.username,
+    Users.profile_picture_url
+FROM
+    Users
+    JOIN Follows ON Users.id = Follows.follower_id
+WHERE
+    Follows.followed_id = 12;
 
 --  جبب كل البوستات للاصدقاء
-SELECT Posts.*
-FROM Posts
-JOIN Follows ON Posts.user_id = Follows.followed_id
-WHERE Follows.follower_id = 1;
+SELECT
+    Posts.*
+FROM
+    Posts
+    JOIN Follows ON Posts.user_id = Follows.followed_id
+WHERE
+    Follows.follower_id = 1;
 
-
-
-
-
-
-
-     كل الاشخاص الي متابعهم
-SELECT * 
-    FROM Users
-    INNER JOIN Follows ON Follows.follower_id  =  30  AND  Follows.followed_id = Users.id
-
-
-
-
-
-
-     كل الاشخاص الي متابعيني
-
-    SELECT * 
-    FROM Users
-    INNER JOIN Follows ON Follows.follower_id  =  Users.id  AND  Follows.followed_id = 30
-
-
-
-     كل الاشخاص الي مش ضايفهم
-
-    SELECT *
-FROM Users
-WHERE id != 30
-AND id NOT IN (SELECT followed_id FROM Follows WHERE follower_id = 30);
+كل الاشخاص الي متابعهم
+SELECT
+    *
+FROM
+    Users
+    INNER JOIN Follows ON Follows.follower_id = 30
+    AND Follows.followed_id = Users.id كل الاشخاص الي متابعيني
+SELECT
+    *
+FROM
+    Users
+    INNER JOIN Follows ON Follows.follower_id = Users.id
+    AND Follows.followed_id = 30 كل الاشخاص الي مش ضايفهم
+SELECT
+    *
+FROM
+    Users
+WHERE
+    id != 30
+    AND id NOT IN (
+        SELECT
+            followed_id
+        FROM
+            Follows
+        WHERE
+            follower_id = 30
+    );
