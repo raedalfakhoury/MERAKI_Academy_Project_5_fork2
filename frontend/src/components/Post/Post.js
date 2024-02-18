@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, {
   useEffect,
@@ -553,7 +554,9 @@ function Post() {
                           roundedCircle
                         />
 
+ 
                         <span className="roundCircle"></span>
+ 
                       </div>
                     ) : (
                       <div className="statusOffline">

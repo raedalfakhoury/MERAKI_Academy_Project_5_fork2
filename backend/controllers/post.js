@@ -46,7 +46,7 @@ const getPostById = (req, res) => {
         res.status(200).json({
           success: true,
           message: `Post with ID ${post_id} retrieved successfully`,
-          post: result.rows[0],
+          post: result.rows,
         });
       } else {
         res.status(404).json({
@@ -71,8 +71,11 @@ const getpostByuserId = (req, res) => {
   const query = `
           SELECT * FROM 
           Posts
-          WHERE Posts.user_id=${userId} AND Posts.is_deleted=0;
-        `;
+          JOIN Users ON Posts.user_id = Users.id 
+          WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
+        ` 
+ 
+ 
   const data = [userId];
 
   pool
