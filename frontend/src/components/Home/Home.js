@@ -8,7 +8,7 @@ import Register from "../Rigester/index";
 import LoginPage from "../Login/index";
 import Post from "../Post/Post";
 import WelcomePage from "../welcome page/welcomepage";
-import NavBarPost from "../Navbar/NavBarPost"
+
 
 
 import Loader from "../Loader/Loader";
@@ -20,7 +20,7 @@ function Home() {
   return (
 
     <>
-    <NavBarPost/>
+   
 
       <Routes>
         // <Route path="/users/register" element={<Register />} />
