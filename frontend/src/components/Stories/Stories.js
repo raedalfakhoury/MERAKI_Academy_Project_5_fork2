@@ -87,6 +87,18 @@ export default function Stories() {
       .catch((err) => {
         console.log(err);
       });
+    
+      axios.post(`http://localhost:5000/story`,
+              {video_url : image_url },
+                {headers: {
+                Authorization: `Bearer ${test}`,
+              }
+            }
+              ).then((result)=>{
+        console.log(result);
+      }).catch((err) => {
+        console.log(err);
+      });
   };
 
   // useEffect(() => {
@@ -284,8 +296,8 @@ export default function Stories() {
                       style={{ width: '500px', height: '100%' }}
 
             paddingRight="50px"
-              // width="100"
-              // height="400"
+              width="100"
+              height="400"
               src={image_url}
               title="HARDY - ROCKSTAR (Official Music Video)"
               frameborder="0"
