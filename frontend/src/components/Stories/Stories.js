@@ -9,6 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import PropTypes from "prop-types";
+
 import clsx from "clsx";
 import { Modal as BaseModal } from "@mui/base/Modal";
 import { red } from "@mui/material/colors";
@@ -18,6 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Divider from "@mui/material/Divider";
 import Image from "mui-image";
+import Popup from "reactjs-popup";
 
 import {
   CardHeader,
@@ -42,7 +44,7 @@ export default function Stories() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
-    userNameState("Ahmad");
+    setUserName("ll");
     userStoryState(
       "https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
     );
@@ -52,10 +54,32 @@ export default function Stories() {
   };
   const [expanded, setExpanded] = React.useState(false);
   const [showStory, setShowStory] = useState(false);
-  const [userName, userNameState] = useState("Mohammad");
+  const [userName, setUserName] = useState("Mohammad");
   const [userStory, userStoryState] = useState("");
   const [Data, setData] = useState([]);
   const [image_url, setImage_url] = useState("");
+  const [model, setModle] = useState(false);
+  // Get All Followers
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/followers/Followers/121`, {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.result);
+        setData(res.data.result);
+        console.log(Data);
+        console.log(userStory);
+        Data.map((elem, indx) => {
+          console.log(elem.username);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleAvatarClick = () => {
     setShowStory(true);
@@ -65,40 +89,96 @@ export default function Stories() {
     setExpanded(!expanded);
   };
   const test = localStorage.getItem("token");
+
+  // Cloudinary Parameters [Jamal]
   const pr_key = "rllytlm7";
   const cloud_name = "dmmo3zzyc";
+  const q = 0;
 
+  // Add Story Finction
+  // const handleFile = (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("upload_preset", pr_key);
+
+  //   // Upload the Video to Cloudinary
+  //   axios
+  //     .post(
+  //       `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
+  //       formData
+  //     )
+  //     .then((result) => {
+  //       setImage_url(result.data.secure_url);
+  //       console.log(result.data.secure_url);
+  //       // setToggleSpinnerCloudInN(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  //   // Create New Story In Database
+  //   axios
+  //     .post(
+  //       `http://localhost:5000/story`,
+  //       { video_url: image_url },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${test}`,
+  //         },
+  //       }
+  //     )
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  // };
   const handleFile = (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", pr_key);
+    // Ensure that e and e.target are defined
+    if (e && e.target && e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", pr_key);
 
-    axios
-      .post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
-        formData
-      )
-      .then((result) => {
-        setImage_url(result.data.secure_url);
-        console.log(result.data.secure_url);
-        // setToggleSpinnerCloudInN(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    
-      axios.post(`http://localhost:5000/story`,
-              {video_url : image_url },
-                {headers: {
-                Authorization: `Bearer ${test}`,
-              }
-            }
-              ).then((result)=>{
-        console.log(result);
-      }).catch((err) => {
-        console.log(err);
-      });
+      // Upload the Video to Cloudinary
+      axios
+        .post(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
+          formData
+        )
+        .then((result) => {
+          setImage_url(result.data.secure_url);
+          console.log(result.data.secure_url);
+          // setToggleSpinnerCloudInN(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // Create New Story In Database
+      axios
+        .post(
+          `http://localhost:5000/story`,
+          { video_url: image_url },
+          {
+            headers: {
+              Authorization: `Bearer ${test}`,
+            },
+          }
+        )
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.error("File input is empty or not found.");
+    }
   };
 
   // useEffect(() => {
@@ -123,191 +203,269 @@ export default function Stories() {
   // }, []);
 
   return (
-    <Card
-      style={{
-        position: "absolute",
-        top: "70px",
-        right: "90px",
-        borderRadius: "20px",
-        cursor: "pointer",
-      }}
-      sx={{ maxWidth: 325, minWidth: 325, justifyContent: "center" }}
-    >
-      {/* Title of Stories Section */}
-      <CardHeader />
-      <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
-      <Divider component="div" role="presentation" />
+    //   <>
+    //    <Card
+    //     style={{
+    //       position: "absolute",
+    //       top: "90px",
+    //       right: "90px",
+    //       borderRadius: "20px",
+    //       cursor: "pointer",
+    //     }}
+    //     sx={{ maxWidth: 325, minWidth: 325, justifyContent: "center" }}
+    //   >
+    //           <CardHeader />
+    //  {/* Title of Stories Section */}
+    //  <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
+    //     <Divider component="div" role="presentation" />
 
-      <CardHeader
-        avatar={
-          // <Button onClick={handleAvatarClick} aria-label="story">
-          <Avatar
-            onClick={handleFile}
-            sx={{
-              bgcolor: "#E8E8E8",
-              "&:hover": {
-                bgcolor: "#0288D1",
-                color: "#ffff",
-              },
-            }}
-            aria-label="recipe"
-          >
+    //     <CardHeader
+    //       avatar={
+    //         // <Button onClick={handleAvatarClick} aria-label="story">
 
-            
-            <Modal
-              aria-labelledby="unstyled-modal-title"
-              aria-describedby="unstyled-modal-description"
-              open={open}
-              onClose={handleClose}
-              slots={{ backdrop: StyledBackdrop }}
-            >
-              <ModalContent sx={{ width: 1000 }}>
-                <h2 id="unstyled-modal-title" className="modal-title">
-                  {userName}
-                </h2>
-              
-                <p
-                  id="unstyled-modal-description"
-                  className="modal-description"
-                >
-                  Your Story
-                </p>
-              </ModalContent>
-            </Modal>{" "}
-            <input
-              onChange={(e) => {
-                handleFile(e);
+    //         <Avatar
+    //           onClick={handleFile}
+    //           sx={{
+    //             bgcolor: "#E8E8E8",
+    //             "&:hover": {
+    //               bgcolor: "#0288D1",
+    //               color: "#ffff",
+    //             },
+    //           }}
+    //           aria-label="recipe"
+    //         >
+    //           <Modal
+    //             aria-labelledby="unstyled-modal-title"
+    //             aria-describedby="unstyled-modal-description"
+    //             open={open}
+    //             onClose={handleClose}
+    //             slots={{ backdrop: StyledBackdrop }}
+    //           >
+    //             {model? <ModalContent sx={{ width: 1000 }}>
+    //               <h2 id="unstyled-modal-title" className="modal-title">
+    //                 {elem.username}
+    //               </h2>
+
+    //               <p
+    //                 id="unstyled-modal-description"
+    //                 className="modal-description"
+    //               >
+    //                 Your Story
+    //               </p>
+    //             </ModalContent>:<ModalContent sx={{ width: 1000 }}>
+    //               <h2 id="unstyled-modal-title" className="modal-title">
+    //                 {userName}
+    //               </h2>
+
+    //               <p
+    //                 id="unstyled-modal-description"
+    //                 className="modal-description"
+    //               >
+    //                 Your Story 999
+    //               </p>
+    //             </ModalContent>}
+
+    //           </Modal>{" "}
+    //           <input
+    //             onChange={(e) => {
+    //               handleFile(e);
+    //             }}
+    //             type="file"
+    //             class="input-file"
+    //           />
+    //           +
+    //         </Avatar>
+    //       }
+    //       action={
+    //         <IconButton aria-label="settings">
+    //           {/* <MoreVertIcon /> */}
+    //         </IconButton>
+    //       }
+    //       title={
+    //         <Typography variant="h6" sx={{ fontSize: "15px" }}>
+    //           Add New Story
+    //         </Typography>
+    //       }
+    //       subheader={
+    //         <Typography variant="h6" sx={{ fontSize: "12px" }}>
+    //           Share an image, a video or some text
+    //         </Typography>
+    //       }
+    //     />
+    //   {Data.map((elem,indx)=>(
+
+    //     <Divider component="div" role="presentation" />
+
+    //     <CardHeader
+    //       avatar={
+    //         <TriggerButton type="button" onClick={handleOpen}>
+    //           R
+    //         </TriggerButton>
+
+    //       }
+    //       action={
+    //         <IconButton aria-label="settings">
+    //           <MoreVertIcon />
+    //         </IconButton>
+    //       }
+    //       title="Mohammad"
+    //       subheader="September 14, 2016"
+    //     />
+    //     {/* <Divider aria-hidden="true" /> */}
+    //     <Divider component="div" role="presentation" />
+
+    //     // <CardHeader
+    //     //   avatar={
+    //     //     <TriggerButton type="button" onClick={handleOpen}>
+    //     //       R
+    //     //     </TriggerButton>
+    //     //   }
+    //     //   action={
+    //     //     <IconButton aria-label="settings">
+    //     //       <MoreVertIcon />
+    //     //     </IconButton>
+    //     //   }
+    //     //   title={userName}
+    //     //   subheader="September 14, 2016"
+    //     // />
+    //     // <Divider component="div" role="presentation" />
+
+    //     // <CardHeader
+    //     //   avatar={
+    //     //     <TriggerButton type="button" onClick={handleOpen}>
+    //     //       R
+    //     //     </TriggerButton>
+    //     //   }
+    //     //   action={
+    //     //     <IconButton aria-label="settings">
+    //     //       <MoreVertIcon />
+    //     //     </IconButton>
+    //     //   }
+    //     //   title="Shrimp and Chorizo Paella"
+    //     //   subheader="September 14, 2016"
+    //     // />
+
+    //   )
+
+    //   )}
+    //   </Card>
+    //   </>
+    <>
+      <input
+        onChange={(e) => {
+          handleFile(e);
+        }}
+        type="file"
+        className="input-file"
+        style={{ display: "none" }} // hide the input element visually
+      />
+      <Card
+        style={{
+          position: "absolute",
+          top: "90px",
+          right: "90px",
+          borderRadius: "20px",
+          cursor: "pointer",
+        }}
+        sx={{ maxWidth: 325, minWidth: 325, justifyContent: "center" }}
+      >
+        <CardHeader />
+        {/* Title of Stories Section */}
+        <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
+        <Divider component="div" role="presentation" />
+
+        <CardHeader
+          avatar={
+            <Avatar
+              sx={{
+                bgcolor: "#E8E8E8",
+                "&:hover": {
+                  bgcolor: "#0288D1",
+                  color: "#ffff",
+                },
               }}
-              type="file"
-              class="input-file"
+              aria-label="recipe"
+            >
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={open}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                {model ? (
+                  <ModalContent sx={{ width: 1000 }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Your Story
+                    </p>
+                  </ModalContent>
+                ) : (
+                  <ModalContent sx={{ width: 1000 }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Your Story 999
+                    </p>
+                  </ModalContent>
+                )}
+              </Modal>{" "}
+              <TriggerButton
+                type="button"
+                onClick={() => document.querySelector(".input-file").click()} // trigger file input click
+              >
+                +
+              </TriggerButton>
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="settings">
+              {/* <MoreVertIcon /> */}
+            </IconButton>
+          }
+          title={
+            <Typography variant="h6" sx={{ fontSize: "15px" }}>
+              Add New Story
+            </Typography>
+          }
+          subheader={
+            <Typography variant="h6" sx={{ fontSize: "12px" }}>
+              Share an image, a video, or some text
+            </Typography>
+          }
+        />
+        {Data.map((elem, indx) => (
+          <React.Fragment key={indx}>
+            <Divider component="div" role="presentation" />
+            <CardHeader
+              avatar={
+                <TriggerButton type="button" onClick={handleOpen}>
+                  {indx}
+                </TriggerButton>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={elem.username}
+              subheader={elem.created_at}
             />
-            +             
-          </Avatar>
-
-        }
-        action={
-          <IconButton aria-label="settings">
-            {/* <MoreVertIcon /> */}
-          </IconButton>
-        }
-        title={
-          <Typography variant="h6" sx={{ fontSize: "15px" }}>
-            Add New Story
-          </Typography>
-        }
-        subheader={
-          <Typography variant="h6" sx={{ fontSize: "12px" }}>
-            Share an image, a video or some text
-          </Typography>
-        }
-      />
-
-      <Divider component="div" role="presentation" />
-
-      <CardHeader
-        avatar={
-          <TriggerButton type="button" onClick={handleOpen}>
-            R
-          </TriggerButton>
-
-          //   <div>
-          //   <TriggerButton type="button" onClick={handleOpen}>
-          //     Open modal
-          //   </TriggerButton>
-          //   <Modal
-          //     aria-labelledby="unstyled-modal-title"
-          //     aria-describedby="unstyled-modal-description"
-          //     open={open}
-          //     onClose={handleClose}
-          //     slots={{ backdrop: StyledBackdrop }}
-          //   >
-          //     <ModalContent sx={{ width: 400 }}>
-          //       <h2 id="unstyled-modal-title" className="modal-title">
-          //         Text in a modal
-          //       </h2>
-          //       <p id="unstyled-modal-description" className="modal-description">
-          //         Aliquid amet deserunt earum!
-          //       </p>
-          //     </ModalContent>
-          //   </Modal>
-          // </div>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Mohammad"
-        subheader="September 14, 2016"
-      />
-      {/* <Divider aria-hidden="true" /> */}
-      <Divider component="div" role="presentation" />
-
-      <CardHeader
-        avatar={
-          <TriggerButton type="button" onClick={handleOpen}>
-            R
-          </TriggerButton>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={userName}
-        subheader="September 14, 2016"
-      />
-      <Divider component="div" role="presentation" />
-
-      <CardHeader
-        avatar={
-          <TriggerButton type="button" onClick={handleOpen}>
-            R
-          </TriggerButton>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
-      <div>
-        <TriggerButton type="button" onClick={handleOpen}>
-          Open modal
-        </TriggerButton>
-        <Modal
-          aria-labelledby="unstyled-modal-title"
-          aria-describedby="unstyled-modal-description"
-          open={open}
-          onClose={handleClose}
-          slots={{ backdrop: StyledBackdrop }}
-        >
-          <ModalContent sx={{ Maxwidth: "1000px" }}>
-            <h2 id="unstyled-modal-title" className="modal-title">
-              {userName}
-            </h2>
-            <p id="unstyled-modal-description" className="modal-description">
-              Aliqu
-            </p>
-
-            <iframe
-                      style={{ width: '500px', height: '100%' }}
-
-            paddingRight="50px"
-              width="100"
-              height="400"
-              src={image_url}
-              title="HARDY - ROCKSTAR (Official Music Video)"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </ModalContent>
-        </Modal>
-      </div>
-    </Card>
+          </React.Fragment>
+        ))}
+      </Card>
+    </>
   );
 }
 
