@@ -7,7 +7,7 @@ followersRouter.post("/add",authentication ,addFollowers);
 followersRouter.get("/suggested",authentication ,  suggestedFreings);
 followersRouter.get("/Following/:id" ,  getAllFollowing);
 followersRouter.get("/Followers/:id" ,  getAllFollowers);
-followersRouter.delete("/delete",   deleteFollowed);
-followersRouter.delete("/delete/follower/",  deleteFollowers);
+followersRouter.delete("/delete", authentication,deleteFollowed);
+followersRouter.delete("/delete/follower/",  authentication,deleteFollowers);
 
 module.exports = followersRouter;

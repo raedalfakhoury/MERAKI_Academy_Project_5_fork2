@@ -45,11 +45,13 @@ const getAllFollwers = async (req, res) => {
 };
 
 const deleteFollowed = async (req, res) => {
+  const follower_id = req.token.user_id;
+  const { followed_id } = req.body;
   try {
-    const { followed_id } = req.body;
-    const query = `DELETE FROM Follows WHERE followed_id=$1`;
-    const data = [followed_id];
-    const result = await pool.query(query, data);
+
+    const query = `DELETE FROM Follows WHERE followed_id=${followed_id} AND follower_id=${follower_id}`;
+
+    const result = await pool.query(query);
 
     res.status(200).json({
       success: true,
@@ -67,10 +69,11 @@ const deleteFollowed = async (req, res) => {
 };
 const deleteFollowers = async (req, res) => {
   try {
+    const followed_id = req.token.user_id;
     const { follower_id } = req.body;
-    const query = `DELETE FROM Follows WHERE follower_id=$1`;
-    const data = [follower_id];
-    const result = await pool.query(query, data);
+    const query = `DELETE FROM Follows WHERE follower_id=${follower_id} AND followed_id = ${followed_id}`;
+
+    const result = await pool.query(query);
 
     res.status(200).json({
       success: true,
@@ -78,6 +81,7 @@ const deleteFollowers = async (req, res) => {
       result: result.rows,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -178,5 +182,5 @@ module.exports = {
   suggestedFreings,
   getAllFollowing,
   getAllFollowers,
-  deleteFollowers
+  deleteFollowers,
 };

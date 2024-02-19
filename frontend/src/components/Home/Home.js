@@ -28,19 +28,19 @@ function Home() {
    
 
       <Routes>
-        // <Route path="/users/register" element={<Register />} />
-        // <Route path="/users/login" element={<LoginPage />} />
-        // <Route path="/profile" element={<Profile />} />
+         <Route path="/users/register" element={<Register />} />
+         <Route path="/users/login" element={<LoginPage />} />
+        <Route path="/profile" element={<Profile />} />
 
 
 
-        // <Route path="/" element={<WelcomePage/>} />
-        // <Route path="/home/Posts" element={<Post/>} />
+        <Route path="/" element={<WelcomePage/>} />
+        <Route path="/home/Posts" element={<Post/>} />
 
         
       </Routes>
 
-<Stories/>
+{/* <Stories/> */}
       {/* <WelcomePage/>  */}
       {/* <NavBar/> */}
       {/* <Weather/> */}

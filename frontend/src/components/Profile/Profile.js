@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const Profile = () => {
+  const Navigate = useNavigate();
   const arr = useRef([]);
 
   const { token } = useSelector((state) => {
@@ -44,9 +45,24 @@ const Profile = () => {
         setLoader(false);
         setFollowing(result?.data?.result);
         console.log(result.data.result);
-
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const getMyFollowing = () => {
+    axios
+      .get(
+        `http://localhost:5000/followers/Following/${localStorage.getItem(
+          "userId"
+        )}`
+      )
+      .then((result) => {
+        console.log(result.data.result);
+        arr.current = [];
         result.data.result.forEach((element) => {
           console.log(element.id);
+
           arr.current.push(element.id);
         });
       })
@@ -68,27 +84,8 @@ const Profile = () => {
       });
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:5000/users/${searchQuery}`)
-  //     .then((result) => {
-  //       setProfileInfo(result?.data?.result);
-  //       setLoader(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   getFollowers();
-  // }, []);
-
-  //   useEffect(() => {
-
-  // }, []);
-
   useEffect(() => {
+    getMyFollowing();
     getFollowers();
     getFollowing();
     axios
@@ -111,7 +108,7 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [searchQuery]);
 
   function MyVerticallyCenteredModal(props) {
     return (
@@ -131,7 +128,18 @@ const Profile = () => {
             console.log(item);
             return (
               <div key={i} className="pop-main">
-                <div style={{ display: "flex" }}>
+                <div
+                  onClick={() => {
+                    Navigate({
+                      pathname: "/profile",
+                      search: `?prf=${item.id}`,
+                    });
+                    setProfileInfo(null);
+                    window.location.reload();
+                    props.onHide();
+                  }}
+                  style={{ display: "flex", cursor: "pointer" }}
+                >
                   <img
                     className="pop-img"
                     alt=""
@@ -142,25 +150,58 @@ const Profile = () => {
                       borderRadius: "50%",
                     }}
                   />
+
                   <div className="name-bio-pop">
                     <p className="name-pop">{item.username}</p>
+
                     <p className="bio-pop">{item.bio}</p>
                   </div>
                 </div>
 
-                {localStorage.getItem("userId") ==
-                item.id ? null : arr.current?.includes(item.id) ? (
+                {localStorage.getItem("userId") == searchQuery ? (
+                  <button
+                    className="button-pop"
+                    onClick={async () => {
+                      try {
+                        const res = await axios.delete(
+                          `http://localhost:5000/followers/delete/follower/`,
+                          {
+                            data: { follower_id: item.id },
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                        console.log("Remove", res.data);
+                        getMyFollowing();
+                        getFollowers();
+                        getFollowing();
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
+                  >
+                    Remove
+                  </button>
+                ) : localStorage.getItem("userId") ==
+                  item.id ? null : arr.current?.includes(item.id) ? (
                   <button
                     className="button-pop"
                     onClick={async () => {
                       try {
                         const res = await axios.delete(
                           `http://localhost:5000/followers/delete`,
-                          { follower_id: item.id * 1 } 
+                          {
+                            data: { followed_id: item.id },
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
                         );
                         console.log("unfollow", res.data);
-                        // arr.current = []
-                        // getFollowers();
+                        getMyFollowing();
+                        getFollowers();
+                        getFollowing();
                       } catch (error) {
                         console.log(error);
                       }
@@ -173,21 +214,26 @@ const Profile = () => {
                     className="button-pop"
                     onClick={async () => {
                       console.log(item.id);
-                      try {
-                        const res = await axios.post(
-                          `http://localhost:5000/followers/add`,
-                          { followed_id: item.id },
-                          {
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          }
-                        );
-                        console.log("raed", res.data);
-                        // arr.current = []
-                        // getFollowing();
-                      } catch (error) {
-                        console.log(error);
+                      if (arr.current.includes(item.id)) {
+                      } else {
+                        try {
+                          const res = await axios.post(
+                            `http://localhost:5000/followers/add`,
+                            { followed_id: item.id },
+                            {
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+                          console.log("raed", res.data);
+
+                          getMyFollowing();
+                          getFollowers();
+                          getFollowing();
+                        } catch (error) {
+                          console.log(error);
+                        }
                       }
                     }}
                   >
@@ -221,7 +267,7 @@ const Profile = () => {
               <div className="edit">
                 <img
                   className="ProfilePicture"
-                  alt=""
+                  alt="filed image"
                   src={elm.profile_picture_url}
                 />
               </div>
