@@ -297,8 +297,7 @@ const countFAndDAndPo = (req, res) => {
   SELECT 'Posts' AS relationship_type, COUNT(*) AS count
   FROM Posts
   WHERE Posts.user_id = ${IdPorFileUser} AND Posts.is_deleted = 0;`;
-};
-pool
+  pool
   .query(query)
   .then((result) => {
     res.status(200).json({
@@ -313,6 +312,8 @@ pool
       err: err,
     });
   });
+};
+
 
 module.exports = {
   createNewPost,
