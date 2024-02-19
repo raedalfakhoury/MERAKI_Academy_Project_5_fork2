@@ -57,6 +57,27 @@ const deleteFollowed = async (req, res) => {
       result: result.rows,
     });
   } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      err: error,
+    });
+  }
+};
+const deleteFollowers = async (req, res) => {
+  try {
+    const { follower_id } = req.body;
+    const query = `DELETE FROM Follows WHERE follower_id=$1`;
+    const data = [follower_id];
+    const result = await pool.query(query, data);
+
+    res.status(200).json({
+      success: true,
+      message: "deleted successfully",
+      result: result.rows,
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -157,4 +178,5 @@ module.exports = {
   suggestedFreings,
   getAllFollowing,
   getAllFollowers,
+  deleteFollowers
 };

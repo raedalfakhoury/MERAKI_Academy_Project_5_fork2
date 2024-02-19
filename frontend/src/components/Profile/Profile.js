@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
@@ -12,13 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 const Profile = () => {
-  const  arr  = useRef([]);
+  const arr = useRef([]);
 
   const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
     };
   });
+  console.log(token);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("prf") || "";
@@ -35,43 +36,7 @@ const Profile = () => {
   const [following, setFollowing] = useState();
   console.log(following);
   window.scrollTo(0, 0);
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/users/${searchQuery}`)
-      .then((result) => {
-        setProfileInfo(result?.data?.result);
-        setLoader(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/followers/Followers/${searchQuery}`)
-      .then((result) => {
-        setCountFollowers(result.data.length);
-        setLoader(false);
-        setFollowers(result?.data?.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/post/mypost/${searchQuery}`)
-      .then((result) => {
-        console.log("raed", result.data.result.length);
-        setMyPosts(result?.data?.result);
-        setMyPostsLength(result?.data?.result?.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  useEffect(() => {
+  const getFollowing = () => {
     axios
       .get(`http://localhost:5000/followers/Following/${searchQuery}`)
       .then((result) => {
@@ -82,9 +47,66 @@ const Profile = () => {
 
         result.data.result.forEach((element) => {
           console.log(element.id);
-           arr.current.push(element.id)
-          
+          arr.current.push(element.id);
         });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const getFollowers = () => {
+    axios
+      .get(`http://localhost:5000/followers/Followers/${searchQuery}`)
+      .then((result) => {
+        setCountFollowers(result.data.length);
+        setLoader(false);
+        setFollowers(result?.data?.result);
+        console.log(result.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:5000/users/${searchQuery}`)
+  //     .then((result) => {
+  //       setProfileInfo(result?.data?.result);
+  //       setLoader(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   getFollowers();
+  // }, []);
+
+  //   useEffect(() => {
+
+  // }, []);
+
+  useEffect(() => {
+    getFollowers();
+    getFollowing();
+    axios
+      .get(`http://localhost:5000/post/mypost/${searchQuery}`)
+      .then((result) => {
+        console.log("raed", result.data.result.length);
+        setMyPosts(result?.data?.result);
+        setMyPostsLength(result?.data?.result?.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(`http://localhost:5000/users/${searchQuery}`)
+      .then((result) => {
+        setProfileInfo(result?.data?.result);
+        setLoader(false);
       })
       .catch((err) => {
         console.log(err);
@@ -125,13 +147,53 @@ const Profile = () => {
                     <p className="bio-pop">{item.bio}</p>
                   </div>
                 </div>
-                {/* <div> */}
-                {arr.current?.includes(item.id) ? (
-                  <button className="button-pop">Follow</button>
+
+                {localStorage.getItem("userId") ==
+                item.id ? null : arr.current?.includes(item.id) ? (
+                  <button
+                    className="button-pop"
+                    onClick={async () => {
+                      try {
+                        const res = await axios.delete(
+                          `http://localhost:5000/followers/delete`,
+                          { follower_id: item.id * 1 } 
+                        );
+                        console.log("unfollow", res.data);
+                        // arr.current = []
+                        // getFollowers();
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
+                  >
+                    UnFollow
+                  </button>
                 ) : (
-                  <button className="button-pop">UnFollow</button>
+                  <button
+                    className="button-pop"
+                    onClick={async () => {
+                      console.log(item.id);
+                      try {
+                        const res = await axios.post(
+                          `http://localhost:5000/followers/add`,
+                          { followed_id: item.id },
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                        console.log("raed", res.data);
+                        // arr.current = []
+                        // getFollowing();
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
+                  >
+                    Follow
+                  </button>
                 )}
-                {/* </div> */}
               </div>
             );
           })}
@@ -142,9 +204,13 @@ const Profile = () => {
       </Modal>
     );
   }
-console.log(arr.current);
+  console.log(arr.current);
   return (
     <div id="mainPage">
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
       {loader ? (
         <Loader />
       ) : (
@@ -178,10 +244,6 @@ console.log(arr.current);
                   </p>
                 </div>
               </div>
-              <MyVerticallyCenteredModal
-                show={modalShow}
-                onHide={() => setModalShow(false)}
-              />
             </div>
           );
         })
