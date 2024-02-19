@@ -42,23 +42,37 @@ const ExpandMore = styled((props) => {
 
 export default function Stories() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
+  const [expanded, setExpanded] = React.useState(false);
+  const [showStory, setShowStory] = useState(false);
+  const [userName, setUserName] = useState("Mohammad");
+  const [userStory, setUserStory] = useState("");
+  const [Data, setData] = useState([]);
+  const [image_url, setImage_url] = useState("");
+  const [model, setModle] = useState(false);
+  const handleOpen = (e) => {
     setOpen(true);
-    setUserName("ll");
-    userStoryState(
-      "https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
-    );
+    console.log(e.id);
+    setUserName(e.username);
+
+    axios
+      .get(`http://localhost:5000/story/121`, {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.result[0].video_url);
+        // console.log(userStory);
+        setUserStory(res.data.result[0].video_url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const [expanded, setExpanded] = React.useState(false);
-  const [showStory, setShowStory] = useState(false);
-  const [userName, setUserName] = useState("Mohammad");
-  const [userStory, userStoryState] = useState("");
-  const [Data, setData] = useState([]);
-  const [image_url, setImage_url] = useState("");
-  const [model, setModle] = useState(false);
+
   // Get All Followers
   useEffect(() => {
     axios
@@ -96,48 +110,8 @@ export default function Stories() {
   const q = 0;
 
   // Add Story Finction
-  // const handleFile = (e) => {
-  //   const file = e.target.files[0];
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("upload_preset", pr_key);
 
-  //   // Upload the Video to Cloudinary
-  //   axios
-  //     .post(
-  //       `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
-  //       formData
-  //     )
-  //     .then((result) => {
-  //       setImage_url(result.data.secure_url);
-  //       console.log(result.data.secure_url);
-  //       // setToggleSpinnerCloudInN(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-
-  //   // Create New Story In Database
-  //   axios
-  //     .post(
-  //       `http://localhost:5000/story`,
-  //       { video_url: image_url },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${test}`,
-  //         },
-  //       }
-  //     )
-  //     .then((result) => {
-  //       console.log(result);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-
-  // };
   const handleFile = (e) => {
-    // Ensure that e and e.target are defined
     if (e && e.target && e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const formData = new FormData();
@@ -180,27 +154,6 @@ export default function Stories() {
       console.error("File input is empty or not found.");
     }
   };
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:5000/story/1`,{
-  //       headers: {
-  //         Authorization: `Bearer ${test}`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data.result);
-  //       setData(res.data.result)
-  //       console.log(Data);
-  //       console.log(userStory);
-  //       Data.map((elem,indx)=>{
-  //         console.log(elem.video_url);
-  //       })
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
 
   return (
     //   <>
@@ -398,13 +351,22 @@ export default function Stories() {
                     <h2 id="unstyled-modal-title" className="modal-title">
                       {userName}
                     </h2>
-
                     <p
                       id="unstyled-modal-description"
                       className="modal-description"
                     >
                       Your Story
                     </p>
+
+                    <iframe
+                      width="560"
+                      height="315"
+                      src="https://player.cloudinary.com/embed/demo/raw/upload/sample.mp4"
+                      title="Cloudinary Video Player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe>
                   </ModalContent>
                 ) : (
                   <ModalContent sx={{ width: 1000 }}>
@@ -418,6 +380,7 @@ export default function Stories() {
                     >
                       Your Story 999
                     </p>
+                    <img src={userStory} />
                   </ModalContent>
                 )}
               </Modal>{" "}
@@ -450,8 +413,8 @@ export default function Stories() {
             <Divider component="div" role="presentation" />
             <CardHeader
               avatar={
-                <TriggerButton type="button" onClick={handleOpen}>
-                  {indx}
+                <TriggerButton type="button" onClick={() => handleOpen(elem)}>
+                  R
                 </TriggerButton>
               }
               action={
