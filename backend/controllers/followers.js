@@ -48,16 +48,23 @@ const deleteFollowed = async (req, res) => {
   const follower_id = req.token.user_id;
   const { followed_id } = req.body;
   try {
-
-    const query = `DELETE FROM Follows WHERE followed_id=${followed_id} AND follower_id=${follower_id}`;
+    const query = `DELETE FROM Follows WHERE followed_id=${followed_id} AND follower_id=${follower_id} RETURNING *`;
 
     const result = await pool.query(query);
-
-    res.status(200).json({
+ console.log(result.rowCount);
+ if (result.rowCount>0) {
+   res.status(200).json({
       success: true,
       message: "deleted successfully",
       result: result.rows,
     });
+ } else{
+  res.status(404).json({
+    success: false,
+    message: "Not Found"  
+  });
+ }
+   
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -71,7 +78,7 @@ const deleteFollowers = async (req, res) => {
   try {
     const followed_id = req.token.user_id;
     const { follower_id } = req.body;
-    const query = `DELETE FROM Follows WHERE follower_id=${follower_id} AND followed_id = ${followed_id}`;
+    const query = `DELETE FROM Follows WHERE follower_id=${follower_id} AND followed_id = ${followed_id} RETURNING *`;
 
     const result = await pool.query(query);
 
