@@ -126,7 +126,8 @@ INSERT INTO
         is_deleted
     )
 VALUES
-    ($ 1, $ 2, $ 3, $ 4, $ 5, $ 6, $ 7) RETURNING * -- Inserting a new notification
+    ($ 1, $ 2, $ 3, $ 4, $ 5, $ 6, $ 7) RETURNING *
+     -- Inserting a new notification
 INSERT INTO
     Notifications (user_id, content)
 VALUES

@@ -47,7 +47,7 @@ export default function Stories() {
   const [userName, setUserName] = useState("Mohammad");
   const [userStory, setUserStory] = useState("");
   const [Data, setData] = useState([]);
-  const [image_url, setImage_url] = useState("");
+  const [video, setVideo] = useState("");
   const [model, setModle] = useState(false);
   const handleOpen = (e) => {
     setOpen(true);
@@ -104,219 +104,76 @@ export default function Stories() {
   };
   const test = localStorage.getItem("token");
 
-  // Cloudinary Parameters [Jamal]
-  const pr_key = "rllytlm7";
-  const cloud_name = "dmmo3zzyc";
+  // Cloudinary Parameters
+  const pr_key = "nb0pjnta";
+  const cloud_name = "dalwd5c23";
   const q = 0;
 
   // Add Story Finction
 
-  const handleFile = (e) => {
-    if (e && e.target && e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", pr_key);
+  const StoryHandle = (files) => {
+    const formData = new FormData();
+    formData.append("file", files[0]);
+    formData.append("upload_preset", pr_key);
+    // Upload the Video to Cloudinary
+//     axios
+//       .post(
+//         `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
+//         formData
+//       )
+//       .then((result) => {
+//         console.log(result);
+//         // setVideo(result.data.secure_url);
+//         console.log(result.data);
+//         // setToggleSpinnerCloudInN(false);
+//         // postdata(result.data.secure_url)
+//       })
+//       .catch((err) => {
+//         console.log("Error ==== > ",err);
+//       });
 
-      // Upload the Video to Cloudinary
-      axios
-        .post(
-          `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
-          formData
-        )
-        .then((result) => {
-          setImage_url(result.data.secure_url);
-          console.log(result.data.secure_url);
-          // setToggleSpinnerCloudInN(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
 
-      // Create New Story In Database
-      axios
-        .post(
-          `http://localhost:5000/story`,
-          { video_url: image_url },
-          {
-            headers: {
-              Authorization: `Bearer ${test}`,
-            },
-          }
-        )
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.error("File input is empty or not found.");
-    }
+// // console.log(video);
+//     // Create New Story In Database
+fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`, {
+  method: "POST",
+  body: formData,
+})
+  .then((response) => response.json())
+  .then((data) => {
+    // setImage(data.secure_url);
+    console.log(data.url);
+    postdata(data.url)
+  });
+    
   };
 
+  const postdata=(Url)=>{
+    axios
+    .post(
+      `http://localhost:5000/story`,
+      { video_url: Url},
+      {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      }
+    )
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
   return (
-    //   <>
-    //    <Card
-    //     style={{
-    //       position: "absolute",
-    //       top: "90px",
-    //       right: "90px",
-    //       borderRadius: "20px",
-    //       cursor: "pointer",
-    //     }}
-    //     sx={{ maxWidth: 325, minWidth: 325, justifyContent: "center" }}
-    //   >
-    //           <CardHeader />
-    //  {/* Title of Stories Section */}
-    //  <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
-    //     <Divider component="div" role="presentation" />
-
-    //     <CardHeader
-    //       avatar={
-    //         // <Button onClick={handleAvatarClick} aria-label="story">
-
-    //         <Avatar
-    //           onClick={handleFile}
-    //           sx={{
-    //             bgcolor: "#E8E8E8",
-    //             "&:hover": {
-    //               bgcolor: "#0288D1",
-    //               color: "#ffff",
-    //             },
-    //           }}
-    //           aria-label="recipe"
-    //         >
-    //           <Modal
-    //             aria-labelledby="unstyled-modal-title"
-    //             aria-describedby="unstyled-modal-description"
-    //             open={open}
-    //             onClose={handleClose}
-    //             slots={{ backdrop: StyledBackdrop }}
-    //           >
-    //             {model? <ModalContent sx={{ width: 1000 }}>
-    //               <h2 id="unstyled-modal-title" className="modal-title">
-    //                 {elem.username}
-    //               </h2>
-
-    //               <p
-    //                 id="unstyled-modal-description"
-    //                 className="modal-description"
-    //               >
-    //                 Your Story
-    //               </p>
-    //             </ModalContent>:<ModalContent sx={{ width: 1000 }}>
-    //               <h2 id="unstyled-modal-title" className="modal-title">
-    //                 {userName}
-    //               </h2>
-
-    //               <p
-    //                 id="unstyled-modal-description"
-    //                 className="modal-description"
-    //               >
-    //                 Your Story 999
-    //               </p>
-    //             </ModalContent>}
-
-    //           </Modal>{" "}
-    //           <input
-    //             onChange={(e) => {
-    //               handleFile(e);
-    //             }}
-    //             type="file"
-    //             class="input-file"
-    //           />
-    //           +
-    //         </Avatar>
-    //       }
-    //       action={
-    //         <IconButton aria-label="settings">
-    //           {/* <MoreVertIcon /> */}
-    //         </IconButton>
-    //       }
-    //       title={
-    //         <Typography variant="h6" sx={{ fontSize: "15px" }}>
-    //           Add New Story
-    //         </Typography>
-    //       }
-    //       subheader={
-    //         <Typography variant="h6" sx={{ fontSize: "12px" }}>
-    //           Share an image, a video or some text
-    //         </Typography>
-    //       }
-    //     />
-    //   {Data.map((elem,indx)=>(
-
-    //     <Divider component="div" role="presentation" />
-
-    //     <CardHeader
-    //       avatar={
-    //         <TriggerButton type="button" onClick={handleOpen}>
-    //           R
-    //         </TriggerButton>
-
-    //       }
-    //       action={
-    //         <IconButton aria-label="settings">
-    //           <MoreVertIcon />
-    //         </IconButton>
-    //       }
-    //       title="Mohammad"
-    //       subheader="September 14, 2016"
-    //     />
-    //     {/* <Divider aria-hidden="true" /> */}
-    //     <Divider component="div" role="presentation" />
-
-    //     // <CardHeader
-    //     //   avatar={
-    //     //     <TriggerButton type="button" onClick={handleOpen}>
-    //     //       R
-    //     //     </TriggerButton>
-    //     //   }
-    //     //   action={
-    //     //     <IconButton aria-label="settings">
-    //     //       <MoreVertIcon />
-    //     //     </IconButton>
-    //     //   }
-    //     //   title={userName}
-    //     //   subheader="September 14, 2016"
-    //     // />
-    //     // <Divider component="div" role="presentation" />
-
-    //     // <CardHeader
-    //     //   avatar={
-    //     //     <TriggerButton type="button" onClick={handleOpen}>
-    //     //       R
-    //     //     </TriggerButton>
-    //     //   }
-    //     //   action={
-    //     //     <IconButton aria-label="settings">
-    //     //       <MoreVertIcon />
-    //     //     </IconButton>
-    //     //   }
-    //     //   title="Shrimp and Chorizo Paella"
-    //     //   subheader="September 14, 2016"
-    //     // />
-
-    //   )
-
-    //   )}
-    //   </Card>
-    //   </>
     <>
-      <input
-        onChange={(e) => {
-          handleFile(e);
-        }}
-        type="file"
-        className="input-file"
-        style={{ display: "none" }} // hide the input element visually
-      />
+      
       <Card
         style={{
-          position: "absolute",
-          top: "90px",
-          right: "90px",
+          // position: "absolute",
+          // top: "140px",
+          // right: "90px",
           borderRadius: "20px",
           cursor: "pointer",
         }}
@@ -361,7 +218,7 @@ export default function Stories() {
                     <iframe
                       width="560"
                       height="315"
-                      src="https://player.cloudinary.com/embed/demo/raw/upload/sample.mp4"
+                      src={video} 
                       title="Cloudinary Video Player"
                       frameborder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -373,21 +230,35 @@ export default function Stories() {
                     <h2 id="unstyled-modal-title" className="modal-title">
                       {userName}
                     </h2>
-
                     <p
                       id="unstyled-modal-description"
                       className="modal-description"
                     >
                       Your Story 999
                     </p>
-                    <img src={userStory} />
+                    <iframe
+                      width="560"
+                      height="315"
+                      src={video} // Use video_url here
+                      title="Uploaded Video"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe>{" "}
                   </ModalContent>
                 )}
               </Modal>{" "}
               <TriggerButton
                 type="button"
                 onClick={() => document.querySelector(".input-file").click()} // trigger file input click
-              >
+              ><input
+              onChange={(e) => {
+                StoryHandle(e.target.files);
+              }}
+              type="file"
+              className="input-file"
+              style={{ display: "none" }} // hide the input element visually
+            />
                 +
               </TriggerButton>
             </Avatar>
