@@ -19,15 +19,15 @@ import Stories from "../Stories/Stories"
 import Loader from "../Loader/Loader";
 import Profile from "../Profile/Profile";
 
-
+import Explore from "../Explore/Explore";
 function Home() {
   
   return (
 
     <>
-   
+   {/* <Explore/> */}
 
-      <Routes>
+       <Routes>
          <Route path="/users/register" element={<Register />} />
          <Route path="/users/login" element={<LoginPage />} />
         <Route path="/profile" element={<Profile />} />
@@ -38,7 +38,7 @@ function Home() {
         <Route path="/home/Posts" element={<Post/>} />
 
         
-      </Routes>
+      </Routes> 
 
 {/* <Stories/> */}
       {/* <WelcomePage/>  */}

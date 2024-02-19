@@ -55,14 +55,6 @@ import { FaBookmark } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 function Post() {
-  // useEffect(()=>{
-
-
-  
-
-
-
-  // },[])
   const Navigate = useNavigate();
   const [showF, setShowF] = useState(false);
 
@@ -84,7 +76,7 @@ function Post() {
   const [ToggleUpdatePost, setToggleUpdatePost] = useState(false);
   const pr_key = "rllytlm7";
   const cloud_name = "dmmo3zzyc";
-
+const [video,setVideoUrl] =useState()
   const [inputUpdate, setInputUpdate] = useState({
     ID_post: "",
     content: "",
@@ -97,7 +89,7 @@ function Post() {
   });
   // console.log(UpdateComment);
 
-  const handleFile = (e) => {
+  const handleImageJamal = (e) => {
     setToggleSpinnerCloudInN(true);
     const file = e.target.files[0];
     const formData = new FormData();
@@ -112,6 +104,27 @@ function Post() {
       .then((result) => {
         setImage_url(result.data.secure_url);
         setToggleSpinnerCloudInN(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleVideoS = (ee) => {
+    // setInputUpdate({ ...inputUpdate, image: "" });
+    // setToggleSpinnerCloudInUpdate(true);
+    const file = ee.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
+        formData
+      )
+      .then((result) => {
+        console.log(result.data.url);
+        setVideoUrl(result.data.url)
       })
       .catch((err) => {
         console.log(err);
@@ -520,7 +533,7 @@ function Post() {
                 <label class="file-label">
                   <input
                     onChange={(e) => {
-                      handleFile(e);
+                      handleImageJamal(e);
                     }}
                     type="file"
                     class="input-file"
@@ -706,10 +719,23 @@ function Post() {
                           src={elm.media_url}
                           rounded
                         />
+                        {/* <video
+                           controls   autoPlay muted loop
+                          className="imagePosts"
+                          style={{
+                            width: "100%",
+                            height: "50vh",
+                            borderRadius: "600px",
+                            border: "solid 1px #e8e8e8",
+                            cursor: "pointer",
+                          }}
+                          src={video}
+                          rounded
+                        ></video> */}
                         <FaRegComment
                           style={{
                             left: "76%",
-                         
+
                             color: "#000",
                           }}
                           onClick={() => {
@@ -1293,6 +1319,15 @@ function Post() {
       </Modal>
       <br />
       <br />
+      <div>
+        <input
+          id="video"
+          onChange={(e) => {
+            handleVideoS(e);
+          }}
+          type="file"
+        ></input>
+      </div>
       <br />
     </>
   );
