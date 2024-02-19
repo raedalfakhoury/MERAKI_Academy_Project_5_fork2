@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
@@ -8,8 +9,7 @@ import Loader from "../Loader/Loader";
 import "../Profile/Profile.css";
 import { CiBookmark } from "react-icons/ci";
 import { BsPostcard } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
-import Button from "react-bootstrap/Button";
+import { useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 const Profile = () => {
   const Navigate = useNavigate();
@@ -20,36 +20,30 @@ const Profile = () => {
       token: state.auth.token,
     };
   });
-  console.log(token);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const searchQuery = queryParams.get("prf") || "";
-
+  // const searchQuery = queryParams.get("prf") || "";
+  const [searchQuery2, setSearchQuery2] = useState(
+    queryParams.get("prf") || ""
+  );
   const [profileInfo, setProfileInfo] = useState();
   const [loader, setLoader] = useState(true);
   const [showPost, setShowPost] = useState(false);
-  const [countFollowers, setCountFollowers] = useState(0);
-  const [countFollowing, setCountFollowing] = useState(0);
   const [myPosts, setMyPosts] = useState();
-  const [myPostsLength, setMyPostsLength] = useState(0);
-  const [modalShow, setModalShow] = React.useState(false);
   const [followers, setFollowers] = useState();
   const [following, setFollowing] = useState();
-  console.log(following);
+
+  const [showFollowers, setShow] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+  const handleShowFollowers = () => setShow(true);
+  const handleShowFollowing = () => setShowFollowing(true);
+
+  const handleClose = () => setShow(false);
+  const handleClose2 = () => setShowFollowing(false);
+
   window.scrollTo(0, 0);
-  const getFollowing = () => {
-    axios
-      .get(`http://localhost:5000/followers/Following/${searchQuery}`)
-      .then((result) => {
-        setCountFollowing(result.data.length);
-        setLoader(false);
-        setFollowing(result?.data?.result);
-        console.log(result.data.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   const getMyFollowing = () => {
     axios
       .get(
@@ -58,26 +52,10 @@ const Profile = () => {
         )}`
       )
       .then((result) => {
-        console.log(result.data.result);
         arr.current = [];
         result.data.result.forEach((element) => {
-          console.log(element.id);
-
           arr.current.push(element.id);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const getFollowers = () => {
-    axios
-      .get(`http://localhost:5000/followers/Followers/${searchQuery}`)
-      .then((result) => {
-        setCountFollowers(result.data.length);
-        setLoader(false);
-        setFollowers(result?.data?.result);
-        console.log(result.data.result);
       })
       .catch((err) => {
         console.log(err);
@@ -86,21 +64,9 @@ const Profile = () => {
 
   useEffect(() => {
     getMyFollowing();
-    getFollowers();
-    getFollowing();
-    axios
-      .get(`http://localhost:5000/post/mypost/${searchQuery}`)
-      .then((result) => {
-        console.log("raed", result.data.result.length);
-        setMyPosts(result?.data?.result);
-        setMyPostsLength(result?.data?.result?.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
     axios
-      .get(`http://localhost:5000/users/${searchQuery}`)
+      .get(`http://localhost:5000/users/${searchQuery2}`)
       .then((result) => {
         setProfileInfo(result?.data?.result);
         setLoader(false);
@@ -108,160 +74,322 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [searchQuery]);
+  }, [searchQuery2]);
 
-  function MyVerticallyCenteredModal(props) {
+  function Followers() {
     return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton style={{ borderBottom: "0px" }}>
-          <Modal.Title id="contained-modal-title-vcenter">
-            <h3>Followers</h3>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body id="Modal.Body">
-          {followers?.map((item, i) => {
-            console.log(item);
-            return (
-              <div key={i} className="pop-main">
-                <div
-                  onClick={() => {
-                    Navigate({
-                      pathname: "/profile",
-                      search: `?prf=${item.id}`,
-                    });
-                    setProfileInfo(null);
-                    window.location.reload();
-                    props.onHide();
-                  }}
-                  style={{ display: "flex", cursor: "pointer" }}
-                >
-                  <img
-                    className="pop-img"
-                    alt=""
-                    src={item.profile_picture_url}
-                    style={{
-                      width: "80px",
-                      height: "80px",
-                      borderRadius: "50%",
+      <>
+        <Modal
+          show={showFollowers}
+          onHide={handleClose}
+          animation={false}
+          centered
+        >
+          <Modal.Header closeButton style={{ borderBottom: "none" }}>
+            <Modal.Title
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              {followers?.length} Followers
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            id="Modal.Body"
+            style={{ padding: "10px", height: "525px", overflowY: "scroll" }}
+          >
+            {followers?.map((item, i) => {
+              return (
+                <div key={i} className="pop-main">
+                  <div
+                    onClick={() => {
+                      handleClose();
+                      setSearchQuery2(item.id);
+                      Navigate({
+                        pathname: "/profile",
+                        search: `?prf=${item.id}`,
+                      });
+                      
                     }}
-                  />
+                    style={{ display: "flex", cursor: "pointer" }}
+                  >
+                    <img
+                      className="pop-img"
+                      alt=""
+                      src={item.profile_picture_url}
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                        borderRadius: "50%",
+                      }}
+                    />
 
-                  <div className="name-bio-pop">
-                    <p className="name-pop">{item.username}</p>
+                    <div className="name-bio-pop">
+                      <p className="name-pop">{item.username}</p>
 
-                    <p className="bio-pop">{item.bio}</p>
+                      <p className="bio-pop">{item.bio}</p>
+                    </div>
                   </div>
-                </div>
 
-                {localStorage.getItem("userId") == searchQuery ? (
-                  <button
-                    className="button-pop"
-                    onClick={async () => {
-                      try {
-                        const res = await axios.delete(
-                          `http://localhost:5000/followers/delete/follower/`,
-                          {
-                            data: { follower_id: item.id },
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          }
-                        );
-                        console.log("Remove", res.data);
-                        getMyFollowing();
-                        getFollowers();
-                        getFollowing();
-                      } catch (error) {
-                        console.log(error);
-                      }
-                    }}
-                  >
-                    Remove
-                  </button>
-                ) : localStorage.getItem("userId") ==
-                  item.id ? null : arr.current?.includes(item.id) ? (
-                  <button
-                    className="button-pop"
-                    onClick={async () => {
-                      try {
-                        const res = await axios.delete(
-                          `http://localhost:5000/followers/delete`,
-                          {
-                            data: { followed_id: item.id },
-                            headers: {
-                              Authorization: `Bearer ${token}`,
-                            },
-                          }
-                        );
-                        console.log("unfollow", res.data);
-                        getMyFollowing();
-                        getFollowers();
-                        getFollowing();
-                      } catch (error) {
-                        console.log(error);
-                      }
-                    }}
-                  >
-                    UnFollow
-                  </button>
-                ) : (
-                  <button
-                    className="button-pop"
-                    onClick={async () => {
-                      console.log(item.id);
-                      if (arr.current.includes(item.id)) {
-                      } else {
+                  {localStorage.getItem("userId") == searchQuery2 ? (
+                    <button
+                      className="button-pop"
+                      onClick={async () => {
                         try {
-                          const res = await axios.post(
-                            `http://localhost:5000/followers/add`,
-                            { followed_id: item.id },
+                          const res = await axios.delete(
+                            `http://localhost:5000/followers/delete/follower/`,
                             {
+                              data: { follower_id: item.id },
                               headers: {
                                 Authorization: `Bearer ${token}`,
                               },
                             }
                           );
-                          console.log("raed", res.data);
-
-                          getMyFollowing();
-                          getFollowers();
-                          getFollowing();
+ console.log("remove",res.data);
                         } catch (error) {
                           console.log(error);
                         }
-                      }
-                    }}
-                  >
-                    Follow
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </Modal.Body>
-        <Modal.Footer style={{ borderBottom: "0px" }}>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
+                      }}
+                    >
+                      Remove
+                    </button>
+                  ) : localStorage.getItem("userId") ==
+                    item.id ? null : arr.current?.includes(item.id) ? (
+                    <button
+                      className="button-pop"
+                      onClick={async () => {
+                        try {
+                          const res = await axios.delete(
+                            `http://localhost:5000/followers/delete`,
+                            {
+                              data: { followed_id: item.id },
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+ 
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}
+                    >
+                      UnFollow
+                    </button>
+                  ) : (
+                    <button
+                      className="button-pop"
+                      onClick={async () => {
+                        if (arr.current.includes(item.id)) {
+                        } else {
+                          try {
+                            const res = await axios.post(
+                              `http://localhost:5000/followers/add`,
+                              { followed_id: item.id },
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              }
+                            );
+
+                            // getMyFollowing();
+                            // getFollowers();
+                            // getFollowing();
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }
+                      }}
+                    >
+                      Follow
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </Modal.Body>
+        </Modal>
+      </>
     );
   }
-  console.log(arr.current);
+
+  function Following() {
+    return (
+      <>
+        <Modal
+          show={showFollowing}
+          onHide={handleClose2}
+          animation={false}
+          centered
+        >
+          <Modal.Header
+            closeButton
+            style={{ borderBottom: "none", padding: "10px 10px" }}
+          >
+            <Modal.Title
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              {following?.length} Following
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            id="Modal.Body"
+            style={{
+              padding: "10px",
+              height: following?.length == 0 ? "100px" : "525px",
+              overflowY: "scroll",
+            }}
+          >
+            {following?.map((item, i) => {
+            
+              return (
+                <div key={i} className="pop-main">
+                  <div
+                    onClick={() => {
+                      handleClose2();
+                      setSearchQuery2(item.id);
+                      Navigate({
+                        pathname: "/profile",
+                        search: `?prf=${item.id}`,
+                      });
+                      // setProfileInfo(null);
+                      // window.location.reload();
+                      // setModalShowFollowers.onHide();
+                    }}
+                    style={{ display: "flex", cursor: "pointer" }}
+                  >
+                    <img
+                    onClick={()=>{console.log("id",item.id);}}
+                      className="pop-img"
+                      alt=""
+                      src={item.profile_picture_url}
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                        borderRadius: "50%",
+                      }}
+                    />
+
+                    <div className="name-bio-pop">
+                      <p className="name-pop">{item.username}</p>
+
+                      <p className="bio-pop">{item.bio}</p>
+                    </div>
+                  </div>
+
+                  {localStorage.getItem("userId") == searchQuery2 ? (
+                    <button
+                      className="button-pop"
+                      onClick={async () => {
+                        try {
+                          const res = await axios.delete(
+                            `http://localhost:5000/followers/delete`,
+                            {
+                              data: { followed_id: item.id },
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+                          console.log("test",res.data);
+                          // getMyFollowing();
+                          // getFollowers();
+                          // getFollowing();
+
+                          setFollowing(
+                            following.filter((ele, i) => {
+                            
+                              return ele.id !== item.id;
+                            })
+                          );
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}
+                    >
+                      Remove
+                    </button>
+                  ) : localStorage.getItem("userId") ==
+                    item.id ? null : arr.current?.includes(item.id) ? (
+                    <button
+                      className="button-pop"
+                      onClick={async () => {
+                        try {
+                          const res = await axios.delete(
+                            `http://localhost:5000/followers/delete`,
+                            {
+                              data: { followed_id: item.id },
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+
+                          // getMyFollowing();
+                          // getFollowers();
+                          // getFollowing();
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}
+                    >
+                      UnFollow
+                    </button>
+                  ) : (
+                    <button
+                      className="button-pop"
+                      onClick={async () => {
+                        if (arr.current.includes(item.id)) {
+                        } else {
+                          try {
+                            const res = await axios.post(
+                              `http://localhost:5000/followers/add`,
+                              { followed_id: item.id },
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              }
+                            );
+
+                            // getMyFollowing();
+                            // getFollowers();
+                            // getFollowing();
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }
+                      }}
+                    >
+                      Follow
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </Modal.Body>
+        </Modal>
+      </>
+    );
+  }
   return (
     <div id="mainPage">
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
+      <Followers />
+      <Following />
+
       {loader ? (
         <Loader />
       ) : (
         profileInfo?.map((elm, i) => {
-          console.log(elm);
           return (
             <div key={elm.id} className="panel2">
               <div className="edit">
@@ -282,11 +410,52 @@ const Profile = () => {
                 </div>
                 <div className="followerr">
                   <p className="bio">{elm.bio}</p>
-                  <p className="followers" onClick={() => setModalShow(true)}>
-                    {countFollowers} followers
+                  <p
+                    className="followers"
+                    onClick={() => {
+                      // !===============================
+                      axios
+                        .get(
+                          `http://localhost:5000/followers/Followers/${searchQuery2}`
+                        )
+                        .then((result) => {
+                          setFollowers(result?.data?.result);
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+
+                      // !===============================
+                      setShow(true);
+                      handleShowFollowers();
+                    }}
+                  >
+                    followers
                   </p>
-                  <p className="followers" onClick={() => setModalShow(true)}>
-                    {countFollowing} following
+                  <p
+                    className="followers"
+                    onClick={
+                      () => {
+                        // !-------------------------------
+
+                        axios
+                          .get(
+                            `http://localhost:5000/followers/Following/${searchQuery2}`
+                          )
+                          .then((result) => {
+                            setFollowing(result?.data?.result);
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+
+                        handleShowFollowing();
+                      }
+
+                      // !-------------------------------
+                    }
+                  >
+                    following
                   </p>
                 </div>
               </div>
@@ -301,10 +470,18 @@ const Profile = () => {
             <p
               className="posts-saved"
               onClick={() => {
+                axios
+                  .get(`http://localhost:5000/post/mypost/${searchQuery2}`)
+                  .then((result) => {
+                    setMyPosts(result?.data?.result);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
                 setShowPost(!showPost);
               }}
             >
-              posts ({myPostsLength})
+              {myPosts?.length} posts
             </p>
           </div>
           <div className="p-s">
