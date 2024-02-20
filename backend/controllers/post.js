@@ -282,38 +282,40 @@ WHERE
 
 const countFAndDAndPo = (req, res) => {
   const IdPorFileUser = req.params.id;
-  const query = `SELECT 'followers' AS relationship_type, COUNT(*) AS count
-  FROM Follows
-  WHERE Follows.followed_id = ${IdPorFileUser}
+  const query = `
   
-  UNION
-  
-  SELECT 'following' AS relationship_type, COUNT(*) AS count
-  FROM Follows
-  WHERE Follows.follower_id = ${IdPorFileUser}
-  
-  UNION
-  
-  SELECT 'Posts' AS relationship_type, COUNT(*) AS count
-  FROM Posts
-  WHERE Posts.user_id = ${IdPorFileUser} AND Posts.is_deleted = 0;`;
-  pool
-  .query(query)
-  .then((result) => {
-    res.status(200).json({
-      successful: true,
-      message: "All Count Posts And Count follower Count followed ",
-      result: result.rows,
-    });
-  })
-  .catch((err) => {
-    res.status(500).json({
-      success: false,
-      err: err,
-    });
-  });
-};
+  SELECT 'followers' AS relationship_type,COUNT( DISTINCT  Follows.follower_id ) AS count
+FROM Follows
+WHERE Follows.followed_id =${IdPorFileUser} AND Follows.follower_id  !=${IdPorFileUser}
 
+UNION ALL
+
+SELECT  'following' AS relationship_type,COUNT( DISTINCT  Follows.followed_id ) AS count
+FROM Follows 
+WHERE Follows.follower_id = ${IdPorFileUser} AND Follows.followed_id  !=${IdPorFileUser}
+
+UNION ALL
+
+SELECT 'Posts' AS relationship_type, COUNT(*) AS count
+FROM Posts
+WHERE Posts.user_id =112 AND Posts.is_deleted =0;
+  `;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        successful: true,
+        message: "All Count Posts And Count follower Count followed ",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
 
 module.exports = {
   createNewPost,
