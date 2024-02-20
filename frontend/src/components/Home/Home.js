@@ -25,9 +25,9 @@ function Home() {
   return (
 
     <>
-   {/* <Explore/> */}
+   <Explore/>
 
-       <Routes>
+        {/* <Routes>
          <Route path="/users/register" element={<Register />} />
          <Route path="/users/login" element={<LoginPage />} />
         <Route path="/profile" element={<Profile />} />
@@ -38,7 +38,7 @@ function Home() {
         <Route path="/home/Posts" element={<Post/>} />
 
         
-      </Routes> 
+      </Routes>   */}
 
 {/* <Stories/> */}
       {/* <WelcomePage/>  */}

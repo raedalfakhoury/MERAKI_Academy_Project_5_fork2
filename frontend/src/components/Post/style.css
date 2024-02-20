@@ -5,9 +5,10 @@
   font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, segoe ui,
     helvetica neue, Arial, sans-serif;
 }
-body {
-  background-color: rgb(245, 245, 245);
+body{
+  /* background-color: red; */
 }
+
 .status {
   display: flex;
   position: relative;
