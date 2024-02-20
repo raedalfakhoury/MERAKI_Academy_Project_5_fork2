@@ -53,7 +53,7 @@ import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 
 import { motion } from "framer-motion";
-
+import { useInView } from "react-intersection-observer";
 function Post() {
   const Navigate = useNavigate();
   const [showF, setShowF] = useState(false);
@@ -76,7 +76,7 @@ function Post() {
   const [ToggleUpdatePost, setToggleUpdatePost] = useState(false);
   const pr_key = "rllytlm7";
   const cloud_name = "dmmo3zzyc";
-const [video,setVideoUrl] =useState()
+  const [video, setVideoUrl] = useState();
   const [inputUpdate, setInputUpdate] = useState({
     ID_post: "",
     content: "",
@@ -104,14 +104,15 @@ const [video,setVideoUrl] =useState()
       .then((result) => {
         setImage_url(result.data.secure_url);
         setToggleSpinnerCloudInN(false);
+        setVideoUrl("");
       })
       .catch((err) => {
         console.log(err);
       });
   };
   const handleVideoS = (ee) => {
-    // setInputUpdate({ ...inputUpdate, image: "" });
-    // setToggleSpinnerCloudInUpdate(true);
+    setToggleSpinnerCloudInN(true);
+
     const file = ee.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
@@ -124,7 +125,9 @@ const [video,setVideoUrl] =useState()
       )
       .then((result) => {
         console.log(result.data.url);
-        setVideoUrl(result.data.url)
+        setVideoUrl(result.data.url);
+        setImage_url("");
+        setToggleSpinnerCloudInN(false);
       })
       .catch((err) => {
         console.log(err);
@@ -159,7 +162,7 @@ const [video,setVideoUrl] =useState()
     axios
       .post(
         `http://localhost:5000/post/create`,
-        { content: ContentPost, media_url: image_url },
+        { content: ContentPost, media_url: image_url || video },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -178,6 +181,7 @@ const [video,setVideoUrl] =useState()
 
         dispatch(addPost(dataPostMax));
         setImage_url("");
+        setVideoUrl("");
         setContentPost("");
       })
       .catch((err) => {
@@ -405,7 +409,7 @@ const [video,setVideoUrl] =useState()
         <Container className="containerPosts">
           <Row>
             <Col className="navCreatePost" style={{ padding: "0" }}>
-              <Col className="box">
+              <Col className="box active">
                 <span class="icon is-small">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -425,36 +429,35 @@ const [video,setVideoUrl] =useState()
                   Publish
                 </span>
               </Col>
+
               <Col className="box">
-                <span class="icon is-small">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="feather feather-image"
-                  >
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="2"
-                      ry="2"
-                    ></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <polyline points="21 15 16 10 5 21"></polyline>
-                  </svg>
-                  Albums
-                </span>
-              </Col>
-              <Col className="box">
-                <span class="icon is-small">
+                <label
+                  style={{ position: "relative", cursor: "pointer" }}
+                  class="file-label"
+                >
+                  {" "}
+                  <span style={{ cursor: "pointer" }}> video</span>
+                  <input
+                    style={{
+                      width: "170px",
+                      height: "2.5vw",
+                      position: "absolute",
+                      left: "-150%",
+                      top: "-50%",
+                      opacity: "0",
+                      // backgroundColor: "red",
+                      cursor: "pointer",
+                      zIndex: "1",
+                    }}
+                    // class="input-file"
+                    id="video"
+                    onChange={(e) => {
+                      handleVideoS(e);
+                    }}
+                    type="file"
+                  ></input>
+                </label>
+                <span style={{ cursor: "pointer" }} class="icon is-small">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -478,7 +481,6 @@ const [video,setVideoUrl] =useState()
                     ></rect>
                   </svg>
                 </span>{" "}
-                Video
               </Col>
             </Col>
           </Row>
@@ -523,6 +525,25 @@ const [video,setVideoUrl] =useState()
                       src={image_url}
                     />
                   )}
+
+                  {video && (
+                    <video
+                      controls
+                      muted
+                      autoPlay
+                      // loop
+                      className="imagePosts"
+                      style={{
+                        width: "70%",
+                        height: "20vh",
+                        borderRadius: "10px",
+                        border: "solid 1px #e8e8e8",
+                        cursor: "pointer",
+                      }}
+                      src={video}
+                      rounded
+                    ></video>
+                  )}
                 </Col>
               </Row>
 
@@ -542,6 +563,17 @@ const [video,setVideoUrl] =useState()
                   <span class="ic"> Media</span>
                 </label>
                 {image_url && (
+                  <Button
+                    onClick={() => {
+                      createNewPost();
+                    }}
+                    style={{ marginLeft: "10px", borderRadius: "500px" }}
+                    variant="primary"
+                  >
+                    publish
+                  </Button>
+                )}
+                {video && (
                   <Button
                     onClick={() => {
                       createNewPost();
@@ -690,48 +722,55 @@ const [video,setVideoUrl] =useState()
                           padding: "0px",
                         }}
                       >
-                        <Image
-                          onDoubleClick={() => {
-                            if (
-                              localStorage.getItem(`${elm.id}`) * 1 !==
-                              elm.id
-                            ) {
-                              setToggleLike(!toggleLike);
+                        {elm.media_url.includes(".mp4") ? (
+                          <video
+                            controls
+                            muted
+                            autoPlay
+                            loop
+                            className="imagePosts"
+                            style={{
+                              width: "100%",
+                              height: "50vh",
+                              // borderRadius: "600px",
+                              border: "solid 1px #e8e8e8",
+                              cursor: "pointer",
+                            }}
+                            src={elm.media_url}
+                            rounded
+                          ></video>
+                        ) : (
+                          <Image
+                            onDoubleClick={() => {
+                              if (
+                                localStorage.getItem(`${elm.id}`) * 1 !==
+                                elm.id
+                              ) {
+                                setToggleLike(!toggleLike);
 
-                              Like(elm.id);
-                              localStorage.setItem(`${elm.id}`, `${elm.id}`);
-                            } else {
-                              setToggleLike(!toggleLike);
+                                Like(elm.id);
+                                localStorage.setItem(`${elm.id}`, `${elm.id}`);
+                              } else {
+                                setToggleLike(!toggleLike);
 
-                              Like(elm.id);
+                                Like(elm.id);
 
-                              localStorage.removeItem(`${elm.id}`);
-                            }
-                          }}
-                          className="imagePosts"
-                          style={{
-                            width: "100%",
-                            height: "50vh",
-                            borderRadius: "600px",
-                            border: "solid 1px #e8e8e8",
-                            cursor: "pointer",
-                          }}
-                          src={elm.media_url}
-                          rounded
-                        />
-                        {/* <video
-                           controls   autoPlay muted loop
-                          className="imagePosts"
-                          style={{
-                            width: "100%",
-                            height: "50vh",
-                            borderRadius: "600px",
-                            border: "solid 1px #e8e8e8",
-                            cursor: "pointer",
-                          }}
-                          src={video}
-                          rounded
-                        ></video> */}
+                                localStorage.removeItem(`${elm.id}`);
+                              }
+                            }}
+                            className="imagePosts"
+                            style={{
+                              width: "100%",
+                              height: "50vh",
+                              borderRadius: "600px",
+                              border: "solid 1px #e8e8e8",
+                              cursor: "pointer",
+                            }}
+                            src={elm.media_url}
+                            rounded
+                          />
+                        )}
+
                         <FaRegComment
                           style={{
                             left: "76%",
@@ -1167,11 +1206,18 @@ const [video,setVideoUrl] =useState()
                 }}
               />
               <div className="updateImage">
-                {inputUpdate.image !== "" && (
+                {inputUpdate.image !== "" &&
+                !inputUpdate.image.includes(".mp4") ? (
                   <img
                     style={{ width: "120px", height: "120px" }}
                     src={inputUpdate.image}
                   ></img>
+                ) : (
+                  <video
+                  
+                    style={{ width: "120px", height: "120px" }}
+                    src={inputUpdate.image}
+                  ></video>
                 )}
                 {ToggleSpinnerCloudInNUpdate && (
                   <div
@@ -1210,7 +1256,7 @@ const [video,setVideoUrl] =useState()
                   </h4>
                 </div>
 
-                <label class="file-label">
+               <label class="file-label">
                   <input
                     onChange={(e) => {
                       handleFileUpdatePost(e);
@@ -1319,15 +1365,7 @@ const [video,setVideoUrl] =useState()
       </Modal>
       <br />
       <br />
-      <div>
-        <input
-          id="video"
-          onChange={(e) => {
-            handleVideoS(e);
-          }}
-          type="file"
-        ></input>
-      </div>
+      <div></div>
       <br />
     </>
   );
