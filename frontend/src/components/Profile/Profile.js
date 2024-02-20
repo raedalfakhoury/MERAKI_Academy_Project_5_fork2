@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -14,7 +15,7 @@ import Modal from "react-bootstrap/Modal";
 const Profile = () => {
   const Navigate = useNavigate();
   const arr = useRef([]);
-
+  const [remove, setRemove] = useState(false);
   const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
@@ -33,12 +34,16 @@ const Profile = () => {
   const [myPosts, setMyPosts] = useState();
   const [followers, setFollowers] = useState();
   const [following, setFollowing] = useState();
-
+  const [countFollowers, serCountFollowers] = useState(0);
+  const [countFollowing, serCountFollowing] = useState(0);
+  const [countPosts, serCountPosts] = useState(0);
+  const [innerText, setInnerText] = useState("");
+  console.log(innerText);
   const [showFollowers, setShow] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
-
+  console.log(following);
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
 
@@ -70,6 +75,29 @@ const Profile = () => {
       .then((result) => {
         setProfileInfo(result?.data?.result);
         setLoader(false);
+      })
+      .then((res) => {
+        axios
+          .get(`http://localhost:5000/post/countFAndDAndPo/${searchQuery2}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((result) => {
+            console.log(result);
+            result?.data?.result.forEach((ele) => {
+              if (ele.relationship_type == "following") {
+                serCountFollowing(ele.count);
+              } else if (ele.relationship_type == "followers") {
+                serCountFollowers(ele.count);
+              } else if (ele.relationship_type == "Posts") {
+                serCountPosts(ele.count);
+              }
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -106,13 +134,13 @@ const Profile = () => {
                 <div key={i} className="pop-main">
                   <div
                     onClick={() => {
+                      setMyPosts([]);
                       handleClose();
                       setSearchQuery2(item.id);
                       Navigate({
                         pathname: "/profile",
                         search: `?prf=${item.id}`,
                       });
-                      
                     }}
                     style={{ display: "flex", cursor: "pointer" }}
                   >
@@ -148,7 +176,11 @@ const Profile = () => {
                               },
                             }
                           );
- console.log("remove",res.data);
+                          setFollowers(
+                            followers.filter((ele) => {
+                              return ele.id !== item.id;
+                            })
+                          );
                         } catch (error) {
                           console.log(error);
                         }
@@ -171,7 +203,6 @@ const Profile = () => {
                               },
                             }
                           );
- 
                         } catch (error) {
                           console.log(error);
                         }
@@ -195,10 +226,6 @@ const Profile = () => {
                                 },
                               }
                             );
-
-                            // getMyFollowing();
-                            // getFollowers();
-                            // getFollowing();
                           } catch (error) {
                             console.log(error);
                           }
@@ -216,7 +243,7 @@ const Profile = () => {
       </>
     );
   }
-
+  console.log("out", arr.current);
   function Following() {
     return (
       <>
@@ -250,7 +277,6 @@ const Profile = () => {
             }}
           >
             {following?.map((item, i) => {
-            
               return (
                 <div key={i} className="pop-main">
                   <div
@@ -261,14 +287,10 @@ const Profile = () => {
                         pathname: "/profile",
                         search: `?prf=${item.id}`,
                       });
-                      // setProfileInfo(null);
-                      // window.location.reload();
-                      // setModalShowFollowers.onHide();
                     }}
                     style={{ display: "flex", cursor: "pointer" }}
                   >
                     <img
-                    onClick={()=>{console.log("id",item.id);}}
                       className="pop-img"
                       alt=""
                       src={item.profile_picture_url}
@@ -286,31 +308,22 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  {localStorage.getItem("userId") == searchQuery2 ? (
+                  {localStorage.getItem("userId") == searchQuery2 &&
+                  innerText == "followers" ? (
                     <button
                       className="button-pop"
                       onClick={async () => {
                         try {
                           const res = await axios.delete(
-                            `http://localhost:5000/followers/delete`,
+                            `http://localhost:5000/followers/delete/follower/`,
                             {
-                              data: { followed_id: item.id },
+                              data: { follower_id: item.id },
                               headers: {
                                 Authorization: `Bearer ${token}`,
                               },
                             }
                           );
-                          console.log("test",res.data);
-                          // getMyFollowing();
-                          // getFollowers();
-                          // getFollowing();
-
-                          setFollowing(
-                            following.filter((ele, i) => {
-                            
-                              return ele.id !== item.id;
-                            })
-                          );
+                          console.log("Remove", res.data);
                         } catch (error) {
                           console.log(error);
                         }
@@ -334,9 +347,15 @@ const Profile = () => {
                             }
                           );
 
-                          // getMyFollowing();
-                          // getFollowers();
-                          // getFollowing();
+                          arr.current = arr.current.filter((ele) => {
+                            return ele !== item.id * 1;
+                          });
+                          setRemove(!remove);
+                          {
+                            localStorage.getItem("userId") == searchQuery2 &&
+                              serCountFollowing(countFollowing - 1);
+                          }
+                          console.log("in", arr.current);
                         } catch (error) {
                           console.log(error);
                         }
@@ -360,10 +379,12 @@ const Profile = () => {
                                 },
                               }
                             );
-
-                            // getMyFollowing();
-                            // getFollowers();
-                            // getFollowing();
+                            arr.current.push(item.id);
+                            setRemove(!remove);
+                            {
+                              localStorage.getItem("userId") == searchQuery2 &&
+                                serCountFollowing(countFollowing - 1);
+                            }
                           } catch (error) {
                             console.log(error);
                           }
@@ -412,7 +433,8 @@ const Profile = () => {
                   <p className="bio">{elm.bio}</p>
                   <p
                     className="followers"
-                    onClick={() => {
+                    onClick={(e) => {
+                      setInnerText(e.target.innerText);
                       // !===============================
                       axios
                         .get(
@@ -430,12 +452,13 @@ const Profile = () => {
                       handleShowFollowers();
                     }}
                   >
-                    followers
+                    {countFollowers} followers
                   </p>
                   <p
                     className="followers"
                     onClick={
-                      () => {
+                      (e) => {
+                        setInnerText(e.target.innerText);
                         // !-------------------------------
 
                         axios
@@ -455,7 +478,7 @@ const Profile = () => {
                       // !-------------------------------
                     }
                   >
-                    following
+                    {countFollowing} following
                   </p>
                 </div>
               </div>
@@ -470,6 +493,7 @@ const Profile = () => {
             <p
               className="posts-saved"
               onClick={() => {
+                setMyPosts([]);
                 axios
                   .get(`http://localhost:5000/post/mypost/${searchQuery2}`)
                   .then((result) => {
@@ -481,7 +505,7 @@ const Profile = () => {
                 setShowPost(!showPost);
               }}
             >
-              {myPosts?.length} posts
+              {countPosts} posts
             </p>
           </div>
           <div className="p-s">
