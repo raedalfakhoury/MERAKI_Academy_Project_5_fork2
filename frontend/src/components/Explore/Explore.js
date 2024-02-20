@@ -15,7 +15,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 export function TemporaryDrawer() {
   const [state, setState] = React.useState({
     top: false,
@@ -56,7 +57,6 @@ export function TemporaryDrawer() {
         ))}
       </List>
       <Divider />
-
     </Box>
   );
 
@@ -77,8 +77,34 @@ export function TemporaryDrawer() {
     </div>
   );
 }
+// /!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!///
+const Explore = () => {
+  const { token, userId, name, image } = useSelector((state) => {
+    return {
+      posts: state.posts.posts,
+      userId: state.auth.userId,
+      token: state.auth.token,
+      name: state.auth.name,
+      image: state.auth.image,
+    };
+  });
 
-function Explore() {
+  // http://localhost:5000/post/1/getPosts
+  const [Posts, setPosts] = React.useState([]);
+  React.useEffect(() => {
+    axios
+      .get(`http://localhost:5000/post/1/getPosts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        setPosts(result.data.posts);
+        console.log(result.data.posts);
+      })
+      .catch((err) => {});
+  }, []);
+
   return (
     <>
       <Container style={{ display: "flex", margin: "0px" }}>
@@ -97,7 +123,7 @@ function Explore() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                height: "60vw",
+                height: "55vw",
                 flexWrap: "nowrap",
               }}
             >
@@ -129,7 +155,7 @@ function Explore() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                height: "60vw",
+                height: "55vw",
                 flexWrap: "nowrap",
               }}
             >
@@ -161,36 +187,50 @@ function Explore() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                height: "120vw",
+                gap: "5px",
+                // height: "120vw",
               }}
             >
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
+              {Posts?.map((post, index) => {
+                return (
+                  <>
+                    {post.media_url.includes(".mp4") && (
+                      <Col
+                        style={{
+                          display: "flex",
+                          FlexDirection: "column",
+                          flexWrap: "nowrap",
+                          // borderTop: "1px solid red",
+                          // borderBottom: "1px solid red",
+                        }}
+                      >
+                        <video
+                          controls
+                          muted
+                          autoPlay
+                          loop
+                          rounded
+                          style={{
+                            width: "100%",
+                            height: "36.2vw",
+                            border: "none",
+                            flexWrap: "nowrap",
+                            padding: "0px",
+                            marginTop: "3px",
+                          }}
+                          src={post.media_url}
+                        ></video>
+                      </Col>
+                    )}
+                  </>
+                );
+              })}
             </Row>
           </Container>
         </Container>
       </Container>
     </>
   );
-}
+};
 
 export default Explore;

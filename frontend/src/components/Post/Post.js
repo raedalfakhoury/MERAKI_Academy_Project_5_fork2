@@ -133,8 +133,8 @@ function Post() {
         console.log(err);
       });
   };
-
-  const handleFileUpdatePost = (e) => {
+  // const [Action, setAction] = useState("");
+  const handleFileUpdatePost = (e, Action) => {
     setInputUpdate({ ...inputUpdate, image: "" });
     setToggleSpinnerCloudInUpdate(true);
     const file = e.target.files[0];
@@ -144,7 +144,7 @@ function Post() {
 
     axios
       .post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${cloud_name}/${Action}/upload`,
         formData
       )
       .then((result) => {
@@ -1214,7 +1214,6 @@ function Post() {
                   ></img>
                 ) : (
                   <video
-                  
                     style={{ width: "120px", height: "120px" }}
                     src={inputUpdate.image}
                   ></video>
@@ -1256,11 +1255,16 @@ function Post() {
                   </h4>
                 </div>
 
-               <label class="file-label">
+                <label class="file-label">
                   <input
                     onChange={(e) => {
-                      handleFileUpdatePost(e);
-                      setToggleUpdatePost(true);
+                      if (e.target.files[0].type === "video/mp4") {
+                        handleFileUpdatePost(e, "video");
+                        setToggleUpdatePost(true);
+                      } else {
+                        handleFileUpdatePost(e, "image");
+                        setToggleUpdatePost(true);
+                      }
                     }}
                     type="file"
                     class="input-file"
