@@ -142,7 +142,7 @@ const Explore = () => {
                 flexDirection: "column",
                 // height: "55vw",
                 flexWrap: "nowrap",
-                gap: "10px",
+
                 padding: "0 10px ",
               }}
             >
@@ -160,6 +160,8 @@ const Explore = () => {
                           margin: "0",
                           flex: "1 ",
                           position: "relative",
+                          width: "500px",
+
                           // borderTop: "1px solid red",
                           // borderBottom: "1px solid red",
                         }}
@@ -178,12 +180,14 @@ const Explore = () => {
                           muted
                           style={{
                             width: "100%",
-                            height: "17.2vw",
+                            height: "20.7vw",
                             border: "none",
                             flexWrap: "nowrap",
                             padding: "0px",
                             // marginTop: "2px",
-                            border: "2px solid #000",
+                            // borderTop: "4px solid  #fff",
+                            borderBottom: "4px solid  #fff",
+                            borderRight: "11px solid  #fff",
                           }}
                           src={post.media_url}
                         ></video>
@@ -202,14 +206,23 @@ const Explore = () => {
                 // height: "55vw",
                 flexWrap: "nowrap",
                 paddingLeft: "10px ",
-                gap: "10px",
+                // gap: "2px",
               }}
             >
               {Posts?.map((post, index) => {
                 return (
                   <>
                     {post.media_url.includes(".jpg") && (
-                      <Col style={{ position: "relative" }}>
+                      <Col
+                        style={{
+                          position: "relative",
+                          width: "500px",
+                          margin: "0px",
+                          padding: "0px",
+                          borderBottom: "4px solid  #fff",
+                          borderRight: "18px solid  #fff",
+                        }}
+                      >
                         <FaImages
                           style={{
                             position: "absolute",
@@ -222,9 +235,8 @@ const Explore = () => {
                           style={{
                             padding: "0",
                             width: "100%",
-                            height: "17.2vw",
+                            height: "20.4vw",
                             border: "none",
-                            border: "2px solid #000",
                           }}
                           src={post.media_url}
                         />
@@ -240,7 +252,7 @@ const Explore = () => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "10px",
+                gap: "2px",
                 padding: "0 10px 0 10px ",
                 // marginTop: "3px",
               }}
@@ -255,6 +267,9 @@ const Explore = () => {
                           FlexDirection: "column",
                           flexWrap: "nowrap",
                           position: "relative",
+                          width: "500px",
+                          padding: "0px",
+                          margin: "0",
                           // height: "10000px",
 
                           // borderTop: "1px solid red",
@@ -281,7 +296,8 @@ const Explore = () => {
                             border: "none",
                             flexWrap: "nowrap",
                             padding: "0px",
-                            border: "2px solid #000",
+                            margin: "0",
+                            border: "2px solid  rgb(244,244,244)",
                             backgroundColor: "#000",
                           }}
                           src={post.media_url}
