@@ -44,11 +44,11 @@ const ExpandMore = styled((props) => {
 
 export default function Stories() {
   const [loading, setLoading] = useState(true);
-
+const [openResult,setOpenResult] = React.useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
   const [open, setOpen] = React.useState(false);
-  const [open1,setOpen1]= React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const [showStory, setShowStory] = useState(false);
   const [userName, setUserName] = useState("Mohammad");
@@ -65,31 +65,36 @@ export default function Stories() {
   // ===============================   get all stories by user Id ==============================
   const handleOpen = (e) => {
     setOpen(true);
-    console.log(e.id);
+    console.log(e.id,e.username);
     setUserName(e.username);
     setLoading(true);
     axios
-      .get(`http://localhost:5000/story/121`, {
+      .get(`http://localhost:5000/story/${e.id}`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
       })
       .then((res) => {
         console.log(res.data.result[0].video_url);
-        // console.log(userStory);
         setUserStory(res.data.result);
         console.log(userStory);
+        setLoading(false); 
+
       })
       .catch((err) => {
         console.log(err);
+        setOpen(false);
+
+        setOpenResult(true)
+
       })
-      .finally(() => {
-        setLoading(false); // Set loading to false once data fetching is complete
-      });
+      ;
   };
   const handleClose = () => {
+    console.log(userStory);
     setOpen(false);
-    setOpen1(false)
+    setOpen1(false);
+    setOpenResult(false)
   };
 
   // ==========================  Get All Followers ======================================
@@ -152,7 +157,7 @@ export default function Stories() {
 
   // get Cloudinary URL
   const StoryHandle = (files) => {
-    setOpen1(true)
+    setOpen1(true);
     const formData = new FormData();
     formData.append("file", files[0]);
     formData.append("upload_preset", pr_key);
@@ -223,39 +228,85 @@ export default function Stories() {
               <Modal
                 aria-labelledby="unstyled-modal-title"
                 aria-describedby="unstyled-modal-description"
+                open={openResult}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      No Stories
+                    </p>
+                  
+                  </div>
+                </ModalContent>
+              </Modal>
+              {/* This Modal to Add New Story */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
                 open={open1}
                 onClose={handleClose}
                 slots={{ backdrop: StyledBackdrop }}
               >
-                <ModalContent sx={{ maxwidth: 100, maxHeight: 1200 }}>
-                  <h2 id="unstyled-modal-title" className="modal-title">
-                    {userName}
-                  </h2>
-                  <p
-                    id="unstyled-modal-description"
-                    className="modal-description"
-                  >
-                    Your Story
-                  </p>
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      Add New Story
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Your Story
+                    </p>
+                    <textarea
+                      id="publish"
+                      style={{ border: "solid 1px" }}
+                      className="textarea"
+                      rows="3"
+                      placeholder="Write something about you..."
+                      spellCheck="false"
+                    ></textarea>
 
-                  <TriggerButton
-                type="button"
-                onClick={() => {
-                  document.querySelector(".input-file").click();
-                  setOpen1(true);
-              }}              >
-                <input
-                  onChange={(e) => {
-                    StoryHandle(e.target.files);
-                  }}
-                  type="file"
-                  className="input-file"
-                  style={{ display: "none" }} // hide the input element visually
-                />
-                +
-              </TriggerButton>
+                  </div>
+                  <div style={{ textAlign: "center", padding: "20px" }}>
+                    <TriggerButton
+                      type="button"
+                      onClick={() => {
+                        document.querySelector(".input-file").click();
+                        setOpen1(false); // Close the modal after upload
+                      }}
+                    >
+                      <input
+                        onChange={(e) => {
+                          StoryHandle(e.target.files);
+                        }}
+                        type="file"
+                        className="input-file"
+                        style={{ display: "none" }} // hide the input element visually
+                      />
+                      Button 1
+                    </TriggerButton>
+                    <TriggerButton
+                      type="button"
+                      onClick={() => {
+                        console.log(11);
+                        setOpen1(false); // Close the modal
+                      }}
+                    >
+                      Button 2
+                    </TriggerButton>
+                  </div>
                 </ModalContent>
-              </Modal>{" "}
+              </Modal>
+              {/* This Modal to Show the User Story */}
               <Modal
                 aria-labelledby="unstyled-modal-title"
                 aria-describedby="unstyled-modal-description"
@@ -308,7 +359,8 @@ export default function Stories() {
                 type="button"
                 onClick={() => {
                   setOpen1(true);
-              }}              >
+                }}
+              >
                 <input
                   onChange={(e) => {
                     StoryHandle(e.target.files);
