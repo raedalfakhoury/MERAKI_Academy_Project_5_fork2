@@ -57,7 +57,7 @@ const [openResult,setOpenResult] = React.useState(false);
   const [video, setVideo] = useState("");
   const [model, setModle] = useState(false);
   const [vidIndex, setVidIndex] = useState(0);
-
+const usersStories = []
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
@@ -91,7 +91,6 @@ const [openResult,setOpenResult] = React.useState(false);
       ;
   };
   const handleClose = () => {
-    console.log(userStory);
     setOpen(false);
     setOpen1(false);
     setOpenResult(false)
@@ -106,12 +105,13 @@ const [openResult,setOpenResult] = React.useState(false);
         },
       })
       .then((res) => {
-        console.log(res.data.result);
         setData(res.data.result);
-        console.log(Data);
-        Data.map((elem, indx) => {
-          console.log(elem.username);
-        });
+        Data.map((elem,indx)=>{ 
+          console.log("URL = ", elem.video_url);
+          console.log("USER NAME = ",elem);
+          {elem.video_url && usersStories.push(elem)}
+        })
+       
       })
       .catch((err) => {
         console.log(err);
@@ -385,7 +385,7 @@ const [openResult,setOpenResult] = React.useState(false);
             </Typography>
           }
         />
-        {Data.map((elem, indx) => (
+        {usersStories.map((elem, indx) => (
           <React.Fragment key={indx}>
             <Divider component="div" role="presentation" />
             <CardHeader
