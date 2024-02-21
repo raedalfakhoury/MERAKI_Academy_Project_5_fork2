@@ -54,7 +54,97 @@ import { FaBookmark } from "react-icons/fa";
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+
+import { BiSolidLike } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 function Post() {
+  const [LikeComments, setLikeComment] = useState([]);
+  const [Count_like_Comment_number, setCount_like_Comment_number] = useState(
+    []
+  );
+  console.log(Count_like_Comment_number);
+  const Count_like_Comment = (id) => {
+    axios
+      .get(`http://localhost:5000/LikeComments/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        // console.log(result.data.result);
+        setCount_like_Comment_number(result.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getAllIdLikeComments = () => {
+    axios
+      .get(`http://localhost:5000/LikeComments/2/xx`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        setLikeComment(result.data.result);
+        // console.log(result.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const createLikeComment = (id) => {
+    axios
+      .post(
+        `http://localhost:5000/LikeComments/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+        getAllIdLikeComments();
+        const InCre = Count_like_Comment_number.map((elm, index) => {
+          if (elm.comment_id === id) {
+            elm.like_count = (elm.like_count *1 )+ 1;
+          }
+          return elm
+        });
+        setCount_like_Comment_number(InCre);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const removeLikeComments = (id) => {
+    axios
+      .delete(`http://localhost:5000/LikeComments/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        getAllIdLikeComments();
+        const DCre = Count_like_Comment_number.map((elm, index) => {
+          if (elm.comment_id === id) {
+            elm.like_count = (elm.like_count *1 )- 1;
+          }
+          return elm
+        });
+        setCount_like_Comment_number(DCre);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const Navigate = useNavigate();
   const [showF, setShowF] = useState(false);
 
@@ -552,17 +642,18 @@ function Post() {
                 className="imageClod"
               >
                 <label class="file-label">
-                  <input style={{
-                       width: "170px",
-                       height: "2.5vw",
-                       position: "absolute",
-                       left: "-150%",
-                       top: "-50%",
-                       opacity: "0",
-                       // backgroundColor: "red",
-                       cursor: "pointer",
-                       zIndex: "1",
-                  }}
+                  <input
+                    style={{
+                      width: "170px",
+                      height: "2.5vw",
+                      position: "absolute",
+                      left: "-150%",
+                      top: "-50%",
+                      opacity: "0",
+                      // backgroundColor: "red",
+                      cursor: "pointer",
+                      zIndex: "1",
+                    }}
                     onChange={(e) => {
                       handleImageJamal(e);
                     }}
@@ -792,6 +883,8 @@ function Post() {
                             if (IDPost === elm.id) {
                               setIDPost("");
                             } else {
+                              getAllIdLikeComments();
+                              Count_like_Comment(elm.id);
                               getCommentsByPostId(elm.id);
                             }
                           }}
@@ -951,6 +1044,7 @@ function Post() {
                         <Col className="com-text">
                           comments ({elm.commentsByPostId.length})
                         </Col>
+
                         <Col></Col>
                         <CloseButton
                           className="CloseButton_x"
@@ -1152,7 +1246,33 @@ function Post() {
                               >
                                 {comment.content}
                               </span>
-
+                              {LikeComments?.find((elm, index) => {
+                                return elm.comment_id === comment.comment_id;
+                              }) ? (
+                                <BiSolidLike
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    removeLikeComments(comment.comment_id);
+                                  }}
+                                />
+                              ) : (
+                                <BiLike
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    createLikeComment(comment.comment_id);
+                                  }}
+                                />
+                              )}
+                              {Count_like_Comment_number?.map((element, i) => {
+                                return (
+                                  <>
+                                    {element?.comment_id ===
+                                      comment?.comment_id && (
+                                      <span>{element.like_count}</span>
+                                    )}
+                                  </>
+                                );
+                              })}
                               <span className="const_like">
                                 <span className=" line"></span>
                               </span>

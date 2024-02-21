@@ -31,8 +31,6 @@ const removeLikeComments = (req, res) => {
   WHERE user_id = ${user_id} AND comment_id =${Comment_id}
   RETURNING *;`;
 
-
-
   pool
     .query(query)
     .then((result) => {
@@ -43,7 +41,7 @@ const removeLikeComments = (req, res) => {
       });
     })
     .catch((err) => {
-        console.log(err);
+      console.log(err);
       res.status(500).json({
         success: false,
         message: "Server error",
@@ -54,9 +52,13 @@ const removeLikeComments = (req, res) => {
 
 const countLikeComment = (req, res) => {
   //   const user_id = req.token.user_id;
-  const Comment_id = req.params.id;
+  const POStID = req.params.id;
 
-  const query = `SELECT COUNT(comment_id) FROM likeComments WHERE comment_id=${Comment_id}`;
+  const query = `SELECT c.comment_id, COUNT(lc.id) AS like_count
+  FROM Comments c
+  LEFT JOIN likeComments lc ON c.comment_id = lc.comment_id
+  WHERE c.post_id =${POStID}
+  GROUP BY c.comment_id;`;
 
   pool
     .query(query)
@@ -64,11 +66,11 @@ const countLikeComment = (req, res) => {
       res.status(200).json({
         success: true,
         message: "all comment ",
-        result: result.rows[0],
+        result: result.rows,
       });
     })
     .catch((err) => {
-        console.log(err);
+      console.log(err);
       res.status(500).json({
         success: false,
         message: "Server error",
@@ -77,4 +79,26 @@ const countLikeComment = (req, res) => {
     });
 };
 
-module.exports = { createLikeComments, removeLikeComments, countLikeComment };
+const getAllLikesComments = (req, res) => {
+    const user_id = req.token.user_id;
+  const query = `select * from likeComments where user_id = ${user_id}`;
+  pool
+    .query(query)
+    .then((result) => {
+        res.status(200).json({
+            success: true,
+            message: "all comment By USER ID ",
+            result: result.rows,
+          });
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            err: err,
+          });
+    });
+};
+
+module.exports = { createLikeComments, removeLikeComments, countLikeComment,getAllLikesComments };
