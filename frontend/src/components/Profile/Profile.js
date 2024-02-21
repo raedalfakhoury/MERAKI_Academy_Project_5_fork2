@@ -383,7 +383,7 @@ const Profile = () => {
                             setRemove(!remove);
                             {
                               localStorage.getItem("userId") == searchQuery2 &&
-                                serCountFollowing(countFollowing - 1);
+                                serCountFollowing(countFollowing + 1);
                             }
                           } catch (error) {
                             console.log(error);
@@ -420,15 +420,83 @@ const Profile = () => {
                   src={elm.profile_picture_url}
                 />
               </div>
+
               <div className="colum">
                 <div className="follower">
                   <p className="username">{elm.username}</p>
-                  <p className="followers"> Edit profile</p>
+
+                  {localStorage.getItem("userId") == searchQuery2 ? (
+                    <p className="followers"> Edit profile</p>
+                  ) : arr.current.includes(searchQuery2) ? (
+                    <button id=" UnFollow-Public"
+                      className="button-pop"
+                      onClick={async () => {
+                        try {
+                          const res = await axios.delete(
+                            `http://localhost:5000/followers/delete`,
+                            {
+                              data: { followed_id: searchQuery2 },
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+
+                          arr.current = arr.current.filter((ele) => {
+                            return ele !== searchQuery2 
+                          });
+                          setRemove(!remove);
+                          {
+                            localStorage.getItem("userId") == searchQuery2 &&
+                              serCountFollowing(countFollowing - 1);
+                          }
+                          console.log("in", arr.current);
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }}
+                    >
+                      {" "}
+                      UnFollow
+                    </button>
+                  ) : (
+                    <button id="Follow-Public"
+                      className="button-pop"
+                      onClick={async () => {
+                        if (arr.current.includes(searchQuery2)) {
+                        } else {
+                          try {
+                            const res = await axios.post(
+                              `http://localhost:5000/followers/add`,
+                              { followed_id: searchQuery2 },
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              }
+                            );
+                            arr.current.push(searchQuery2);
+                            setRemove(!remove);
+                            {
+                              localStorage.getItem("userId") == searchQuery2 &&
+                                serCountFollowing(countFollowing + 1);
+                            }
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }
+                      }}
+                    >
+                      {" "}
+                      Follow
+                    </button>
+                  )}
                   <p> </p>
                   <h4>
                     <span></span>
                   </h4>
                 </div>
+
                 <div className="followerr">
                   <p className="bio">{elm.bio}</p>
                   <p
@@ -516,12 +584,32 @@ const Profile = () => {
         <div className={showPost ? "grid-media" : "none"}>
           {myPosts?.map((ele, i) => {
             return (
-              <img
-                key={ele.id}
-                className="img-post"
-                alt=""
-                src={ele.media_url}
-              ></img>
+              <>
+                {!ele.media_url.includes(".mp4") ? (
+                  <img
+                    key={ele.id}
+                    className="img-post"
+                    alt=""
+                    src={ele.media_url}
+                  ></img>
+                ) : (
+                  <video
+                    controls
+                    muted
+                    className="img-post"
+                    style={
+                      {
+                        // width: "100%",
+                        // height: "50vh",
+                        // // borderRadius: "600px",
+                        // border: "solid 1px #e8e8e8",
+                        // cursor: "pointer",
+                      }
+                    }
+                    src={ele.media_url}
+                  ></video>
+                )}
+              </>
             );
           })}
         </div>
