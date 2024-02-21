@@ -126,7 +126,7 @@ const usersStories = []
       video.onended = (e) => {
         console.log("Video Ended");
         if (storyIndexRef.current === userStory.length - 1) {
-          onClose();
+          handleClose();
         } else {
           setStoryIndex((value) => value + 1);
         }
