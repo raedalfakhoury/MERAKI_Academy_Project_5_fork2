@@ -16,6 +16,7 @@ const Profile = () => {
   const Navigate = useNavigate();
   const arr = useRef([]);
   const [remove, setRemove] = useState(false);
+  const [test, setTest] = useState(true);
   const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
@@ -38,15 +39,13 @@ const Profile = () => {
   const [countFollowing, serCountFollowing] = useState(0);
   const [countPosts, serCountPosts] = useState(0);
   const [innerText, setInnerText] = useState("");
-  console.log(innerText);
   const [showFollowers, setShow] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
-  console.log(following);
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
-
+  let filtration;
   window.scrollTo(0, 0);
 
   const getMyFollowing = () => {
@@ -102,7 +101,7 @@ const Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [searchQuery2]);
+  }, [searchQuery2, arr]);
 
   function Followers() {
     return (
@@ -161,7 +160,7 @@ const Profile = () => {
                       <p className="bio-pop">{item.bio}</p>
                     </div>
                   </div>
-
+                  {/* عندما اكون داخل البروفايل الخاص بي */}
                   {localStorage.getItem("userId") == searchQuery2 ? (
                     <button
                       className="button-pop"
@@ -188,11 +187,14 @@ const Profile = () => {
                     >
                       Remove
                     </button>
-                  ) : localStorage.getItem("userId") ==
-                    item.id ? null : arr.current?.includes(item.id) ? (
+                  ) : // {لما اكون ببروفايل شخص اخر ويظهر امي من ضمن المتابعين له لا اريد ان يظهر زر الحذف}
+                  localStorage.getItem("userId") ==
+                    // {اذا كان الشخص يلي بتابعني من ضمن المصفوفه يلي فيها الاشخاص يلي بتابعهم}
+                    item.id ? null : arr.current?.includes(item.id) && test ? (
                     <button
                       className="button-pop"
                       onClick={async () => {
+                        console.log("unfollow", arr.current.includes(item.id));
                         try {
                           const res = await axios.delete(
                             `http://localhost:5000/followers/delete`,
@@ -203,6 +205,13 @@ const Profile = () => {
                               },
                             }
                           );
+                          // console.log("t.a", res.data.result);
+                          filtration = followers.filter((ele) => {
+                            return ele.id !== res.data.result[0].followed_id;
+                          });
+                          // setFollowers(filtration);
+                          arr.current = filtration;
+                          setTest(!test);
                         } catch (error) {
                           console.log(error);
                         }
@@ -214,21 +223,22 @@ const Profile = () => {
                     <button
                       className="button-pop"
                       onClick={async () => {
-                        if (arr.current.includes(item.id)) {
-                        } else {
-                          try {
-                            const res = await axios.post(
-                              `http://localhost:5000/followers/add`,
-                              { followed_id: item.id },
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${token}`,
-                                },
-                              }
-                            );
-                          } catch (error) {
-                            console.log(error);
-                          }
+                        console.log("follow", arr.current.includes(item.id));
+
+                        try {
+                          const res = await axios.post(
+                            `http://localhost:5000/followers/add`,
+                            { followed_id: item.id },
+                            {
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            }
+                          );
+                          arr.current.push(item.id);
+                          setTest(!test);
+                        } catch (error) {
+                          console.log(error);
                         }
                       }}
                     >
@@ -244,6 +254,7 @@ const Profile = () => {
     );
   }
   console.log("out", arr.current);
+  console.log("FOLO", followers);
   function Following() {
     return (
       <>
@@ -426,9 +437,15 @@ const Profile = () => {
                   <p className="username">{elm.username}</p>
 
                   {localStorage.getItem("userId") == searchQuery2 ? (
-                    <p className="followers"> Edit profile</p>
+                    <p className="followers" style={{ cursor: "pointer" }} onClick={()=>{
+                       
+                    }}>
+                      {" "}
+                      Edit profile
+                    </p>
                   ) : arr.current.includes(searchQuery2) ? (
-                    <button id=" UnFollow-Public"
+                    <button
+                      id=" UnFollow-Public"
                       className="button-pop"
                       onClick={async () => {
                         try {
@@ -443,7 +460,7 @@ const Profile = () => {
                           );
 
                           arr.current = arr.current.filter((ele) => {
-                            return ele !== searchQuery2 
+                            return ele !== searchQuery2;
                           });
                           setRemove(!remove);
                           {
@@ -460,7 +477,8 @@ const Profile = () => {
                       UnFollow
                     </button>
                   ) : (
-                    <button id="Follow-Public"
+                    <button
+                      id="Follow-Public"
                       className="button-pop"
                       onClick={async () => {
                         if (arr.current.includes(searchQuery2)) {

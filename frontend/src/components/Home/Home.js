@@ -28,8 +28,8 @@ function Home() {
    
 
         <Routes>
-         <Route path="/users/register" element={<Register />} />
-         <Route path="/Explore" element={<Explore/>} />
+         {/* <Route path="/users/register" element={<Register />} /> */}
+         {/* <Route path="/Explore" element={<Explore/>} /> */}
          <Route path="/users/login" element={<LoginPage />} />
         <Route path="/profile" element={<Profile />} />
 
