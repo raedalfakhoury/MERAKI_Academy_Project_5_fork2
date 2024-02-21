@@ -161,6 +161,7 @@ const Explore = () => {
                           flex: "1 ",
                           position: "relative",
                           width: "500px",
+                    
 
                           // borderTop: "1px solid red",
                           // borderBottom: "1px solid red",
@@ -186,6 +187,7 @@ const Explore = () => {
                             padding: "0px",
                             // marginTop: "2px",
                             // borderTop: "4px solid  #fff",
+                            
                             borderBottom: "4px solid  #fff",
                             borderRight: "11px solid  #fff",
                           }}
