@@ -10,7 +10,8 @@ const {
   deletePostByUserId,
   getAllPosts,
   deletePostById ,
-  getAllPostsMyFriends
+  getAllPostsMyFriends,
+  countFAndDAndPo
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
@@ -28,7 +29,8 @@ PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
  
 
 
-PostRouter.get("/allpost", authentication, getAllPosts);
+PostRouter.get("/:id/getPosts", authentication, getAllPosts);
+PostRouter.get("/countFAndDAndPo/:id", authentication, countFAndDAndPo);
 
 PostRouter.delete("/:id", authentication,deletePostById );
 
@@ -39,7 +41,7 @@ PostRouter.get("/:id/getAllPostsMyFollower", authentication, getAllPostsMyFriend
 module.exports = PostRouter;
 
 // test createNewPost
-//  http://localhost:5000/post/create
+//  http://localhost:5000/post/allpost
 // token :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJuYW1lIjoiamFtNGFsYmFyaG9vbSIsImltYWdlIjoiaHR0cHM6Ly9pbWFnZXMuY3RmYXNzZXRzLm5ldC9oNmdvbzlndzFoaDYvMnNOWnRGQVdPZFAxbG1RMzNWd1JOMy8yNGU5NTNiOTIwYTljZDBmZjJlMWQ1ODc3NDJhMjQ3Mi8xLWludHJvLXBob3RvLWZpbmFsLmpwZz93PTEyMDAmaD05OTImcT03MCZmbT13ZWJwIiwicm9sZSI6MSwiaXNfZGVsZXRlZCI6MCwiaWF0IjoxNzA3NDg1NzgzLCJleHAiOjE3MDc1MDczODN9.7qARUw50bqXvN9hMNDXN_tYmNpCJiD6omK6Qqn4D1rA
 
 // 1.0{

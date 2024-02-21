@@ -19,7 +19,7 @@ import Stories from "../Stories/Stories"
 import Loader from "../Loader/Loader";
 import Profile from "../Profile/Profile";
 
-
+import Explore from "../Explore/Explore";
 function Home() {
   
   return (
@@ -27,19 +27,21 @@ function Home() {
     <>
    
 
-      <Routes>
+        <Routes>
          <Route path="/users/register" element={<Register />} />
+         <Route path="/Explore" element={<Explore/>} />
          <Route path="/users/login" element={<LoginPage />} />
         <Route path="/profile" element={<Profile />} />
 
 
 
         <Route path="/" element={<WelcomePage/>} />
-        <Route path="/home/Posts" element={<><Post/><Stories/>
-</>} />
+
+
+        <Route path="/home" element={<Post/>} />
 
         
-      </Routes>
+      </Routes>  
 
 <Stories/>
       {/* <WelcomePage/>  */}

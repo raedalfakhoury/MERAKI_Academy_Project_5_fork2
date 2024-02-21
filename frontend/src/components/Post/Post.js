@@ -53,16 +53,8 @@ import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 
 import { motion } from "framer-motion";
-
+import { useInView } from "react-intersection-observer";
 function Post() {
-  // useEffect(()=>{
-
-
-  
-
-
-
-  // },[])
   const Navigate = useNavigate();
   const [showF, setShowF] = useState(false);
 
@@ -84,7 +76,7 @@ function Post() {
   const [ToggleUpdatePost, setToggleUpdatePost] = useState(false);
   const pr_key = "rllytlm7";
   const cloud_name = "dmmo3zzyc";
-
+  const [video, setVideoUrl] = useState();
   const [inputUpdate, setInputUpdate] = useState({
     ID_post: "",
     content: "",
@@ -97,7 +89,7 @@ function Post() {
   });
   // console.log(UpdateComment);
 
-  const handleFile = (e) => {
+  const handleImageJamal = (e) => {
     setToggleSpinnerCloudInN(true);
     const file = e.target.files[0];
     const formData = new FormData();
@@ -112,13 +104,37 @@ function Post() {
       .then((result) => {
         setImage_url(result.data.secure_url);
         setToggleSpinnerCloudInN(false);
+        setVideoUrl("");
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  const handleVideoS = (ee) => {
+    setToggleSpinnerCloudInN(true);
 
-  const handleFileUpdatePost = (e) => {
+    const file = ee.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
+        formData
+      )
+      .then((result) => {
+        console.log(result.data.url);
+        setVideoUrl(result.data.url);
+        setImage_url("");
+        setToggleSpinnerCloudInN(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // const [Action, setAction] = useState("");
+  const handleFileUpdatePost = (e, Action) => {
     setInputUpdate({ ...inputUpdate, image: "" });
     setToggleSpinnerCloudInUpdate(true);
     const file = e.target.files[0];
@@ -128,7 +144,7 @@ function Post() {
 
     axios
       .post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${cloud_name}/${Action}/upload`,
         formData
       )
       .then((result) => {
@@ -146,7 +162,7 @@ function Post() {
     axios
       .post(
         `http://localhost:5000/post/create`,
-        { content: ContentPost, media_url: image_url },
+        { content: ContentPost, media_url: image_url || video },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -165,6 +181,7 @@ function Post() {
 
         dispatch(addPost(dataPostMax));
         setImage_url("");
+        setVideoUrl("");
         setContentPost("");
       })
       .catch((err) => {
@@ -392,7 +409,7 @@ function Post() {
         <Container className="containerPosts">
           <Row>
             <Col className="navCreatePost" style={{ padding: "0" }}>
-              <Col className="box">
+              <Col className="box active">
                 <span class="icon is-small">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -412,36 +429,35 @@ function Post() {
                   Publish
                 </span>
               </Col>
+
               <Col className="box">
-                <span class="icon is-small">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="feather feather-image"
-                  >
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="2"
-                      ry="2"
-                    ></rect>
-                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                    <polyline points="21 15 16 10 5 21"></polyline>
-                  </svg>
-                  Albums
-                </span>
-              </Col>
-              <Col className="box">
-                <span class="icon is-small">
+                <label
+                  style={{ position: "relative", cursor: "pointer" }}
+                  class="file-label"
+                >
+                  {" "}
+                  <span style={{ cursor: "pointer" }}> video</span>
+                  <input
+                    style={{
+                      width: "170px",
+                      height: "2.5vw",
+                      position: "absolute",
+                      left: "-150%",
+                      top: "-50%",
+                      opacity: "0",
+                      // backgroundColor: "red",
+                      cursor: "pointer",
+                      zIndex: "1",
+                    }}
+                    // class="input-file"
+                    id="video"
+                    onChange={(e) => {
+                      handleVideoS(e);
+                    }}
+                    type="file"
+                  ></input>
+                </label>
+                <span style={{ cursor: "pointer" }} class="icon is-small">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -465,7 +481,6 @@ function Post() {
                     ></rect>
                   </svg>
                 </span>{" "}
-                Video
               </Col>
             </Col>
           </Row>
@@ -510,6 +525,25 @@ function Post() {
                       src={image_url}
                     />
                   )}
+
+                  {video && (
+                    <video
+                      controls
+                      muted
+                      autoPlay
+                      // loop
+                      className="imagePosts"
+                      style={{
+                        width: "70%",
+                        height: "20vh",
+                        borderRadius: "10px",
+                        border: "solid 1px #e8e8e8",
+                        cursor: "pointer",
+                      }}
+                      src={video}
+                      rounded
+                    ></video>
+                  )}
                 </Col>
               </Row>
 
@@ -520,7 +554,7 @@ function Post() {
                 <label class="file-label">
                   <input
                     onChange={(e) => {
-                      handleFile(e);
+                      handleImageJamal(e);
                     }}
                     type="file"
                     class="input-file"
@@ -529,6 +563,17 @@ function Post() {
                   <span class="ic"> Media</span>
                 </label>
                 {image_url && (
+                  <Button
+                    onClick={() => {
+                      createNewPost();
+                    }}
+                    style={{ marginLeft: "10px", borderRadius: "500px" }}
+                    variant="primary"
+                  >
+                    publish
+                  </Button>
+                )}
+                {video && (
                   <Button
                     onClick={() => {
                       createNewPost();
@@ -677,39 +722,59 @@ function Post() {
                           padding: "0px",
                         }}
                       >
-                        <Image
-                          onDoubleClick={() => {
-                            if (
-                              localStorage.getItem(`${elm.id}`) * 1 !==
-                              elm.id
-                            ) {
-                              setToggleLike(!toggleLike);
+                        {elm.media_url.includes(".mp4") ? (
+                          <video
+                            controls
+                            muted
+                            autoPlay
+                            loop
+                            className="imagePosts"
+                            style={{
+                              width: "100%",
+                              height: "50vh",
+                              // borderRadius: "600px",
+                              border: "solid 1px #e8e8e8",
+                              cursor: "pointer",
+                            }}
+                            src={elm.media_url}
+                            rounded
+                          ></video>
+                        ) : (
+                          <Image
+                            onDoubleClick={() => {
+                              if (
+                                localStorage.getItem(`${elm.id}`) * 1 !==
+                                elm.id
+                              ) {
+                                setToggleLike(!toggleLike);
 
-                              Like(elm.id);
-                              localStorage.setItem(`${elm.id}`, `${elm.id}`);
-                            } else {
-                              setToggleLike(!toggleLike);
+                                Like(elm.id);
+                                localStorage.setItem(`${elm.id}`, `${elm.id}`);
+                              } else {
+                                setToggleLike(!toggleLike);
 
-                              Like(elm.id);
+                                Like(elm.id);
 
-                              localStorage.removeItem(`${elm.id}`);
-                            }
-                          }}
-                          className="imagePosts"
-                          style={{
-                            width: "100%",
-                            height: "50vh",
-                            borderRadius: "600px",
-                            border: "solid 1px #e8e8e8",
-                            cursor: "pointer",
-                          }}
-                          src={elm.media_url}
-                          rounded
-                        />
+                                localStorage.removeItem(`${elm.id}`);
+                              }
+                            }}
+                            className="imagePosts"
+                            style={{
+                              width: "100%",
+                              height: "50vh",
+                              borderRadius: "600px",
+                              border: "solid 1px #e8e8e8",
+                              cursor: "pointer",
+                            }}
+                            src={elm.media_url}
+                            rounded
+                          />
+                        )}
+
                         <FaRegComment
                           style={{
                             left: "76%",
-                         
+
                             color: "#000",
                           }}
                           onClick={() => {
@@ -1141,11 +1206,17 @@ function Post() {
                 }}
               />
               <div className="updateImage">
-                {inputUpdate.image !== "" && (
+                {inputUpdate.image !== "" &&
+                !inputUpdate.image.includes(".mp4") ? (
                   <img
                     style={{ width: "120px", height: "120px" }}
                     src={inputUpdate.image}
                   ></img>
+                ) : (
+                  <video
+                    style={{ width: "120px", height: "120px" }}
+                    src={inputUpdate.image}
+                  ></video>
                 )}
                 {ToggleSpinnerCloudInNUpdate && (
                   <div
@@ -1187,8 +1258,13 @@ function Post() {
                 <label class="file-label">
                   <input
                     onChange={(e) => {
-                      handleFileUpdatePost(e);
-                      setToggleUpdatePost(true);
+                      if (e.target.files[0].type === "video/mp4") {
+                        handleFileUpdatePost(e, "video");
+                        setToggleUpdatePost(true);
+                      } else {
+                        handleFileUpdatePost(e, "image");
+                        setToggleUpdatePost(true);
+                      }
                     }}
                     type="file"
                     class="input-file"
@@ -1293,6 +1369,7 @@ function Post() {
       </Modal>
       <br />
       <br />
+      <div></div>
       <br />
     </>
   );

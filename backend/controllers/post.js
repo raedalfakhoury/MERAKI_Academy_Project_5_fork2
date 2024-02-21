@@ -73,12 +73,12 @@ const getpostByuserId = (req, res) => {
           Posts
           JOIN Users ON Posts.user_id = Users.id 
           WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
-        ` 
-  
+        `;
+
   const data = [userId];
 
   pool
-    .query(query,data)
+    .query(query, data)
     .then((result) => {
       if (result.rows.length === 0) {
         res.status(404).json({
@@ -280,9 +280,46 @@ WHERE
     });
 };
 
+const countFAndDAndPo = (req, res) => {
+  const IdPorFileUser = req.params.id;
+  const query = `
+  
+  SELECT 'followers' AS relationship_type,COUNT( DISTINCT  Follows.follower_id ) AS count
+FROM Follows
+WHERE Follows.followed_id =${IdPorFileUser} AND Follows.follower_id  !=${IdPorFileUser}
+
+UNION ALL
+
+SELECT  'following' AS relationship_type,COUNT( DISTINCT  Follows.followed_id ) AS count
+FROM Follows 
+WHERE Follows.follower_id = ${IdPorFileUser} AND Follows.followed_id  !=${IdPorFileUser}
+
+UNION ALL
+
+SELECT 'Posts' AS relationship_type, COUNT(*) AS count
+FROM Posts
+WHERE Posts.user_id =112 AND Posts.is_deleted =0;
+  `;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        successful: true,
+        message: "All Count Posts And Count follower Count followed ",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
+
 module.exports = {
   createNewPost,
-
+  countFAndDAndPo,
   getPostById,
   getpostByuserId,
   updatepostById,
@@ -302,4 +339,3 @@ module.exports = {
 //     is_deleted INT,
 //     FOREIGN KEY (user_id) REFERENCES Users (id)
 // );
-
