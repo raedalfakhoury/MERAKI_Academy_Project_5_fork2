@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
-
+import { FaImages } from "react-icons/fa6";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -16,8 +16,22 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import axios from "axios";
+import { MdOutlineOndemandVideo } from "react-icons/md";
+import { useNavigate, useHistory } from "react-router-dom";
+
+import { MdOutlineVideoLibrary } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 export function TemporaryDrawer() {
+  const navigate = useNavigate();
+
+  // const history = useHistory();
+
+  const Navigate = (text) => {
+    navigate({
+      pathname: `/${text.toLowerCase()}`,
+      search: `?prf=${localStorage.getItem("userId")}`,
+    });
+  };
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -45,9 +59,13 @@ export function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Home", "Profile", "LogOut"].map((text, index) => (
+        {["home", "profile", "LogOut"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                Navigate(text);
+              }}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -107,7 +125,7 @@ const Explore = () => {
 
   return (
     <>
-      <Container style={{ display: "flex", margin: "0px" }}>
+      <Container style={{ display: "flex", margin: "0px", paddingTop: "20px" }}>
         <Container style={{ width: "30%" }}>{TemporaryDrawer()}</Container>
         <Container
           style={{
@@ -115,7 +133,6 @@ const Explore = () => {
             width: "100%",
             justifyContent: "flex-end",
             width: "70%",
-            padding: "20px",
           }}
         >
           <Container style={{ width: "35%", padding: "0px", margin: "0px" }}>
@@ -123,63 +140,97 @@ const Explore = () => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                height: "55vw",
+                // height: "55vw",
                 flexWrap: "nowrap",
+                gap: "9px",
+                padding: "0 10px ",
               }}
             >
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
+              {Posts?.map((post, index) => {
+                return (
+                  <>
+                    {post.media_url.includes(".mp4") && index > 41 && (
+                      <Col
+                        style={{
+                          display: "flex",
+                          FlexDirection: "column",
+                          flexWrap: "nowrap",
+                          height: "0px",
+                          padding: "0",
+                          margin: "0",
+                          flex: "1 ",
+                          position: "relative",
+                          // borderTop: "1px solid red",
+                          // borderBottom: "1px solid red",
+                        }}
+                      >
+                        <MdOutlineOndemandVideo
+                          style={{
+                            position: "absolute",
+                            right: "20",
+                            top: "10",
+                            color: "#000",
+                          }}
+                        />
+
+                        <video
+                          controls
+                          muted
+                          style={{
+                            width: "100%",
+                            height: "17.2vw",
+                            border: "none",
+                            flexWrap: "nowrap",
+                            padding: "0px",
+                            marginTop: "2px",
+                            border: "2px solid #000",
+                          }}
+                          src={post.media_url}
+                        ></video>
+                      </Col>
+                    )}
+                  </>
+                );
+              })}
             </Row>
           </Container>
-          <Container style={{ width: "35%", padding: "0px", margin: "0px" }}>
+          <Container style={{ width: "34%", padding: "0px", margin: "0px" }}>
             <Row
               style={{
                 display: "flex",
                 flexDirection: "column",
-                height: "55vw",
+                // height: "55vw",
                 flexWrap: "nowrap",
+                paddingLeft: "10px ",
               }}
             >
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
-              <Col>
-                <Image
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  src="https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg"
-                  thumbnail
-                />
-              </Col>
+              {Posts?.map((post, index) => {
+                return (
+                  <>
+                    {post.media_url.includes(".jpg") && (
+                      <Col style={{ position: "relative" }}>
+                        <FaImages
+                          style={{
+                            position: "absolute",
+                            right: "20",
+                            top: "10",
+                            color: "#fff",
+                          }}
+                        />
+                        <Image
+                          style={{
+                            width: "100%",
+                            height: "17.8vw",
+                            border: "none",
+                          }}
+                          src={post.media_url}
+                          thumbnail
+                        />
+                      </Col>
+                    )}
+                  </>
+                );
+              })}
             </Row>
           </Container>
           <Container style={{ width: "40%", padding: "0px", margin: "0px" }}>
@@ -188,7 +239,8 @@ const Explore = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "5px",
-                // height: "120vw",
+                padding: "0 10px 0 10px ",
+                marginTop: "3px",
               }}
             >
               {Posts?.map((post, index) => {
@@ -200,10 +252,21 @@ const Explore = () => {
                           display: "flex",
                           FlexDirection: "column",
                           flexWrap: "nowrap",
+                          position: "relative",
+                          // height: "10000px",
+
                           // borderTop: "1px solid red",
                           // borderBottom: "1px solid red",
                         }}
                       >
+                        <MdOutlineVideoLibrary
+                          style={{
+                            position: "absolute",
+                            right: "20",
+                            top: "10",
+                            color: "#fff",
+                          }}
+                        />
                         <video
                           controls
                           muted
@@ -212,11 +275,12 @@ const Explore = () => {
                           rounded
                           style={{
                             width: "100%",
-                            height: "36.2vw",
+                            height: "100%",
                             border: "none",
                             flexWrap: "nowrap",
                             padding: "0px",
-                            marginTop: "3px",
+                            marginTop: "2px",
+                            backgroundColor: "#000",
                           }}
                           src={post.media_url}
                         ></video>
