@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 import { styled, css } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 // import CardHeader from "@mui/material/CardHeader";
@@ -9,7 +10,7 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import PropTypes from "prop-types";
-
+import "./index.css";
 import clsx from "clsx";
 import { Modal as BaseModal } from "@mui/base/Modal";
 import { red } from "@mui/material/colors";
@@ -20,7 +21,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Divider from "@mui/material/Divider";
 import Image from "mui-image";
 import Popup from "reactjs-popup";
-
+import ReactPlayer from "react-player";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   CardHeader,
   Avatar,
@@ -41,19 +44,28 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Stories() {
+  const [loading, setLoading] = useState(true);
+
+  const [storyIndex, setStoryIndex] = useState(0);
+  const storyIndexRef = useRef(0);
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const [showStory, setShowStory] = useState(false);
   const [userName, setUserName] = useState("Mohammad");
-  const [userStory, setUserStory] = useState("");
+  const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
   const [video, setVideo] = useState("");
   const [model, setModle] = useState(false);
+  const [vidIndex, setVidIndex] = useState(0);
+
+  const handleVideoEnd = () => {
+    setVidIndex((prevIndex) => prevIndex + 1);
+  };
   const handleOpen = (e) => {
     setOpen(true);
     console.log(e.id);
     setUserName(e.username);
-
+    setLoading(true)
     axios
       .get(`http://localhost:5000/story/121`, {
         headers: {
@@ -63,11 +75,14 @@ export default function Stories() {
       .then((res) => {
         console.log(res.data.result[0].video_url);
         // console.log(userStory);
-        setUserStory(res.data.result[0].video_url);
+        setUserStory(res.data.result);
+        console.log(userStory);
       })
       .catch((err) => {
         console.log(err);
-      });
+      }) .finally(() => {
+        setLoading(false); // Set loading to false once data fetching is complete
+    });
   };
   const handleClose = () => {
     setOpen(false);
@@ -85,7 +100,6 @@ export default function Stories() {
         console.log(res.data.result);
         setData(res.data.result);
         console.log(Data);
-        console.log(userStory);
         Data.map((elem, indx) => {
           console.log(elem.username);
         });
@@ -94,6 +108,25 @@ export default function Stories() {
         console.log(err);
       });
   }, []);
+
+  // To show multiple videos
+  useEffect(() => {
+    const video = document.getElementById("video");
+    if (video) {
+      video.onended = (e) => {
+        console.log("Video Ended");
+        if (storyIndexRef.current === userStory.length - 1) {
+          onClose();
+        } else {
+          setStoryIndex((value) => value + 1);
+        }
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    storyIndexRef.current = storyIndex;
+  }, [storyIndex]);
 
   const handleAvatarClick = () => {
     setShowStory(true);
@@ -109,71 +142,50 @@ export default function Stories() {
   const cloud_name = "dalwd5c23";
   const q = 0;
 
-  // Add Story Finction
+  // Add Story Function
 
   const StoryHandle = (files) => {
     const formData = new FormData();
     formData.append("file", files[0]);
     formData.append("upload_preset", pr_key);
-    // Upload the Video to Cloudinary
-//     axios
-//       .post(
-//         `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
-//         formData
-//       )
-//       .then((result) => {
-//         console.log(result);
-//         // setVideo(result.data.secure_url);
-//         console.log(result.data);
-//         // setToggleSpinnerCloudInN(false);
-//         // postdata(result.data.secure_url)
-//       })
-//       .catch((err) => {
-//         console.log("Error ==== > ",err);
-//       });
 
+    fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.url);
 
-// // console.log(video);
-//     // Create New Story In Database
-fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`, {
-  method: "POST",
-  body: formData,
-})
-  .then((response) => response.json())
-  .then((data) => {
-    // setImage(data.secure_url);
-    console.log(data.url);
-    postdata(data.url)
-  });
-    
+        postdata(data.url);
+      });
   };
 
-  const postdata=(Url)=>{
+  const postdata = (Url) => {
     axios
-    .post(
-      `http://localhost:5000/story`,
-      { video_url: Url},
-      {
-        headers: {
-          Authorization: `Bearer ${test}`,
-        },
-      }
-    )
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+      .post(
+        `http://localhost:5000/story`,
+        { video_url: Url },
+        {
+          headers: {
+            Authorization: `Bearer ${test}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
-      
       <Card
         style={{
-          // position: "absolute",
-          // top: "140px",
-          // right: "90px",
+          position: "absolute",
+          top: "140px",
+          right: "90px",
           borderRadius: "20px",
           cursor: "pointer",
         }}
@@ -203,62 +215,59 @@ fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`, {
                 onClose={handleClose}
                 slots={{ backdrop: StyledBackdrop }}
               >
-                {model ? (
-                  <ModalContent sx={{ width: 1000 }}>
-                    <h2 id="unstyled-modal-title" className="modal-title">
-                      {userName}
-                    </h2>
-                    <p
-                      id="unstyled-modal-description"
-                      className="modal-description"
-                    >
-                      Your Story
-                    </p>
+                <ModalContent sx={{ maxwidth: 100, maxHeight: 1200 }}>
+                  <h2 id="unstyled-modal-title" className="modal-title">
+                    {userName}
+                  </h2>
+                  <p
+                    id="unstyled-modal-description"
+                    className="modal-description"
+                  >
+                    Your Story
+                  </p>
 
-                    <iframe
-                      width="560"
-                      height="315"
-                      src={video} 
-                      title="Cloudinary Video Player"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                    ></iframe>
-                  </ModalContent>
-                ) : (
-                  <ModalContent sx={{ width: 1000 }}>
-                    <h2 id="unstyled-modal-title" className="modal-title">
-                      {userName}
-                    </h2>
-                    <p
-                      id="unstyled-modal-description"
-                      className="modal-description"
-                    >
-                      Your Story 999
-                    </p>
-                    <iframe
-                      width="560"
-                      height="315"
-                      src={video} // Use video_url here
-                      title="Uploaded Video"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                    ></iframe>{" "}
-                  </ModalContent>
-                )}
+                  <div className="video">
+                    {loading ? (
+                      <Box sx={{ display: "flex" }}>
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      <video
+                        width={"300px"}
+                        height={"300px"}
+                        id="video"
+                        src={userStory[storyIndex].video_url}
+                        autoPlay
+                        controls
+                      ></video>
+                    )}
+                    {storyIndex !== 0 && (
+                      <ChevronLeftIcon
+                        onClick={(e) => setStoryIndex((value) => value - 1)}
+                        className="previous hoverable"
+                      />
+                    )}
+                    {storyIndex !== userStory.length - 1 && (
+                      <ChevronRightIcon
+                        onClick={(e) => setStoryIndex((value) => value + 1)}
+                        className="next hoverable"
+                      />
+                    )}
+                  </div>
+                </ModalContent>
               </Modal>{" "}
               <TriggerButton
                 type="button"
                 onClick={() => document.querySelector(".input-file").click()} // trigger file input click
-              ><input
-              onChange={(e) => {
-                StoryHandle(e.target.files);
-              }}
-              type="file"
-              className="input-file"
-              style={{ display: "none" }} // hide the input element visually
-            />
+              >
+                <input
+                  onChange={(e) => {
+                    StoryHandle(e.target.files);
+                  }}
+                  type="file"
+                  className="input-file"
+                  style={{ display: "none" }} // hide the input element visually
+                />
                 +
               </TriggerButton>
             </Avatar>

@@ -35,7 +35,8 @@ function Home() {
 
 
         <Route path="/" element={<WelcomePage/>} />
-        <Route path="/home/Posts" element={<Post/>} />
+        <Route path="/home/Posts" element={<><Post/><Stories/>
+</>} />
 
         
       </Routes>

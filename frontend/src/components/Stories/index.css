@@ -1,0 +1,29 @@
+.video .previous {
+    position: relative;
+    background-color: gray;
+top: 120px;
+    left : -320px;
+    cursor: pointer;
+
+}
+.video  .next {
+    position: relative;
+    background-color: gray;
+    top: 140px;
+left : 20px;
+cursor: pointer;
+}
+.video .svg{
+    color: white;
+    position: absolute;
+    top : 50%
+}
+
+.video{
+    display: flex;
+    flex: 1;
+}
+
+/* .video video{
+    width: 100%;
+} */
