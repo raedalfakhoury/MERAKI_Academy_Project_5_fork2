@@ -36,12 +36,14 @@ function Home() {
 
 
         <Route path="/" element={<WelcomePage/>} />
+
+
         <Route path="/home" element={<Post/>} />
 
         
       </Routes>  
 
-{/* <Stories/> */}
+<Stories/>
       {/* <WelcomePage/>  */}
       {/* <NavBar/> */}
       {/* <Weather/> */}

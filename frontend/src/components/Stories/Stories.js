@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 import { styled, css } from "@mui/material/styles";
 import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import PropTypes from "prop-types";
-
+import "./index.css";
 import clsx from "clsx";
 import { Modal as BaseModal } from "@mui/base/Modal";
 import { red } from "@mui/material/colors";
@@ -20,7 +20,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Divider from "@mui/material/Divider";
 import Image from "mui-image";
 import Popup from "reactjs-popup";
-
+import ReactPlayer from "react-player";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   CardHeader,
   Avatar,
@@ -41,39 +43,60 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Stories() {
+  const [loading, setLoading] = useState(true);
+const [openResult,setOpenResult] = React.useState(false);
+  const [storyIndex, setStoryIndex] = useState(0);
+  const storyIndexRef = useRef(0);
   const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const [showStory, setShowStory] = useState(false);
   const [userName, setUserName] = useState("Mohammad");
-  const [userStory, setUserStory] = useState("");
+  const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
-  const [image_url, setImage_url] = useState("");
+  const [video, setVideo] = useState("");
   const [model, setModle] = useState(false);
+  const [vidIndex, setVidIndex] = useState(0);
+const usersStories = []
+  const handleVideoEnd = () => {
+    setVidIndex((prevIndex) => prevIndex + 1);
+  };
+
+  // ===============================   get all stories by user Id ==============================
   const handleOpen = (e) => {
     setOpen(true);
-    console.log(e.id);
+    console.log(e.id,e.username);
     setUserName(e.username);
-
+    setLoading(true);
     axios
-      .get(`http://localhost:5000/story/121`, {
+      .get(`http://localhost:5000/story/${e.id}`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
       })
       .then((res) => {
         console.log(res.data.result[0].video_url);
-        // console.log(userStory);
-        setUserStory(res.data.result[0].video_url);
+        setUserStory(res.data.result);
+        console.log(userStory);
+        setLoading(false); 
+
       })
       .catch((err) => {
         console.log(err);
-      });
+        setOpen(false);
+
+        setOpenResult(true)
+
+      })
+      ;
   };
   const handleClose = () => {
     setOpen(false);
+    setOpen1(false);
+    setOpenResult(false)
   };
 
-  // Get All Followers
+  // ==========================  Get All Followers ======================================
   useEffect(() => {
     axios
       .get(`http://localhost:5000/followers/Followers/121`, {
@@ -82,19 +105,40 @@ export default function Stories() {
         },
       })
       .then((res) => {
-        console.log(res.data.result);
         setData(res.data.result);
-        console.log(Data);
-        console.log(userStory);
-        Data.map((elem, indx) => {
-          console.log(elem.username);
-        });
+        Data.map((elem,indx)=>{ 
+          console.log("URL = ", elem.video_url);
+          console.log("USER NAME = ",elem);
+          {elem.video_url && usersStories.push(elem)}
+        })
+       
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
+  // ==============================  To show all stories   ======================================
+
+  useEffect(() => {
+    const video = document.getElementById("video");
+    if (video) {
+      video.onended = (e) => {
+        console.log("Video Ended");
+        if (storyIndexRef.current === userStory.length - 1) {
+          onClose();
+        } else {
+          setStoryIndex((value) => value + 1);
+        }
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    storyIndexRef.current = storyIndex;
+  }, [storyIndex]);
+
+  // ===================================================================
   const handleAvatarClick = () => {
     setShowStory(true);
     console.log(showStory);
@@ -104,218 +148,60 @@ export default function Stories() {
   };
   const test = localStorage.getItem("token");
 
-  // Cloudinary Parameters [Jamal]
-  const pr_key = "rllytlm7";
-  const cloud_name = "dmmo3zzyc";
+  // Cloudinary Parameters
+  const pr_key = "nb0pjnta";
+  const cloud_name = "dalwd5c23";
   const q = 0;
 
-  // Add Story Finction
+  // =======================   Add Story Function  ====================================
 
-  const handleFile = (e) => {
-    if (e && e.target && e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", pr_key);
+  // get Cloudinary URL
+  const StoryHandle = (files) => {
+    setOpen1(true);
+    const formData = new FormData();
+    formData.append("file", files[0]);
+    formData.append("upload_preset", pr_key);
 
-      // Upload the Video to Cloudinary
-      axios
-        .post(
-          `https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`,
-          formData
-        )
-        .then((result) => {
-          setImage_url(result.data.secure_url);
-          console.log(result.data.secure_url);
-          // setToggleSpinnerCloudInN(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/video/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.url);
 
-      // Create New Story In Database
-      axios
-        .post(
-          `http://localhost:5000/story`,
-          { video_url: image_url },
-          {
-            headers: {
-              Authorization: `Bearer ${test}`,
-            },
-          }
-        )
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.error("File input is empty or not found.");
-    }
+        postdata(data.url);
+      });
   };
 
+  // Post the Video in the database
+  const postdata = (Url) => {
+    axios
+      .post(
+        `http://localhost:5000/story`,
+        { video_url: Url },
+        {
+          headers: {
+            Authorization: `Bearer ${test}`,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // ===========================================================================================
+
   return (
-    //   <>
-    //    <Card
-    //     style={{
-    //       position: "absolute",
-    //       top: "90px",
-    //       right: "90px",
-    //       borderRadius: "20px",
-    //       cursor: "pointer",
-    //     }}
-    //     sx={{ maxWidth: 325, minWidth: 325, justifyContent: "center" }}
-    //   >
-    //           <CardHeader />
-    //  {/* Title of Stories Section */}
-    //  <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
-    //     <Divider component="div" role="presentation" />
-
-    //     <CardHeader
-    //       avatar={
-    //         // <Button onClick={handleAvatarClick} aria-label="story">
-
-    //         <Avatar
-    //           onClick={handleFile}
-    //           sx={{
-    //             bgcolor: "#E8E8E8",
-    //             "&:hover": {
-    //               bgcolor: "#0288D1",
-    //               color: "#ffff",
-    //             },
-    //           }}
-    //           aria-label="recipe"
-    //         >
-    //           <Modal
-    //             aria-labelledby="unstyled-modal-title"
-    //             aria-describedby="unstyled-modal-description"
-    //             open={open}
-    //             onClose={handleClose}
-    //             slots={{ backdrop: StyledBackdrop }}
-    //           >
-    //             {model? <ModalContent sx={{ width: 1000 }}>
-    //               <h2 id="unstyled-modal-title" className="modal-title">
-    //                 {elem.username}
-    //               </h2>
-
-    //               <p
-    //                 id="unstyled-modal-description"
-    //                 className="modal-description"
-    //               >
-    //                 Your Story
-    //               </p>
-    //             </ModalContent>:<ModalContent sx={{ width: 1000 }}>
-    //               <h2 id="unstyled-modal-title" className="modal-title">
-    //                 {userName}
-    //               </h2>
-
-    //               <p
-    //                 id="unstyled-modal-description"
-    //                 className="modal-description"
-    //               >
-    //                 Your Story 999
-    //               </p>
-    //             </ModalContent>}
-
-    //           </Modal>{" "}
-    //           <input
-    //             onChange={(e) => {
-    //               handleFile(e);
-    //             }}
-    //             type="file"
-    //             class="input-file"
-    //           />
-    //           +
-    //         </Avatar>
-    //       }
-    //       action={
-    //         <IconButton aria-label="settings">
-    //           {/* <MoreVertIcon /> */}
-    //         </IconButton>
-    //       }
-    //       title={
-    //         <Typography variant="h6" sx={{ fontSize: "15px" }}>
-    //           Add New Story
-    //         </Typography>
-    //       }
-    //       subheader={
-    //         <Typography variant="h6" sx={{ fontSize: "12px" }}>
-    //           Share an image, a video or some text
-    //         </Typography>
-    //       }
-    //     />
-    //   {Data.map((elem,indx)=>(
-
-    //     <Divider component="div" role="presentation" />
-
-    //     <CardHeader
-    //       avatar={
-    //         <TriggerButton type="button" onClick={handleOpen}>
-    //           R
-    //         </TriggerButton>
-
-    //       }
-    //       action={
-    //         <IconButton aria-label="settings">
-    //           <MoreVertIcon />
-    //         </IconButton>
-    //       }
-    //       title="Mohammad"
-    //       subheader="September 14, 2016"
-    //     />
-    //     {/* <Divider aria-hidden="true" /> */}
-    //     <Divider component="div" role="presentation" />
-
-    //     // <CardHeader
-    //     //   avatar={
-    //     //     <TriggerButton type="button" onClick={handleOpen}>
-    //     //       R
-    //     //     </TriggerButton>
-    //     //   }
-    //     //   action={
-    //     //     <IconButton aria-label="settings">
-    //     //       <MoreVertIcon />
-    //     //     </IconButton>
-    //     //   }
-    //     //   title={userName}
-    //     //   subheader="September 14, 2016"
-    //     // />
-    //     // <Divider component="div" role="presentation" />
-
-    //     // <CardHeader
-    //     //   avatar={
-    //     //     <TriggerButton type="button" onClick={handleOpen}>
-    //     //       R
-    //     //     </TriggerButton>
-    //     //   }
-    //     //   action={
-    //     //     <IconButton aria-label="settings">
-    //     //       <MoreVertIcon />
-    //     //     </IconButton>
-    //     //   }
-    //     //   title="Shrimp and Chorizo Paella"
-    //     //   subheader="September 14, 2016"
-    //     // />
-
-    //   )
-
-    //   )}
-    //   </Card>
-    //   </>
     <>
-      <input
-        onChange={(e) => {
-          handleFile(e);
-        }}
-        type="file"
-        className="input-file"
-        style={{ display: "none" }} // hide the input element visually
-      />
       <Card
         style={{
           position: "absolute",
-          top: "90px",
+          top: "140px",
           right: "90px",
           borderRadius: "20px",
           cursor: "pointer",
@@ -342,14 +228,37 @@ export default function Stories() {
               <Modal
                 aria-labelledby="unstyled-modal-title"
                 aria-describedby="unstyled-modal-description"
-                open={open}
+                open={openResult}
                 onClose={handleClose}
                 slots={{ backdrop: StyledBackdrop }}
               >
-                {model ? (
-                  <ModalContent sx={{ width: 1000 }}>
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
                     <h2 id="unstyled-modal-title" className="modal-title">
                       {userName}
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      No Stories
+                    </p>
+                  
+                  </div>
+                </ModalContent>
+              </Modal>
+              {/* This Modal to Add New Story */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={open1}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      Add New Story
                     </h2>
                     <p
                       id="unstyled-modal-description"
@@ -357,46 +266,114 @@ export default function Stories() {
                     >
                       Your Story
                     </p>
+                    <textarea
+                      id="publish"
+                      style={{ border: "solid 1px" }}
+                      className="textarea"
+                      rows="3"
+                      placeholder="Write something about you..."
+                      spellCheck="false"
+                    ></textarea>
 
-                    <iframe
-                      width="560"
-                      height="315"
-                      src="https://player.cloudinary.com/embed/demo/raw/upload/sample.mp4"
-                      title="Cloudinary Video Player"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                    ></iframe>
-                  </ModalContent>
-                ) : (
-                  <ModalContent sx={{ width: 1000 }}>
-                    <h2 id="unstyled-modal-title" className="modal-title">
-                      {userName}
-                    </h2>
-
-                    <p
-                      id="unstyled-modal-description"
-                      className="modal-description"
+                  </div>
+                  <div style={{ textAlign: "center", padding: "20px" }}>
+                    <TriggerButton
+                      type="button"
+                      onClick={() => {
+                        document.querySelector(".input-file").click();
+                        setOpen1(false); // Close the modal after upload
+                      }}
                     >
-                      Your Story 999
-                    </p>
-                    <img src={userStory} />
-                  </ModalContent>
-                )}
+                      <input
+                        onChange={(e) => {
+                          StoryHandle(e.target.files);
+                        }}
+                        type="file"
+                        className="input-file"
+                        style={{ display: "none" }} // hide the input element visually
+                      />
+                      Button 1
+                    </TriggerButton>
+                    <TriggerButton
+                      type="button"
+                      onClick={() => {
+                        console.log(11);
+                        setOpen1(false); // Close the modal
+                      }}
+                    >
+                      Button 2
+                    </TriggerButton>
+                  </div>
+                </ModalContent>
+              </Modal>
+              {/* This Modal to Show the User Story */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={open}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxwidth: 100, maxHeight: 1200 }}>
+                  <h2 id="unstyled-modal-title" className="modal-title">
+                    {userName}
+                  </h2>
+                  <p
+                    id="unstyled-modal-description"
+                    className="modal-description"
+                  >
+                    Your Story
+                  </p>
+
+                  <div className="video">
+                    {loading ? (
+                      <Box sx={{ display: "flex" }}>
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      <video
+                        width={"300px"}
+                        height={"300px"}
+                        id="video"
+                        src={userStory[storyIndex].video_url}
+                        autoPlay
+                        controls
+                      ></video>
+                    )}
+                    {storyIndex !== 0 && (
+                      <ChevronLeftIcon
+                        onClick={(e) => setStoryIndex((value) => value - 1)}
+                        className="previous hoverable"
+                      />
+                    )}
+                    {storyIndex !== userStory.length - 1 && (
+                      <ChevronRightIcon
+                        onClick={(e) => setStoryIndex((value) => value + 1)}
+                        className="next hoverable"
+                      />
+                    )}
+                  </div>
+                </ModalContent>
               </Modal>{" "}
               <TriggerButton
                 type="button"
-                onClick={() => document.querySelector(".input-file").click()} // trigger file input click
+                onClick={() => {
+                  setOpen1(true);
+                }}
               >
+                <input
+                  onChange={(e) => {
+                    StoryHandle(e.target.files);
+                  }}
+                  type="file"
+                  className="input-file"
+                  style={{ display: "none" }} // hide the input element visually
+                />
                 +
               </TriggerButton>
             </Avatar>
           }
-          action={
-            <IconButton aria-label="settings">
-              {/* <MoreVertIcon /> */}
-            </IconButton>
-          }
+          action={<IconButton aria-label="settings"></IconButton>}
           title={
             <Typography variant="h6" sx={{ fontSize: "15px" }}>
               Add New Story
@@ -408,7 +385,7 @@ export default function Stories() {
             </Typography>
           }
         />
-        {Data.map((elem, indx) => (
+        {usersStories.map((elem, indx) => (
           <React.Fragment key={indx}>
             <Divider component="div" role="presentation" />
             <CardHeader
