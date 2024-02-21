@@ -46,6 +46,7 @@ function Home() {
 <Stories/>
       {/* <WelcomePage/>  */}
       {/* <NavBar/> */}
+      <NavBarPost/>
       {/* <Weather/> */}
       {/* <Profile/> */}
       {/* <RecommendedFreind/> */}

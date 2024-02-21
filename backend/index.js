@@ -19,21 +19,17 @@ const followersRouter = require('./routes/followers')
 const storyRouter =require("./routes/story")
 const commentsRouter = require("./routes/comments");
 const likesRouter = require("./routes/likes")
-
+const searchRouter = require("./routes/search")
 
 app.use("/users", userRouter);
 app.use("/roles", roleRouter);
 app.use("/post",PostRouter)
 app.use("/followers",followersRouter)
-
 app.use("/Reels",ReelsRouter)
-
-
-
 app.use("/comments", commentsRouter);
 app.use("/story", storyRouter);
 app.use("/likes", likesRouter)
-
+app.use("/search",searchRouter)
 
 
 
