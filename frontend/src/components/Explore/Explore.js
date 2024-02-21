@@ -142,7 +142,7 @@ const Explore = () => {
                 flexDirection: "column",
                 // height: "55vw",
                 flexWrap: "nowrap",
-                gap: "9px",
+                gap: "10px",
                 padding: "0 10px ",
               }}
             >
@@ -182,7 +182,7 @@ const Explore = () => {
                             border: "none",
                             flexWrap: "nowrap",
                             padding: "0px",
-                            marginTop: "2px",
+                            // marginTop: "2px",
                             border: "2px solid #000",
                           }}
                           src={post.media_url}
@@ -202,6 +202,7 @@ const Explore = () => {
                 // height: "55vw",
                 flexWrap: "nowrap",
                 paddingLeft: "10px ",
+                gap: "10px",
               }}
             >
               {Posts?.map((post, index) => {
@@ -219,12 +220,13 @@ const Explore = () => {
                         />
                         <Image
                           style={{
+                            padding: "0",
                             width: "100%",
-                            height: "17.8vw",
+                            height: "17.2vw",
                             border: "none",
+                            border: "2px solid #000",
                           }}
                           src={post.media_url}
-                          thumbnail
                         />
                       </Col>
                     )}
@@ -238,9 +240,9 @@ const Explore = () => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "5px",
+                gap: "10px",
                 padding: "0 10px 0 10px ",
-                marginTop: "3px",
+                // marginTop: "3px",
               }}
             >
               {Posts?.map((post, index) => {
@@ -279,7 +281,7 @@ const Explore = () => {
                             border: "none",
                             flexWrap: "nowrap",
                             padding: "0px",
-                            marginTop: "2px",
+                            border: "2px solid #000",
                             backgroundColor: "#000",
                           }}
                           src={post.media_url}
