@@ -43,7 +43,7 @@ function Home() {
         
       </Routes>  
 
-<Stories/>
+{/* <Stories/> */}
       {/* <WelcomePage/>  */}
       {/* <NavBar/> */}
       <NavBarPost/>

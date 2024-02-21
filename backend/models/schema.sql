@@ -79,7 +79,13 @@ CREATE TABLE Likes (
     FOREIGN KEY (user_id) REFERENCES Users (id),
     FOREIGN KEY (post_id) REFERENCES Posts (id)
 );
-
+CREATE TABLE likeComments (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    comment_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE
+);
 -- Table: Notifications
 CREATE TABLE Notifications (
     notification_id SERIAL PRIMARY KEY,
