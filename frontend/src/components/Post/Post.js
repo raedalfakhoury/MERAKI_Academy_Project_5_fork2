@@ -552,12 +552,22 @@ function Post() {
                 className="imageClod"
               >
                 <label class="file-label">
-                  <input
+                  <input style={{
+                       width: "170px",
+                       height: "2.5vw",
+                       position: "absolute",
+                       left: "-150%",
+                       top: "-50%",
+                       opacity: "0",
+                       // backgroundColor: "red",
+                       cursor: "pointer",
+                       zIndex: "1",
+                  }}
                     onChange={(e) => {
                       handleImageJamal(e);
                     }}
                     type="file"
-                    class="input-file"
+                    // class="input-file"
                   />
                   <IoCameraOutline />
                   <span class="ic"> Media</span>
