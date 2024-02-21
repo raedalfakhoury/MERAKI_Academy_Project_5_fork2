@@ -44,7 +44,7 @@ const ExpandMore = styled((props) => {
 
 export default function Stories() {
   const [loading, setLoading] = useState(true);
-const [openResult,setOpenResult] = React.useState(false);
+  const [openResult, setOpenResult] = React.useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
   const [open, setOpen] = React.useState(false);
@@ -57,7 +57,8 @@ const [openResult,setOpenResult] = React.useState(false);
   const [video, setVideo] = useState("");
   const [model, setModle] = useState(false);
   const [vidIndex, setVidIndex] = useState(0);
-const usersStories = []
+  const [usersStories, setUserStories] = useState([]);
+  const temp = [];
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
@@ -65,7 +66,7 @@ const usersStories = []
   // ===============================   get all stories by user Id ==============================
   const handleOpen = (e) => {
     setOpen(true);
-    console.log(e.id,e.username);
+    console.log(e.id, e.username);
     setUserName(e.username);
     setLoading(true);
     axios
@@ -78,40 +79,51 @@ const usersStories = []
         console.log(res.data.result[0].video_url);
         setUserStory(res.data.result);
         console.log(userStory);
-        setLoading(false); 
-
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setOpen(false);
 
-        setOpenResult(true)
-
-      })
-      ;
+        setOpenResult(true);
+      });
   };
   const handleClose = () => {
     setOpen(false);
     setOpen1(false);
-    setOpenResult(false)
+    setOpenResult(false);
   };
 
   // ==========================  Get All Followers ======================================
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/followers/Followers/121`, {
+      .get(`http://localhost:5000/followers/Following/121`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
       })
       .then((res) => {
         setData(res.data.result);
-        Data.map((elem,indx)=>{ 
-          console.log("URL = ", elem.video_url);
-          console.log("USER NAME = ",elem);
-          {elem.video_url && usersStories.push(elem)}
-        })
-       
+        console.log(Data);
+        res.data.result.map((elem, indx) => {
+          axios
+            .get(`http://localhost:5000/story/${elem.id}`, {
+              headers: {
+                Authorization: `Bearer ${test}`,
+              },
+            })
+            .then((res) => {
+              console.log(res.data.result);
+              res.data.result.map((elem1, indx1) => {
+                {
+                  elem1.video_url && temp.push(elem1);
+                }
+              });
+              console.log(temp);
+              setUserStories(temp);
+            });
+
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -243,7 +255,6 @@ const usersStories = []
                     >
                       No Stories
                     </p>
-                  
                   </div>
                 </ModalContent>
               </Modal>
@@ -274,7 +285,6 @@ const usersStories = []
                       placeholder="Write something about you..."
                       spellCheck="false"
                     ></textarea>
-
                   </div>
                   <div style={{ textAlign: "center", padding: "20px" }}>
                     <TriggerButton
@@ -385,7 +395,7 @@ const usersStories = []
             </Typography>
           }
         />
-        {usersStories.map((elem, indx) => (
+        {Data.map((elem, indx) => (
           <React.Fragment key={indx}>
             <Divider component="div" role="presentation" />
             <CardHeader
