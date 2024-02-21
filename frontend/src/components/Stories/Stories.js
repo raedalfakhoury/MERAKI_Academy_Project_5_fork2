@@ -4,7 +4,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { styled, css } from "@mui/material/styles";
 import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
@@ -49,6 +48,7 @@ export default function Stories() {
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
   const [open, setOpen] = React.useState(false);
+  const [open1,setOpen1]= React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const [showStory, setShowStory] = useState(false);
   const [userName, setUserName] = useState("Mohammad");
@@ -61,11 +61,13 @@ export default function Stories() {
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
+
+  // ===============================   get all stories by user Id ==============================
   const handleOpen = (e) => {
     setOpen(true);
     console.log(e.id);
     setUserName(e.username);
-    setLoading(true)
+    setLoading(true);
     axios
       .get(`http://localhost:5000/story/121`, {
         headers: {
@@ -80,15 +82,17 @@ export default function Stories() {
       })
       .catch((err) => {
         console.log(err);
-      }) .finally(() => {
+      })
+      .finally(() => {
         setLoading(false); // Set loading to false once data fetching is complete
-    });
+      });
   };
   const handleClose = () => {
     setOpen(false);
+    setOpen1(false)
   };
 
-  // Get All Followers
+  // ==========================  Get All Followers ======================================
   useEffect(() => {
     axios
       .get(`http://localhost:5000/followers/Followers/121`, {
@@ -109,7 +113,8 @@ export default function Stories() {
       });
   }, []);
 
-  // To show multiple videos
+  // ==============================  To show all stories   ======================================
+
   useEffect(() => {
     const video = document.getElementById("video");
     if (video) {
@@ -128,6 +133,7 @@ export default function Stories() {
     storyIndexRef.current = storyIndex;
   }, [storyIndex]);
 
+  // ===================================================================
   const handleAvatarClick = () => {
     setShowStory(true);
     console.log(showStory);
@@ -142,9 +148,11 @@ export default function Stories() {
   const cloud_name = "dalwd5c23";
   const q = 0;
 
-  // Add Story Function
+  // =======================   Add Story Function  ====================================
 
+  // get Cloudinary URL
   const StoryHandle = (files) => {
+    setOpen1(true)
     const formData = new FormData();
     formData.append("file", files[0]);
     formData.append("upload_preset", pr_key);
@@ -161,6 +169,7 @@ export default function Stories() {
       });
   };
 
+  // Post the Video in the database
   const postdata = (Url) => {
     axios
       .post(
@@ -179,6 +188,9 @@ export default function Stories() {
         console.log(err);
       });
   };
+
+  // ===========================================================================================
+
   return (
     <>
       <Card
@@ -208,6 +220,42 @@ export default function Stories() {
               }}
               aria-label="recipe"
             >
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={open1}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxwidth: 100, maxHeight: 1200 }}>
+                  <h2 id="unstyled-modal-title" className="modal-title">
+                    {userName}
+                  </h2>
+                  <p
+                    id="unstyled-modal-description"
+                    className="modal-description"
+                  >
+                    Your Story
+                  </p>
+
+                  <TriggerButton
+                type="button"
+                onClick={() => {
+                  document.querySelector(".input-file").click();
+                  setOpen1(true);
+              }}              >
+                <input
+                  onChange={(e) => {
+                    StoryHandle(e.target.files);
+                  }}
+                  type="file"
+                  className="input-file"
+                  style={{ display: "none" }} // hide the input element visually
+                />
+                +
+              </TriggerButton>
+                </ModalContent>
+              </Modal>{" "}
               <Modal
                 aria-labelledby="unstyled-modal-title"
                 aria-describedby="unstyled-modal-description"
@@ -258,8 +306,9 @@ export default function Stories() {
               </Modal>{" "}
               <TriggerButton
                 type="button"
-                onClick={() => document.querySelector(".input-file").click()} // trigger file input click
-              >
+                onClick={() => {
+                  setOpen1(true);
+              }}              >
                 <input
                   onChange={(e) => {
                     StoryHandle(e.target.files);
@@ -272,11 +321,7 @@ export default function Stories() {
               </TriggerButton>
             </Avatar>
           }
-          action={
-            <IconButton aria-label="settings">
-              {/* <MoreVertIcon /> */}
-            </IconButton>
-          }
+          action={<IconButton aria-label="settings"></IconButton>}
           title={
             <Typography variant="h6" sx={{ fontSize: "15px" }}>
               Add New Story
