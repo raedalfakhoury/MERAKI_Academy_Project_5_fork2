@@ -100,7 +100,6 @@ export default function NavBarPost() {
   const handleLogout = (event) => {
     dispatch(setLogout());
     redirect("/");
-
   };
 
   const menuId = "primary-search-account-menu";
@@ -181,7 +180,7 @@ export default function NavBarPost() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box style={{ paddingBottom: "80px" }} sx={{ flexGrow: 1 }}>
       <AppBar
         position="fixed"
         sx={{ bgcolor: "#ffff", color: "black", height: "55px" }}
@@ -292,6 +291,7 @@ export default function NavBarPost() {
                 color="info"
                 style={{ "&:hover": { backgroundColor: "#659BDC" } }}
               >
+                
                 <SvgIcon
                   viewBox="0 0 24 24"
                   style={{
@@ -308,15 +308,33 @@ export default function NavBarPost() {
               </Badge>
             </IconButton>
           </Box>
+          <button class="buttons" onClick={()=>{
+            redirect("/Explore")
+          }}>
+          Explore
+  <svg fill="currentColor" viewBox="0 0 24 24" class="iconss">
+    <path
+      clip-rule="evenodd"
+      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+      fill-rule="evenodd"
+    ></path>
+  </svg>
+</button>
           {/* Space Box */}
           <Box sx={{ flexGrow: 1 }} />
           {/* Search */}
+
           <Search
             style={{
+              border: "1px solid gray",
+              boxSizing: "",
+              marginBottom: "0px",
+              padding: "0px",
               backgroundColor: "#F7F7F7",
               color: "black",
               width: "400px",
               borderRadius: "20px",
+              height: "30px",
             }}
           >
             <SearchIconWrapper>

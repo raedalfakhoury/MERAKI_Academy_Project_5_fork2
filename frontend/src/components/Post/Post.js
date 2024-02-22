@@ -111,9 +111,9 @@ function Post() {
         getAllIdLikeComments();
         const InCre = Count_like_Comment_number.map((elm, index) => {
           if (elm.comment_id === id) {
-            elm.like_count = (elm.like_count *1 )+ 1;
+            elm.like_count = elm.like_count * 1 + 1;
           }
-          return elm
+          return elm;
         });
         setCount_like_Comment_number(InCre);
       })
@@ -134,9 +134,9 @@ function Post() {
         getAllIdLikeComments();
         const DCre = Count_like_Comment_number.map((elm, index) => {
           if (elm.comment_id === id) {
-            elm.like_count = (elm.like_count *1 )- 1;
+            elm.like_count = elm.like_count * 1 - 1;
           }
-          return elm
+          return elm;
         });
         setCount_like_Comment_number(DCre);
       })
@@ -495,7 +495,7 @@ function Post() {
   return (
     <>
       {/* <NavBarPost /> */}
-      <Container>
+      <Container style={{ display:"flex",flexDirection:"column",gap:"10px"}}>
         <Container className="containerPosts">
           <Row>
             <Col className="navCreatePost" style={{ padding: "0" }}>
@@ -697,7 +697,10 @@ function Post() {
                 <Col>
                   <Row className="postsUserNav">
                     {userId == elm.user_id ? (
-                      <div style={{ width: "70px" }} className="status">
+                      <div
+                        style={{ width: "70px", padding: "0px" }}
+                        className="status"
+                      >
                         <Image
                           onClick={() => {
                             Navigate({
@@ -1246,33 +1249,43 @@ function Post() {
                               >
                                 {comment.content}
                               </span>
-                              {LikeComments?.find((elm, index) => {
-                                return elm.comment_id === comment.comment_id;
-                              }) ? (
-                                <BiSolidLike
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    removeLikeComments(comment.comment_id);
-                                  }}
-                                />
-                              ) : (
-                                <BiLike
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    createLikeComment(comment.comment_id);
-                                  }}
-                                />
-                              )}
-                              {Count_like_Comment_number?.map((element, i) => {
-                                return (
-                                  <>
-                                    {element?.comment_id ===
-                                      comment?.comment_id && (
-                                      <span>{element.like_count}</span>
-                                    )}
-                                  </>
-                                );
-                              })}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  gap: "5px",
+                                  paddingLeft: "65px",
+                                }}
+                              >
+                                {LikeComments?.find((elm, index) => {
+                                  return elm.comment_id === comment.comment_id;
+                                }) ? (
+                                  <BiSolidLike
+                                    style={{ cursor: "pointer", width: "20px" }}
+                                    onClick={() => {
+                                      removeLikeComments(comment.comment_id);
+                                    }}
+                                  />
+                                ) : (
+                                  <BiLike
+                                    style={{ cursor: "pointer", width: "20px" }}
+                                    onClick={() => {
+                                      createLikeComment(comment.comment_id);
+                                    }}
+                                  />
+                                )}
+                                {Count_like_Comment_number?.map(
+                                  (element, i) => {
+                                    return (
+                                      <>
+                                        {element?.comment_id ===
+                                          comment?.comment_id && (
+                                          <span>{element.like_count}</span>
+                                        )}
+                                      </>
+                                    );
+                                  }
+                                )}
+                              </div>
                               <span className="const_like">
                                 <span className=" line"></span>
                               </span>

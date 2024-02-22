@@ -21,6 +21,7 @@ import { useNavigate, useHistory } from "react-router-dom";
 
 import { MdOutlineVideoLibrary } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import NavBarPost from "../Navbar/NavBarPost";
 export function TemporaryDrawer() {
   const navigate = useNavigate();
 
@@ -125,7 +126,8 @@ const Explore = () => {
 
   return (
     <>
-      <Container style={{ display: "flex", margin: "0px", paddingTop: "20px" }}>
+      <NavBarPost />
+      <Container style={{ display: "flex", margin: "0px" }}>
         <Container style={{ width: "30%" }}>{TemporaryDrawer()}</Container>
         <Container
           style={{
@@ -161,7 +163,6 @@ const Explore = () => {
                           flex: "1 ",
                           position: "relative",
                           width: "500px",
-                    
 
                           // borderTop: "1px solid red",
                           // borderBottom: "1px solid red",
@@ -187,7 +188,7 @@ const Explore = () => {
                             padding: "0px",
                             // marginTop: "2px",
                             // borderTop: "4px solid  #fff",
-                            
+
                             borderBottom: "4px solid  #fff",
                             borderRight: "11px solid  #fff",
                           }}

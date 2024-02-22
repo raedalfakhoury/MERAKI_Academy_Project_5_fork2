@@ -1,13 +1,11 @@
-import React  from "react";
+import React from "react";
 import "./App.css";
-import Home from "./components/Home/Home";
+import CustomRoute  from "./components/RoutesABB/CustomRoute";
 
 function App() {
- 
-
   return (
     <div className="App">
-      <Home />
+      <CustomRoute  />
     </div>
   );
 }
