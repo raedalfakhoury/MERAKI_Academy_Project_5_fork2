@@ -1,0 +1,11 @@
+#W-R {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#Container-home {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 100px;
+  gap: 20px;
+}

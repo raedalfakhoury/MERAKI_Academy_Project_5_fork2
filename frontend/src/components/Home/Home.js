@@ -1,60 +1,30 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
-/* eslint-disable no-unused-vars */
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import Weather from "../Weather/Weather";
-import RecommendedFreind from "../recommendedFreind/recommendedFreind";
-import Register from "../Rigester/index";
-import LoginPage from "../Login/index";
+import "./Home.css";
 import Post from "../Post/Post";
-import WelcomePage from "../welcome page/welcomepage";
+import Weather from "../Weather/Weather";
+import NavBarPost from "../Navbar/NavBarPost";
+import RecommendedFreind from "../recommendedFreind/recommendedFreind";
+import Stories from "../Stories/Stories";
+import { Container } from "react-bootstrap";
 
-import NavBarPost from "../Navbar/NavBarPost"
-import Stories from "../Stories/Stories" 
-
-
-
-
-
-import Loader from "../Loader/Loader";
-import Profile from "../Profile/Profile";
-
-import Explore from "../Explore/Explore";
 function Home() {
-  
   return (
-
     <>
-   
+      <NavBarPost />
 
-        <Routes>
-         {/* <Route path="/users/register" element={<Register />} /> */}
-         {/* <Route path="/Explore" element={<Explore/>} /> */}
-         <Route path="/users/login" element={<LoginPage />} />
-        <Route path="/profile" element={<Profile />} />
-
-
-
-        <Route path="/" element={<WelcomePage/>} />
-
-
-        <Route path="/home" element={<Post/>} />
-
-        
-      </Routes>  
-
-{/* <Stories/> */}
-      {/* <WelcomePage/>  */}
-      {/* <NavBar/> */}
-      <NavBarPost/>
-      {/* <Weather/> */}
-      {/* <Profile/> */}
-      {/* <RecommendedFreind/> */}
-      {/* <LoginPage /> */}
-
-      {/* <Post/>   */}
+      <div id="Container-home">
+        <div id="W-R">
+          <Weather  />
+          <RecommendedFreind />
+        </div>
+        <div>
+          <Post />
+        </div>
+        <div>
+          <Stories />
+        </div>
+      </div>
     </>
   );
 }
-
 export default Home;

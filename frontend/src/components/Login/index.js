@@ -89,7 +89,7 @@ function LoginPage() {
               dispatch(
                 setImageAndName({ name: res.data.name, image: res.data.image })
               );
-              redirect("/home/posts");
+              redirect("/home");
             })
             .catch((err) => {
               console.log(err.response.data.massage);
@@ -238,7 +238,7 @@ function LoginPage() {
                                         })
                                       );
 
-                                      redirect("/home/posts");
+                                      redirect("/home");
                                     })
                                     .catch((err) => {
                                       console.log(err.response.data.massage);

@@ -212,13 +212,15 @@ export default function Stories() {
     <>
       <Card
         style={{
-          position: "absolute",
-          top: "140px",
-          right: "90px",
-          borderRadius: "20px",
+          // position: "absolute",
+          // top: "140px",
+          // right: "90px",
+          // marginTop:"100px",
+          borderRadius: "10px",
           cursor: "pointer",
+          width:"100%"
         }}
-        sx={{ maxWidth: 325, minWidth: 325, justifyContent: "center" }}
+        sx={{}}
       >
         <CardHeader />
         {/* Title of Stories Section */}
