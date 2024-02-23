@@ -11,7 +11,8 @@ const {
   getAllPosts,
   deletePostById ,
   getAllPostsMyFriends,
-  countFAndDAndPo
+  countFAndDAndPo,
+  savePost
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
@@ -25,6 +26,10 @@ PostRouter.get("/mypost/:userId",   getpostByuserId);
  
  
 PostRouter.put("/update/:id", authentication, updatepostById);
+
+PostRouter.put("/save", authentication, savePost);
+
+
 PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
  
 

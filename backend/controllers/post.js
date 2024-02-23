@@ -317,6 +317,29 @@ WHERE Posts.user_id =112 AND Posts.is_deleted =0;
     });
 };
 
+const savePost = (req, res) => {
+  const user_id = req.token.user_id;
+  const {post_id} = req.body;
+  const data = [user_id, post_id];
+  const query = `INSERT INTO Posts_Users (user_id , post_id) VALUES ($1 , $2) RETURNING * ; `;
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(202).json({
+        successful: true,
+        message: "All Saved Posts",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log("from save post",err);
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
+
 module.exports = {
   createNewPost,
   countFAndDAndPo,
@@ -328,6 +351,7 @@ module.exports = {
   getAllPosts,
   deletePostById,
   getAllPostsMyFriends,
+  savePost
 };
 
 // CREATE TABLE Posts (

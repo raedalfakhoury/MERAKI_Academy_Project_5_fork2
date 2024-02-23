@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
 import React, {
@@ -27,6 +29,7 @@ import {
   UpdatePost,
   UpdateCommentByPostId,
 } from "../redux/reducers/Posts";
+import savePostSlice, { addsavePost } from "../redux/reducers/savePost/index";
 import { GiSelfLove } from "react-icons/gi";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -62,7 +65,6 @@ function Post() {
   const [Count_like_Comment_number, setCount_like_Comment_number] = useState(
     []
   );
-  console.log(Count_like_Comment_number);
   const Count_like_Comment = (id) => {
     axios
       .get(`http://localhost:5000/LikeComments/${id}`, {
@@ -411,7 +413,6 @@ function Post() {
       image: state.auth.image,
     };
   });
-  console.log(posts);
   const [open, setOpen] = useState(false);
   const [openCommentUpdate, setOpenCommentUpdate] = useState(false);
 
@@ -495,7 +496,9 @@ function Post() {
   return (
     <>
       {/* <NavBarPost /> */}
-      <Container style={{ display:"flex",flexDirection:"column",gap:"10px"}}>
+      <Container
+        style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+      >
         <Container className="containerPosts">
           <Row>
             <Col className="navCreatePost" style={{ padding: "0" }}>
@@ -897,8 +900,26 @@ function Post() {
                         {ToggleSava ? (
                           <div
                             id="SavePost"
-                            onClick={() => {
-                              setToggleSava(false);
+                            onClick={async () => {
+                              try {
+                                const res = await axios.put(
+                                  `http://localhost:5000/post/save`,
+                                  { post_id: elm.id },
+
+                                  {
+                                    headers: {
+                                      Authorization: `Bearer ${token}`,
+                                    },
+                                  }
+                                );
+                                console.log("save");
+                                setToggleSava(false);
+                                console.log(elm.id);
+                                console.log(res);
+                                dispatch(addsavePost(elm.id));
+                              } catch (error) {
+                                console.log("from save posts", error);
+                              }
                             }}
                             class=" containerss"
                             style={{
@@ -913,6 +934,7 @@ function Post() {
                           <div
                             id="UnSavePost"
                             onClick={() => {
+                              console.log("unsave");
                               setToggleSava(true);
                             }}
                             class=" containerss"
@@ -1352,6 +1374,7 @@ function Post() {
                 {inputUpdate.image !== "" &&
                 !inputUpdate.image.includes(".mp4") ? (
                   <img
+                    alt=""
                     style={{ width: "120px", height: "120px" }}
                     src={inputUpdate.image}
                   ></img>
