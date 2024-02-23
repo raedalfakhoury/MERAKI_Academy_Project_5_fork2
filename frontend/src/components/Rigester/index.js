@@ -18,6 +18,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export default function Rigester() {
   const [userLastName, setUserFirstName] = useState("");
   const [userFirstName, setUserLastName] = useState("");
+  const [open1, setOpen1] = useState(false);
+
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userCountry, setUserCountry] = useState("");
@@ -25,6 +27,10 @@ export default function Rigester() {
   const [result, setUserResult] = useState("");
   const [status, setStatus] = useState(false);
   const redirect = useNavigate();
+  // const tese = localStorage("toke")
+    // Cloudinary Parameters
+    const pr_key = "nb0pjnta";
+    const cloud_name = "dalwd5c23";
   // const handleButtonClick = () => {
   //   document.querySelector(".input-file").click();
   // };
