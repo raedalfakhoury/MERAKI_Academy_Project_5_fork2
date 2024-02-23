@@ -74,8 +74,7 @@ export default function NavBarPost() {
   const dispatch = useDispatch();
   const [userProfile, setUserProfile] = useState(null);
   const handleClick = (event) => {
-
-console.log(3);
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {

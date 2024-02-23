@@ -34,14 +34,23 @@ export default function Stories() {
   const [open1, setOpen1] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showStory, setShowStory] = useState(false);
-  const [userName, setUserName] = useState("Mohammad");
+  const [userName, setUserName] = useState("");
   const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
-  const [video, setVideo] = useState("");
+  const [userPhoto, setUserPhoto] = useState("");
   const [model, setModle] = useState(false);
   const [vidIndex, setVidIndex] = useState(0);
   const [usersStories, setUserStories] = useState([]);
   const temp = [];
+
+    // ================= My Informations From Local Storge =================================
+    const My_ID = localStorage.getItem("userId");
+    const My_userName = localStorage.getItem("name")
+    const My_Img = localStorage.getItem("image")
+
+
+
+    // ====================================================================================
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
@@ -71,13 +80,39 @@ export default function Stories() {
         setOpenResult(true);
       });
   };
+
+  const handleOpenMyStories = (e) => {
+    setOpen(true);
+    setUserName(My_userName);
+    setLoading(true);
+    axios
+      .get(`http://localhost:5000/story/${My_ID}`, {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.result);
+        setUserStory(res.data.result);
+        console.log(userStory);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpen(false);
+
+        setOpenResult(true);
+      });
+  };
   const handleClose = () => {
     setOpen(false);
     setOpen1(false);
     setOpenResult(false);
   };
-  const My_ID = localStorage.getItem("userId");
-  // ==========================  Get All Followers ======================================
+
+
+
+  // ==========================  Get All Following ======================================
   useEffect(() => {
     axios
       .get(`http://localhost:5000/followers/Following/${My_ID}`, {
@@ -114,7 +149,7 @@ export default function Stories() {
     storyIndexRef.current = storyIndex;
   }, [storyIndex]);
 
-  // ===================================================================
+  //
   const handleAvatarClick = () => {
     setShowStory(true);
     console.log(showStory);
@@ -176,21 +211,57 @@ export default function Stories() {
     <>
       <Card
         style={{
-          // position: "absolute",
-          // top: "140px",
-          // right: "90px",
-          // marginTop:"100px",
           borderRadius: "10px",
           cursor: "pointer",
-          width: "100%",
+          width: "125%",
         }}
         sx={{}}
       >
-        <CardHeader />
         {/* Title of Stories Section */}
-        <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
+        <h6 style={{ paddingLeft: "20px", paddingTop: "20px" }}>Stories</h6>
         <Divider component="div" role="presentation" />
 
+        {/* My stories Section  */}
+
+        <CardHeader
+          avatar={
+            <Avatar
+              sx={{
+                bgcolor: "#E8E8E8",
+                "&:hover": {
+                  bgcolor: "#0288D1",
+                  color: "#ffff",
+                },
+              }}
+              aria-label="recipe"
+            >
+              <img
+                src={My_Img}
+                onClick={() => handleOpenMyStories()}
+                style={{
+                  color: "black",
+                  width: "40px",
+                  height: "35px",
+                  borderRadius: "25px",
+                  cursor: "pointer",
+                }}
+              />
+            </Avatar>
+          }
+          action={<IconButton aria-label="settings"></IconButton>}
+          title={
+            <Typography variant="h6" sx={{ fontSize: "15px" }}>
+              My Stories
+            </Typography>
+          }
+          subheader={
+            <Typography variant="h6" sx={{ fontSize: "12px" }}>
+              {userName} 's Stories
+            </Typography>
+          }
+        />
+
+        {/* Add new Story Section  */}
         <CardHeader
           avatar={
             <Avatar
@@ -366,18 +437,17 @@ export default function Stories() {
             <Divider component="div" role="presentation" />
             <CardHeader
               avatar={
-                <TriggerButton  type="button" onClick={() => handleOpen(elem)}>
-                  <img
-                    src={userPhoto}
-                    style={{
-                      color: "black",
-                      width: "40px",
-                      height: "35px",
-                      borderRadius: "20px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </TriggerButton>
+                <img
+                  src={elem.profile_picture_url}
+                  onClick={() => handleOpen(elem)}
+                  style={{
+                    color: "black",
+                    width: "40px",
+                    height: "35px",
+                    borderRadius: "25px",
+                    cursor: "pointer",
+                  }}
+                />
               }
               action={
                 <IconButton aria-label="settings">
