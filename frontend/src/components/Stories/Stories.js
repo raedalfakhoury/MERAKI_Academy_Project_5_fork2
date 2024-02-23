@@ -93,11 +93,11 @@ export default function Stories() {
     setOpen1(false);
     setOpenResult(false);
   };
-
+const My_ID = localStorage.getItem("userId")
   // ==========================  Get All Followers ======================================
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/followers/Following/121`, {
+      .get(`http://localhost:5000/followers/Following/${My_ID}`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
@@ -106,22 +106,7 @@ export default function Stories() {
         setData(res.data.result);
         console.log(Data);
         res.data.result.map((elem, indx) => {
-          axios
-            .get(`http://localhost:5000/story/${elem.id}`, {
-              headers: {
-                Authorization: `Bearer ${test}`,
-              },
-            })
-            .then((res) => {
-              console.log(res.data.result);
-              res.data.result.map((elem1, indx1) => {
-                {
-                  elem1.video_url && temp.push(elem1);
-                }
-              });
-              console.log(temp);
-              setUserStories(temp);
-            });
+         
 
         });
       })
