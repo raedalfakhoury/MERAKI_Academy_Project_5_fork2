@@ -122,10 +122,10 @@ export default function NavBarPost() {
     >
       <MenuItem
         onClick={() => {
-          handleMenuClose()
+          handleMenuClose();
           redirect({
             pathname: "/profile",
-            search: `?prf=${My_ID}`
+            search: `?prf=${My_ID}`,
           });
         }}
       >
@@ -214,7 +214,17 @@ export default function NavBarPost() {
             variant="h5"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block", color: "#659BDC" } }}
+            sx={{
+              display: {
+                xs: "none",
+                sm: "block",
+                color: "#659BDC",
+                cursor: "pointer",
+              },
+            }}
+            onClick={() => {
+              redirect("/home");
+            }}
           >
             TALAGI
           </Typography>

@@ -43,14 +43,12 @@ export default function Stories() {
   const [usersStories, setUserStories] = useState([]);
   const temp = [];
 
-    // ================= My Informations From Local Storge =================================
-    const My_ID = localStorage.getItem("userId");
-    const My_userName = localStorage.getItem("name")
-    const My_Img = localStorage.getItem("image")
+  // ================= My Informations From Local Storge =================================
+  const My_ID = localStorage.getItem("userId");
+  const My_userName = localStorage.getItem("name");
+  const My_Img = localStorage.getItem("image");
 
-
-
-    // ====================================================================================
+  // ====================================================================================
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
@@ -109,8 +107,6 @@ export default function Stories() {
     setOpen1(false);
     setOpenResult(false);
   };
-
-
 
   // ==========================  Get All Following ======================================
   useEffect(() => {
@@ -432,33 +428,41 @@ export default function Stories() {
             </Typography>
           }
         />
-        {Data.map((elem, indx) => (
-          <React.Fragment key={indx}>
-            <Divider component="div" role="presentation" />
-            <CardHeader
-              avatar={
-                <img
-                  src={elem.profile_picture_url}
-                  onClick={() => handleOpen(elem)}
-                  style={{
-                    color: "black",
-                    width: "40px",
-                    height: "35px",
-                    borderRadius: "25px",
-                    cursor: "pointer",
-                  }}
-                />
-              }
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={elem.username}
-              subheader={elem.created_at}
-            />
-          </React.Fragment>
-        ))}
+        <div
+          style={{
+            maxHeight: "230px",
+            overflowY: "scroll",
+          }}
+        >
+          {/* Render all friends */}
+          {Data.map((elem, indx) => (
+            <React.Fragment key={indx}>
+              <Divider component="div" role="presentation" />
+              <CardHeader
+                avatar={
+                  <img
+                    src={elem.profile_picture_url}
+                    onClick={() => handleOpen(elem)}
+                    style={{
+                      color: "black",
+                      width: "40px",
+                      height: "35px",
+                      borderRadius: "25px",
+                      cursor: "pointer",
+                    }}
+                  />
+                }
+                action={
+                  <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={elem.username}
+                subheader={elem.created_at}
+              />
+            </React.Fragment>
+          ))}
+        </div>
       </Card>
     </>
   );
