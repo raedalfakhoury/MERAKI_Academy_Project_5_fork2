@@ -12,12 +12,13 @@ import Loader from "../Loader/Loader";
 import "../Profile/Profile.css";
 import { CiBookmark } from "react-icons/ci";
 import { BsPostcard } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
+import savePostSlice, { setsavePost } from "../redux/reducers/savePost/index";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -30,17 +31,20 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 const Profile = () => {
+  const dispatch = useDispatch();
+
   const Navigate = useNavigate();
   const arr = useRef([]);
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
   let bio = useRef("");
-  const { token } = useSelector((state) => {
+  const { token, savePost } = useSelector((state) => {
     return {
       token: state.auth.token,
+      savePost: state.savePost.savePost,
     };
   });
-
+  console.log("save", savePost);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   // const searchQuery = queryParams.get("prf") || "";
@@ -50,6 +54,7 @@ const Profile = () => {
   const [profileInfo, setProfileInfo] = useState();
   const [loader, setLoader] = useState(true);
   const [showPost, setShowPost] = useState(false);
+  const [showSave, setShowSave] = useState(false);
   const [myPosts, setMyPosts] = useState();
   const [followers, setFollowers] = useState();
   const [following, setFollowing] = useState();
@@ -530,9 +535,9 @@ const Profile = () => {
                           });
                           const edit = profileInfo.map((ele) => {
                             ele.bio = bio;
-                            return ele
+                            return ele;
                           });
-                          setProfileInfo(edit)
+                          setProfileInfo(edit);
                           handleCloseEditProfile();
                         } catch (error) {
                           console.log("error from update profile bio", error);
@@ -573,7 +578,7 @@ const Profile = () => {
                 <div className="follower">
                   <p className="username">{elm.username}</p>
 
-                  {localStorage.getItem("userId") == searchQuery2 ? ( 
+                  {localStorage.getItem("userId") == searchQuery2 ? (
                     <button
                       className="Btn"
                       onClick={async () => {
@@ -597,7 +602,7 @@ const Profile = () => {
                     <button
                       // id=" UnFollow-Public"
                       className="Btn"
-                      onClick={async () => { 
+                      onClick={async () => {
                         try {
                           const res = await axios.delete(
                             `http://localhost:5000/followers/delete`,
@@ -744,8 +749,34 @@ const Profile = () => {
             </p>
           </div>
           <div className="p-s">
-            <CiBookmark />
-            <p className="posts-saved">saves</p>
+            {localStorage.getItem("userId") == searchQuery2 ? (
+              <>
+                <CiBookmark />
+                <p
+                  className="posts-saved"
+                  onClick={async () => {
+                    try {
+                      const res = await axios.get(
+                        `http://localhost:5000/post/allSavePost`,
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        }
+                      );
+                      console.log(res?.data?.result);
+                      dispatch(setsavePost(res?.data?.result));
+                      setShowPost(!showPost);
+                      setShowSave(!showSave);
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }}
+                >
+                  saves
+                </p>
+              </>
+            ) : null}
           </div>
         </div>
         <div className={showPost ? "grid-media" : "none"}>
@@ -780,6 +811,38 @@ const Profile = () => {
             );
           })}
         </div>
+      </div>
+      <div className={showSave ? "grid-media" : "none"}>
+        {savePost?.map((ele, i) => {
+          return (
+            <>
+              {!ele.media_url.includes(".mp4") ? (
+                <img
+                  key={ele.id}
+                  className="img-post"
+                  alt=""
+                  src={ele.media_url}
+                ></img>
+              ) : (
+                <video
+                  controls
+                  muted
+                  className="img-post"
+                  style={
+                    {
+                      // width: "100%",
+                      // height: "50vh",
+                      // // borderRadius: "600px",
+                      // border: "solid 1px #e8e8e8",
+                      // cursor: "pointer",
+                    }
+                  }
+                  src={ele.media_url}
+                ></video>
+              )}
+            </>
+          );
+        })}
       </div>
     </div>
   );

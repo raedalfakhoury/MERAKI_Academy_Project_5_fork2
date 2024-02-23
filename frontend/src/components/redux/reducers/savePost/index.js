@@ -8,7 +8,7 @@ export const savePostSlice = createSlice({
   },
   reducers: {
     setsavePost: (state, action) => {
-      state.posts = action.payload;
+      state.savePost = action.payload;
     },
     addsavePost: (state, action) => {
       state.savePost.push(action.payload);

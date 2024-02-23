@@ -319,7 +319,7 @@ WHERE Posts.user_id =112 AND Posts.is_deleted =0;
 
 const savePost = (req, res) => {
   const user_id = req.token.user_id;
-  const {post_id} = req.body;
+  const { post_id } = req.body;
   const data = [user_id, post_id];
   const query = `INSERT INTO Posts_Users (user_id , post_id) VALUES ($1 , $2) RETURNING * ; `;
   pool
@@ -332,7 +332,7 @@ const savePost = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log("from save post",err);
+      console.log("from save post", err);
       res.status(500).json({
         success: false,
         err: err,
@@ -340,6 +340,40 @@ const savePost = (req, res) => {
     });
 };
 
+const getSavedPosts = (req, res) => {
+  const user_id = req.token.user_id;
+  const value = [user_id];
+  const query = `SELECT DISTINCT 
+  Posts_Users.user_id,
+  Posts_Users.post_id,
+  Users.username,
+ Posts.media_url,
+  Posts.content
+FROM
+  Posts_Users
+JOIN
+  Users ON Posts_Users.user_id = Users.id
+JOIN
+  Posts ON Posts_Users.post_id = Posts.id
+  WHERE Posts_Users.user_id = $1
+  ;`;
+  pool
+    .query(query, value)
+    .then((result) => {
+      res.status(200).json({
+        successful: true,
+        message: "get All Saved Posts",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log("from get save post", err);
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
 module.exports = {
   createNewPost,
   countFAndDAndPo,
@@ -351,7 +385,8 @@ module.exports = {
   getAllPosts,
   deletePostById,
   getAllPostsMyFriends,
-  savePost
+  savePost,
+  getSavedPosts,
 };
 
 // CREATE TABLE Posts (

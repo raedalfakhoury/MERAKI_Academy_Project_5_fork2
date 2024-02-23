@@ -914,9 +914,9 @@ function Post() {
                                 );
                                 console.log("save");
                                 setToggleSava(false);
-                                console.log(elm.id);
+                                console.log(elm);
                                 console.log(res);
-                                dispatch(addsavePost(elm.id));
+                                dispatch(addsavePost(elm));
                               } catch (error) {
                                 console.log("from save posts", error);
                               }
