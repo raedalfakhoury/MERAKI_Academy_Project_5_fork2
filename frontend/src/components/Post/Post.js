@@ -8,6 +8,7 @@ import React, {
   forwardRef,
   ReactElement,
   Ref,
+  useRef,
 } from "react";
 import NavBarPost from "../Navbar/NavBarPost";
 import { useDispatch, useSelector } from "react-redux";
@@ -146,6 +147,26 @@ function Post() {
         console.log(err);
       });
   };
+
+  const postSavedArray = useRef([]);
+  console.log(postSavedArray.current);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/post/allSavePost`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log("from get save post", result.data.result);
+        result?.data?.result?.map((ele) => {
+          return postSavedArray.current.push(ele.post_id);
+        });
+      })
+      .catch((err) => {
+        console.log("from get saved post", err);
+      });
+  }, []);
 
   const Navigate = useNavigate();
   const [showF, setShowF] = useState(false);
@@ -897,7 +918,7 @@ function Post() {
                           className="containerss"
                         />
 
-                        {ToggleSava ? (
+                        {!postSavedArray.current.includes(elm.id) ? (
                           <div
                             id="SavePost"
                             onClick={async () => {
