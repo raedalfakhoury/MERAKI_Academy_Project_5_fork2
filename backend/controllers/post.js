@@ -332,7 +332,6 @@ const savePost = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log("from save post", err);
       res.status(500).json({
         success: false,
         err: err,
@@ -367,7 +366,28 @@ JOIN
       });
     })
     .catch((err) => {
-      console.log("from get save post", err);
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
+
+const deleteSavePost = (req, res) => {
+  const user_id = req.token.user_id;
+  const { post_id } = req.body;
+  const data = [user_id, post_id];
+  const query = ` DELETE FROM Posts_Users WHERE Posts_Users.user_id = $1 AND Posts_Users.post_id = $2  ;`;
+  pool
+    .query(query, data)
+    .then((result) => { 
+      res.status(200).json({
+        successful: true,
+        message: "deleted successfully",
+        result: result.rows,
+      }) 
+    })
+    .catch((err) => { 
       res.status(500).json({
         success: false,
         err: err,
@@ -387,6 +407,7 @@ module.exports = {
   getAllPostsMyFriends,
   savePost,
   getSavedPosts,
+  deleteSavePost,
 };
 
 // CREATE TABLE Posts (

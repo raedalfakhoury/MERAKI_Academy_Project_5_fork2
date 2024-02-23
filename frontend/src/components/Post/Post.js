@@ -938,6 +938,7 @@ function Post() {
                                 console.log(elm);
                                 console.log(res);
                                 dispatch(addsavePost(elm));
+                                postSavedArray.current.push(elm.id);
                               } catch (error) {
                                 console.log("from save posts", error);
                               }
@@ -954,9 +955,27 @@ function Post() {
                         ) : (
                           <div
                             id="UnSavePost"
-                            onClick={() => {
-                              console.log("unsave");
-                              setToggleSava(true);
+                            onClick={async () => {
+                              try {
+                                const res = await axios.delete(
+                                  `http://localhost:5000/post/delete/saved`,
+                                  { post_id: elm.id },
+
+                                  {
+                                    headers: {
+                                      Authorization: `Bearer ${token}`,
+                                    },
+                                  }
+                                );
+                                console.log(res);
+                                console.log("unsave");
+                                setToggleSava(true);
+                                postSavedArray.current.filter((ele) => {
+                                  return ele !== elm.id;
+                                });
+                              } catch (error) {
+                                console.log(error);
+                              }
                             }}
                             class=" containerss"
                             style={{
