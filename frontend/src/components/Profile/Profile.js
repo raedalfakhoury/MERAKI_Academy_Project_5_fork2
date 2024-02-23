@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-unreachable */
 /* eslint-disable no-lone-blocks */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable eqeqeq */
@@ -10,8 +12,24 @@ import Loader from "../Loader/Loader";
 import "../Profile/Profile.css";
 import { CiBookmark } from "react-icons/ci";
 import { BsPostcard } from "react-icons/bs";
+import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 const Profile = () => {
   const Navigate = useNavigate();
   const arr = useRef([]);
@@ -41,12 +59,17 @@ const Profile = () => {
   const [innerText, setInnerText] = useState("");
   const [showFollowers, setShow] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
+  const handleShowEditProfile = () => setShowEditProfile(true);
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
+  const handleCloseEditProfile = () => setShowEditProfile(false);
   let filtration;
   window.scrollTo(0, 0);
+
+  const [user, setUser] = useState();
 
   const getMyFollowing = () => {
     axios
@@ -253,8 +276,7 @@ const Profile = () => {
       </>
     );
   }
-  console.log("out", arr.current);
-  console.log("FOLO", followers);
+
   function Following() {
     return (
       <>
@@ -413,11 +435,79 @@ const Profile = () => {
       </>
     );
   }
+
+  function EditProfile() {
+    return (
+      <>
+        <Modal
+          show={showEditProfile}
+          onHide={handleCloseEditProfile}
+          animation={false}
+          centered
+        >
+          <Modal.Header
+            closeButton
+            style={{ borderBottom: "none", padding: "10px 10px" }}
+          >
+            <Modal.Title
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                paddingBottom: "10px",
+                borderBottom: "1px solid #808080",
+              }}
+            >
+              Public info
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            id="Modal.Body"
+            style={{
+              padding: "10px",
+              height: following?.length == 0 ? "100px" : "525px",
+              overflowY: "auto",
+            }}
+          >
+            <div className="mainEditProfile">
+              {user?.map((ele) => {
+                console.log(ele);
+
+                return (
+                  // <img  className="imgEditProfile" alt="" src={ele.profile_picture_url} />
+                  <Stack direction="row" spacing={2}>
+                    <Avatar
+                      alt={ele.username}
+                      src={ele.profile_picture_url}
+                      sx={{ width: 200, height: 200 }}
+                    />
+                  </Stack>
+                );
+              })}
+              <div>
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                >
+                  Upload image
+                  <VisuallyHiddenInput type="file" />
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </>
+    );
+  }
   return (
     <div id="mainPage">
       <Followers />
       <Following />
-
+      <EditProfile />
       {loader ? (
         <Loader />
       ) : (
@@ -437,12 +527,30 @@ const Profile = () => {
                   <p className="username">{elm.username}</p>
 
                   {localStorage.getItem("userId") == searchQuery2 ? (
-                    <p className="followers" style={{ cursor: "pointer" }} onClick={()=>{
-                       
-                    }}>
-                      {" "}
-                      Edit profile
-                    </p>
+                    // <p
+                    //   className="followers"
+                    //   style={{ cursor: "pointer" }}
+                    //   onClick={async () => {
+                    //     try {
+                    //       const result = await axios.get(
+                    //         `http://localhost:5000/users/${searchQuery2}`
+                    //       );
+                    //       setUser(result.data.result);
+                    //       handleShowEditProfile();
+                    //     } catch (error) {
+                    //       console.log(error);
+                    //     }
+                    //   }}
+                    // >
+                    //   {" "}
+                    //   Edit profile
+                    // </p>
+                    <button class="Btn">
+                      Edit
+                      <svg class="svg" viewBox="0 0 512 512">
+                        <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
+                      </svg>
+                    </button>
                   ) : arr.current.includes(searchQuery2) ? (
                     <button
                       id=" UnFollow-Public"
