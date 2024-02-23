@@ -959,9 +959,8 @@ function Post() {
                               try {
                                 const res = await axios.delete(
                                   `http://localhost:5000/post/delete/saved`,
-                                  { post_id: elm.id },
-
                                   {
+                                    data: { post_id: elm.id },
                                     headers: {
                                       Authorization: `Bearer ${token}`,
                                     },
@@ -970,9 +969,10 @@ function Post() {
                                 console.log(res);
                                 console.log("unsave");
                                 setToggleSava(true);
-                                postSavedArray.current.filter((ele) => {
-                                  return ele !== elm.id;
-                                });
+                                postSavedArray.current =
+                                  postSavedArray.current.filter(
+                                    (ele) => ele !== elm.id
+                                  );
                               } catch (error) {
                                 console.log(error);
                               }
