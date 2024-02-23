@@ -25,15 +25,54 @@ export default function Rigester() {
   const [result, setUserResult] = useState("");
   const [status, setStatus] = useState(false);
   const redirect = useNavigate();
-  const handleButtonClick = () => {
-    document.querySelector(".input-file").click();
-  };
+  // const handleButtonClick = () => {
+  //   document.querySelector(".input-file").click();
+  // };
   const handleFileInputChange = (e) => {
     console.log(5);
   };
   const handleClick = () => {
     // Handle click action here
   };
+
+    // get Cloudinary URL
+    const handleButtonClick = (files) => {
+      setOpen1(true);
+      const formData = new FormData();
+      formData.append("file", files[0]);
+      formData.append("upload_preset", pr_key);
+  
+      fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.url);
+  
+          postdata(data.url);
+        });
+    };
+  
+    // Post the Video in the database
+    const postdata = (Url) => {
+      axios
+        .post(
+          `http://localhost:5000/story`,
+          { video_url: Url },
+          {
+            headers: {
+              Authorization: `Bearer ${test}`,
+            },
+          }
+        )
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   return (
     // <section className="background-radial-gradient overflow-hidden">
     //   <style>
