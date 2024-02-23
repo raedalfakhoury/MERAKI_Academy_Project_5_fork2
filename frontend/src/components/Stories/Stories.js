@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -105,7 +106,7 @@ export default function Stories() {
       .then((res) => {
         setData(res.data.result);
         console.log(Data);
-        res.data.result.map((elem, indx) => {
+        res?.data?.result?.map((elem, indx) => {
           axios
             .get(`http://localhost:5000/story/${elem.id}`, {
               headers: {
