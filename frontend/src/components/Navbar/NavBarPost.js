@@ -120,8 +120,17 @@ export default function NavBarPost() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose()
+          redirect({
+            pathname: "/profile",
+            search: `?prf=${My_ID}`
+          });
+        }}
+      >
+        Profile
+      </MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
