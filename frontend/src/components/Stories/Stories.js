@@ -44,12 +44,12 @@ const ExpandMore = styled((props) => {
 
 export default function Stories() {
   const [loading, setLoading] = useState(true);
-  const [openResult, setOpenResult] = React.useState(false);
+  const [openResult, setOpenResult] = useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
-  const [open, setOpen] = React.useState(false);
-  const [open1, setOpen1] = React.useState(false);
-  const [expanded, setExpanded] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [showStory, setShowStory] = useState(false);
   const [userName, setUserName] = useState("Mohammad");
   const [userStory, setUserStory] = useState([]);
