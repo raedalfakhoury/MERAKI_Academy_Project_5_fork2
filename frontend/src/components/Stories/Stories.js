@@ -4,32 +4,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { styled, css } from "@mui/material/styles";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import PropTypes from "prop-types";
 import "./index.css";
 import clsx from "clsx";
 import { Modal as BaseModal } from "@mui/base/Modal";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Divider from "@mui/material/Divider";
-import Image from "mui-image";
-import Popup from "reactjs-popup";
-import ReactPlayer from "react-player";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import {
-  CardHeader,
-  Avatar,
-  IconButton,
-  Typography,
-  Button,
-} from "@mui/material";
+import { CardHeader, Avatar, IconButton, Typography } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -93,7 +76,7 @@ export default function Stories() {
     setOpen1(false);
     setOpenResult(false);
   };
-const My_ID = localStorage.getItem("userId")
+  const My_ID = localStorage.getItem("userId");
   // ==========================  Get All Followers ======================================
   useEffect(() => {
     axios
@@ -105,10 +88,6 @@ const My_ID = localStorage.getItem("userId")
       .then((res) => {
         setData(res.data.result);
         console.log(Data);
-        res.data.result.map((elem, indx) => {
-         
-
-        });
       })
       .catch((err) => {
         console.log(err);
@@ -203,7 +182,7 @@ const My_ID = localStorage.getItem("userId")
           // marginTop:"100px",
           borderRadius: "10px",
           cursor: "pointer",
-          width:"100%"
+          width: "100%",
         }}
         sx={{}}
       >
@@ -387,8 +366,17 @@ const My_ID = localStorage.getItem("userId")
             <Divider component="div" role="presentation" />
             <CardHeader
               avatar={
-                <TriggerButton type="button" onClick={() => handleOpen(elem)}>
-                  R
+                <TriggerButton  type="button" onClick={() => handleOpen(elem)}>
+                  <img
+                    src={userPhoto}
+                    style={{
+                      color: "black",
+                      width: "40px",
+                      height: "35px",
+                      borderRadius: "20px",
+                      cursor: "pointer",
+                    }}
+                  />
                 </TriggerButton>
               }
               action={

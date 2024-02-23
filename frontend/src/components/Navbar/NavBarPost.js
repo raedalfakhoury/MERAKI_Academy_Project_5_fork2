@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { SvgIcon } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../redux/store";
+import { Avatar } from "@mui/material";
 import { setLogout } from "../redux/reducers/auth/index";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -71,9 +72,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function NavBarPost() {
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
-
+  const [userProfile, setUserProfile] = useState(null);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+
+console.log(3);
   };
 
   const handleClose = () => {
@@ -125,6 +127,20 @@ export default function NavBarPost() {
     </Menu>
   );
   const redirect = useNavigate();
+
+  //====================================== Get User Profile  by Id ===================================
+  const My_ID = localStorage.getItem("userId");
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users/${My_ID}`)
+      .then((res) => {
+        setUserProfile(res.data.result[0].profile_picture_url);
+        console.log(res.data.result[0].profile_picture_url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -350,12 +366,13 @@ export default function NavBarPost() {
             />
           </Search>
           {/* Profile Picture */}
-          <AccountCircle
+
+          <Avatar
+            src={userProfile}
+            alt="User Profile"
             style={{
-              color: "black",
               width: "40px",
-              height: "35px",
-              borderRadius: "20px",
+              height: "40px",
               cursor: "pointer",
             }}
             onClick={handleClick}
