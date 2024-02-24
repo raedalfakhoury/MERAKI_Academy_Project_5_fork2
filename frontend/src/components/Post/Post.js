@@ -55,6 +55,8 @@ import { motion } from "framer-motion";
 import { BiSolidLike } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
 function Post() {
+  const [Add_className, set_Add_className] = useState(true);
+
   const [LikeComments, setLikeComment] = useState([]);
   const [Count_like_Comment_number, setCount_like_Comment_number] = useState(
     []
@@ -525,7 +527,12 @@ function Post() {
         <Container className="containerPosts">
           <Row>
             <Col className="navCreatePost" style={{ padding: "0" }}>
-              <Col className="box active">
+              <Col
+                className={Add_className ? "box active" : "box"}
+                onClick={() => {
+                  set_Add_className(true);
+                }}
+              >
                 <span class="icon is-small">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -546,7 +553,12 @@ function Post() {
                 </span>
               </Col>
 
-              <Col className="box">
+              <Col
+                className={!Add_className ? "box active" : "box "}
+                onClick={() => {
+                  set_Add_className(false);
+                }}
+              >
                 <label
                   style={{ position: "relative", cursor: "pointer" }}
                   class="file-label"
@@ -845,7 +857,17 @@ function Post() {
                   >
                     <Row className="bodyPostImage">
                       {" "}
-                      <p style={{ margin: "5px" }}>{elm.content}</p>
+                      <p
+                        style={{
+                          margin: "5px",
+                          fontWeight: "500",
+                          color: "#000",
+                          fontSize: "18px",
+                          fontFamily:" revert-layer"
+                        }}
+                      >
+                        {elm.content}
+                      </p>
                     </Row>
                     <Row>
                       {" "}
