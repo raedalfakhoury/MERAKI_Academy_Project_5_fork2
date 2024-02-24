@@ -1,17 +1,25 @@
 .video .previous {
     position: relative;
-    background-color: gray;
-top: 120px;
-    left : -320px;
+    grid-column-start:1;
+grid-row-start: 2;
+
     cursor: pointer;
+    width: 35%;
+    height: 100%;
+    margin-right: auto;
+
 
 }
 .video  .next {
     position: relative;
-    background-color: gray;
-    top: 140px;
-left : 20px;
+    grid-column-start: 3;
+    grid-row-start: 2;
+
+width: 35%;
+height: 100%;
 cursor: pointer;
+margin-left: auto;
+
 }
 .video .svg{
     color: white;
@@ -20,10 +28,31 @@ cursor: pointer;
 }
 
 .video{
-    display: flex;
-    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    width: auto;
+    height: 50%;
+    grid-row-start: 2;
+    grid-row-end: 2;
 }
 
-/* .video video{
-    width: 100%;
-} */
+.video video{
+    /* width: 100%; */
+    grid-column-start:2;
+    grid-row-start: 2;
+
+    margin: auto;
+    width: 80%;
+    height: 80%;
+}
+
+.model-show-stories{
+    background-color: rgb(20, 52, 178);
+}
+
+.model-show-stories .model-content{
+    width: 50%;
+    height: 80%;
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr;
+}
