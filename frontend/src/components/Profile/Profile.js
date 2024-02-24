@@ -31,6 +31,34 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 const Profile = () => {
+  const [data_user, set_data_user] = useState({
+    bio: "",
+    image: "",
+  });
+
+  const pr_key = "rllytlm7";
+  const cloud_name = "dmmo3zzyc";
+
+  const handleImageJamal = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        formData
+      )
+      .then((result) => {
+        console.log(result.data.url);
+        set_data_user({ ...data_user, image: result.data.url });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const dispatch = useDispatch();
 
   const Navigate = useNavigate();
@@ -38,7 +66,7 @@ const Profile = () => {
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
   const [image, setImage] = useState();
-  let bio = useRef("");
+  // let bio = useRef("");
   const { token, savePost } = useSelector((state) => {
     return {
       token: state.auth.token,
@@ -104,7 +132,8 @@ const Profile = () => {
         console.log(err);
       });
   };
-
+  // console.log(profileInfo); // array
+  // console.log(profile_picture_url);
   useEffect(() => {
     getMyFollowing();
 
@@ -455,120 +484,13 @@ const Profile = () => {
     );
   }
 
-  function EditProfile() {
-    return (
-      <>
-        <Modal
-          show={showEditProfile}
-          onHide={handleCloseEditProfile}
-          animation={false}
-          centered
-        >
-          <Modal.Header
-            closeButton
-            style={{ borderBottom: "none", padding: "10px 10px" }}
-          >
-            <Modal.Title
-              style={{
-                justifyContent: "center",
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                paddingBottom: "10px",
-                borderBottom: "1px solid #808080",
-              }}
-            >
-              Public info
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body
-            id="Modal.Body"
-            style={{
-              padding: "10px",
-              display: "flex",
-              overflowY: "auto",
-            }}
-          >
-            <div className="mainEditProfile">
-              {user?.map((ele, i) => {
-                return (
-                  <>
-                    <img
-                      key={i}
-                      className="imgEditProfile"
-                      alt=""
-                      src={ele.profile_picture_url}
-                    />
-                    <div>
-                      <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudUploadIcon />}
-                      >
-                        Upload image
-                        <VisuallyHiddenInput type="file" />
-                      </Button>
-                    </div>
-                    <textarea
-                      id="w3review"
-                      name="w3review"
-                      rows="4"
-                      cols="50"
-                      placeholder={ele.bio}
-                      onChange={(e) => {
-                        bio =
-                          e.target.value == null
-                            ? profileInfo[0]?.bio
-                            : e.target.value;
-                      }}
-                    ></textarea>
+  // function EditProfile() {
+  //   return (
+  //     <>
 
-                    <button
-                      id="btn2"
-                      onClick={async () => {
-                        try {
-                          const result = await axios.put(
-                            `http://localhost:5000/users/update`,
-                            {
-                              bio: bio,
-                            },
-                            {
-                              headers: {
-                                Authorization: `Bearer ${token}`,
-                              },
-                            }
-                          );
-                          Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Successfully changed",
-                            showConfirmButton: false,
-                            timer: 1000,
-                          });
-                          const edit = profileInfo.map((ele) => {
-                            ele.bio = bio;
-                            return ele;
-                          });
-                          setProfileInfo(edit);
-                          handleCloseEditProfile();
-                        } catch (error) {
-                          console.log("error from update profile bio", error);
-                        }
-                      }}
-                    >
-                      SAVE CHANGE
-                    </button>
-                  </>
-                );
-              })}
-            </div>
-          </Modal.Body>
-        </Modal>
-      </>
-    );
-  }
+  //     </>
+  //   );
+  // }
 
   function PostPopUp() {
     return (
@@ -590,9 +512,8 @@ const Profile = () => {
                 alignItems: "center",
                 width: "100%",
               }}
-             
             >
-               <h4> {postAndComment?.length} comments</h4>
+              <h4> {postAndComment?.length} comments</h4>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body
@@ -607,7 +528,7 @@ const Profile = () => {
               <Loader />
             ) : (
               <div className="mainPostPopup">
-                {image && image.length > 0 && postAndComment.length > 0 &&(
+                {image && image.length > 0 && postAndComment.length > 0 && (
                   <img
                     alt=""
                     src={postAndComment[0]?.media_url}
@@ -681,7 +602,7 @@ const Profile = () => {
     <div id="mainPage">
       <Followers />
       <Following />
-      <EditProfile />
+      {/* <EditProfile /> */}
       <PostPopUp />
       {loader ? (
         <Loader />
@@ -722,6 +643,17 @@ const Profile = () => {
                             `http://localhost:5000/users/${searchQuery2}`
                           );
                           setUser(result.data.result);
+                          const { bio, profile_picture_url } =
+                            result.data.result[0];
+                          // console.log(result.data.result[0]);
+                          set_data_user({
+                            ...data_user,
+                            bio: bio,
+                            image: profile_picture_url,
+                          });
+                          // bio: "",
+                          // image: "",
+                          // console.log(result.data.result[0]);
                           handleShowEditProfile();
                           setShowPost(false);
                           setShowSave(false);
@@ -949,7 +881,7 @@ const Profile = () => {
                     src={ele.media_url}
                     onClick={async () => {
                       handleShowPostPopup();
-                      console.log(ele.id);
+                      // console.log(ele.id);
                       try {
                         setLoader(false);
                         // ! {The axios.get() method doesn't accept a second parameter for passing data in a GET request} مهم
@@ -964,8 +896,8 @@ const Profile = () => {
                             },
                           }
                         );
-                        console.log(res?.data?.result);
-                        console.log(images.data.post);
+                        // console.log(res?.data?.result);
+                        // console.log(images.data.post);
                         setImage(images?.data?.post);
                         setPostAndComment(res?.data?.result);
                       } catch (error) {
@@ -1021,6 +953,127 @@ const Profile = () => {
       >
         HOME
       </button>
+      <Modal
+        show={showEditProfile}
+        onHide={handleCloseEditProfile}
+        animation={false}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{ borderBottom: "none", padding: "10px 10px" }}
+        >
+          <Modal.Title
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+              borderBottom: "1px solid #808080",
+            }}
+          >
+            Public info
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          id="Modal.Body"
+          style={{
+            padding: "10px",
+            display: "flex",
+            overflowY: "auto",
+          }}
+        >
+          <div className="mainEditProfile">
+            {user?.map((ele, i) => {
+              return (
+                <>
+                  <img
+                    key={i}
+                    className="imgEditProfile"
+                    alt=""
+                    src={data_user.image}
+                  />
+                  <div>
+                    <Button
+                      component="label"
+                      role={undefined}
+                      variant="contained"
+                      tabIndex={-1}
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload image
+                      <VisuallyHiddenInput
+                        type="file"
+                        onChange={(e) => {
+                          handleImageJamal(e);
+                          // console.log(e.target.value);
+                        }}
+                      />
+                    </Button>
+                  </div>
+                  <textarea
+                    value={data_user.bio}
+                    id="w3review"
+                    name="w3review"
+                    rows="4"
+                    cols="50"
+                    // placeholder={ele.bio}
+                    onChange={(e) => {
+                      set_data_user({ ...data_user, bio: e.target.value });
+                    }}
+                  ></textarea>
+
+                  <button
+                    id="btn2"
+                    onClick={async () => {
+                      try {
+                        const result = await axios.put(
+                          `http://localhost:5000/users/update`,
+                          {
+                            bio: data_user.bio,
+                            profile_picture_url: data_user.image,
+                          },
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                   
+                        const newProfileInfo_X = profileInfo.map(
+                          (elm, index) => {
+                            elm.profile_picture_url = data_user.image;
+                            return elm
+                          }
+                        );
+                             setProfileInfo(newProfileInfo_X)
+                        Swal.fire({
+                          position: "center",
+                          icon: "success",
+                          title: "Successfully changed",
+                          showConfirmButton: false,
+                          timer: 1000,
+                        });
+                        const edit = profileInfo.map((ele) => {
+                          ele.bio = data_user.bio;
+                          return ele;
+                        });
+                        setProfileInfo(edit);
+                        handleCloseEditProfile();
+                      } catch (error) {
+                        console.log("error from update profile bio", error);
+                      }
+                    }}
+                  >
+                    SAVE CHANGE
+                  </button>
+                </>
+              );
+            })}
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

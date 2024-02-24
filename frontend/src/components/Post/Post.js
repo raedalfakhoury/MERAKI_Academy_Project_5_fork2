@@ -358,7 +358,7 @@ function Post() {
         }
       )
       .then((result) => {
-        const {comment_id}=  result.data.result
+        const { comment_id } = result.data.result;
         // console.log(result.data.result.comment_id);
         const dataCommentMax = {
           ...result.data.result,
@@ -369,9 +369,10 @@ function Post() {
         setInputAddComment("");
 
         console.log(Count_like_Comment_number);
-        setCount_like_Comment_number([...Count_like_Comment_number,{comment_id:comment_id,like_count:0}])
-
-      
+        setCount_like_Comment_number([
+          ...Count_like_Comment_number,
+          { comment_id: comment_id, like_count: 0 },
+        ]);
       })
       .catch((err) => {
         console.log(err);
@@ -607,12 +608,13 @@ function Post() {
                   xs={6}
                   style={{ maxHeight: "40px", maxWidth: "70px" }}
                 >
-                           <Stack direction="row" spacing={2}>
-                      <Avatar style={{cursor:"pointer"}}
-                        alt="Remy Sharp"
-                        src={image}
-                      />
-                    </Stack>
+                  <Stack direction="row" spacing={2}>
+                    <Avatar
+                      style={{ cursor: "pointer" }}
+                      alt="Remy Sharp"
+                      src={image}
+                    />
+                  </Stack>
                 </Col>
 
                 <Col>
@@ -722,7 +724,7 @@ function Post() {
               <Container className="containerPosts">
                 <Col>
                   <Row className="postsUserNav">
-                    {userId == elm.user_id ? (
+                    {elm.is_loggedin ? (
                       <div
                         style={{ width: "70px", padding: "0px" }}
                         className="status"
@@ -1575,7 +1577,8 @@ function Post() {
                 return (
                   <>
                     <Stack direction="row" spacing={2}>
-                      <Avatar style={{cursor:"pointer"}}
+                      <Avatar
+                        style={{ cursor: "pointer" }}
                         onClick={() => {
                           Navigate({
                             pathname: "/profile",
