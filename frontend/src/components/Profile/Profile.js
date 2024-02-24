@@ -37,6 +37,7 @@ const Profile = () => {
   const arr = useRef([]);
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
+
   let bio = useRef("");
   const { token, savePost } = useSelector((state) => {
     return {
@@ -56,7 +57,6 @@ const Profile = () => {
   const [showPost, setShowPost] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [myPosts, setMyPosts] = useState();
-  console.log(myPosts?.length);
   const [followers, setFollowers] = useState();
   const [following, setFollowing] = useState();
   const [countFollowers, serCountFollowers] = useState(0);
@@ -66,12 +66,18 @@ const Profile = () => {
   const [showFollowers, setShow] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showPostPopup, setShowPostPopup] = useState(false);
+  const [postAndComment, setPostAndComment] = useState();
+
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
   const handleShowEditProfile = () => setShowEditProfile(true);
+  const handleShowPostPopup = () => setShowPostPopup(true);
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
   const handleCloseEditProfile = () => setShowEditProfile(false);
+  const handleClosePostPopup = () => setShowPostPopup(false);
+
   let filtration;
   window.scrollTo(0, 0);
 
@@ -508,7 +514,10 @@ const Profile = () => {
                       cols="50"
                       placeholder={ele.bio}
                       onChange={(e) => {
-                        bio = e.target.value;
+                        bio =
+                          e.target.value == null
+                            ? profileInfo[0]?.bio
+                            : e.target.value;
                       }}
                     ></textarea>
 
@@ -556,11 +565,125 @@ const Profile = () => {
       </>
     );
   }
+
+  function PostPopUp() {
+    return (
+      <>
+        <Modal
+          show={showPostPopup}
+          onHide={handleClosePostPopup}
+          animation={false}
+          centered
+        >
+          <Modal.Header
+            closeButton
+            style={{ borderBottom: "1px solid #808080", padding: "5px 10px" }}
+          >
+            <Modal.Title
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              {postAndComment?.map((e) => {
+                console.log(e);
+                return (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      width: "100%",
+                    }}
+                  >
+                    <p style={{ fontSize: "20px", margin: "0px" }}>
+                      {" "}
+                      {e.like_count}
+                    </p>
+                    <p style={{ fontSize: "20px", margin: "0px" }}>
+                      {" "}
+                      {e.comment_count}
+                    </p>
+                  </div>
+                );
+              })}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            id="Modal.Body"
+            style={{
+              padding: "10px",
+              display: "flex",
+              overflowY: "auto",
+            }}
+          >
+            <div className="mainPostPopup">
+              {postAndComment?.map((ele) => {
+                console.log(ele);
+                return (
+                  <>
+                    <img
+                      alt=""
+                      src={ele.post_media_url}
+                      style={{ height: "250px", width: "200px" }}
+                    ></img>
+                    <div
+                      className="inPopup"
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          gap: "10px",
+                          height: "fit-content",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          alt=""
+                          src={ele.post_profile_picture_url}
+                          style={{
+                            height: "70px",
+                            width: "70px",
+                            borderRadius: "50%",
+                          }}
+                        ></img>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column-reverse",
+                          }}
+                        >
+                          <p style={{ marginBottom: "0px" }}>
+                            {ele.comment_content?.split("|")[0]}{" "}
+                          </p>
+                          <p style={{ marginBottom: "0px" }}>
+                            {ele.comment_username}{" "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+          </Modal.Body>
+        </Modal>
+      </>
+    );
+  }
+
   return (
     <div id="mainPage">
       <Followers />
       <Following />
       <EditProfile />
+      <PostPopUp />
       {loader ? (
         <Loader />
       ) : (
@@ -666,7 +789,7 @@ const Profile = () => {
                             );
                             arr.current.push(searchQuery2);
                             setRemove(!remove);
-                            
+
                             serCountFollowers(countFollowers * 1 + 1);
                             setShowPost(false);
                             setShowSave(false);
@@ -770,6 +893,7 @@ const Profile = () => {
                 axios
                   .get(`http://localhost:5000/post/mypost/${searchQuery2}`)
                   .then((result) => {
+                    console.log(result.data);
                     setMyPosts(result?.data?.result);
                     setShowSave(false);
                   })
@@ -807,7 +931,7 @@ const Profile = () => {
                     }
                   }}
                 >
-                  saves
+                  Archives
                 </p>
               </>
             ) : null}
@@ -822,14 +946,33 @@ const Profile = () => {
                     key={ele.id}
                     className="img-post"
                     alt=""
+                    style={{ cursor: "pointer" }}
                     src={ele.media_url}
+                    onClick={async () => {
+                      handleShowPostPopup();
+                      console.log(ele.id);
+                      try {
+                        // ! {The axios.get() method doesn't accept a second parameter for passing data in a GET request} مهم
+                        const res = await axios.get(
+                          `http://localhost:5000/post/postWithComments/${ele.id}`
+                        );
+                        console.log(res?.data);
+                        setPostAndComment(res?.data?.result);
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
                   ></img>
                 ) : (
                   <video
+                    style={{ cursor: "pointer" }}
                     controls
                     muted
                     className="img-post"
                     src={ele.media_url}
+                    onClick={() => {
+                      console.log(ele.id);
+                    }}
                   ></video>
                 )}
               </>
@@ -860,7 +1003,14 @@ const Profile = () => {
           );
         })}
       </div>
-      <button id="Floating" onClick={()=>{Navigate("/home")}}>HOME</button>
+      <button
+        id="Floating"
+        onClick={() => {
+          Navigate("/home");
+        }}
+      >
+        HOME
+      </button>
     </div>
   );
 };

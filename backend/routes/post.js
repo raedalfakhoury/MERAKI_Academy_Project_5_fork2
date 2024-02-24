@@ -15,9 +15,11 @@ const {
   savePost,
   getSavedPosts,
   deleteSavePost,
+  getPostAndComment
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
+PostRouter.get("/postWithComments/:Posts_id",   getPostAndComment);
 
 PostRouter.delete("/delete/saved", authentication, deleteSavePost);
 PostRouter.get("/allSavePost", authentication, getSavedPosts);

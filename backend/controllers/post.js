@@ -69,7 +69,13 @@ const getpostByuserId = (req, res) => {
   const userId = req.params.userId;
 
   const query = `
-          SELECT * FROM 
+          SELECT Posts.id,
+          Posts.user_id,
+          Posts.content,
+          Posts.media_url,
+          Posts.created_at,
+          Users.profile_picture_url,
+          Users.username FROM 
           Posts
           JOIN Users ON Posts.user_id = Users.id 
           WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
@@ -380,14 +386,63 @@ const deleteSavePost = (req, res) => {
   const query = ` DELETE FROM Posts_Users WHERE Posts_Users.user_id = $1 AND Posts_Users.post_id = $2  ;`;
   pool
     .query(query, data)
-    .then((result) => { 
+    .then((result) => {
       res.status(200).json({
         successful: true,
         message: "deleted successfully",
         result: result.rows,
-      }) 
+      });
     })
-    .catch((err) => { 
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
+
+const getPostAndComment = (req, res) => {
+  const { Posts_id } = req.params;
+  const data = [Posts_id];
+  const query = `SELECT 
+  Posts.id AS post_id,
+  Posts.user_id AS post_user_id,
+  Posts.content AS post_content,
+  Posts.media_url AS post_media_url,
+  Posts.created_at AS post_created_at,
+  Users.username AS post_username,
+  Users.profile_picture_url AS post_profile_picture_url,
+  COUNT(DISTINCT Comments.comment_id) AS comment_count,
+  STRING_AGG(Comments.content, '|') AS comment_content,
+  COUNT(DISTINCT Likes.like_id) AS like_count,
+  CommentUsers.id AS comment_user_id,
+  CommentUsers.username AS comment_username,
+  CommentUsers.profile_picture_url AS comment_profile_picture_url
+FROM 
+  Posts
+LEFT JOIN Users ON Posts.user_id = Users.id
+LEFT JOIN Comments ON Comments.post_id = Posts.id
+LEFT JOIN Likes ON Likes.post_id = Posts.id
+LEFT JOIN Users AS CommentUsers ON Comments.user_id = CommentUsers.id
+WHERE 
+  Posts.id = $1
+GROUP BY
+  Posts.id, 
+  Users.id,
+  CommentUsers.id;
+;
+`;
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        successful: true,
+        message: "get Posts with comments",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
       res.status(500).json({
         success: false,
         err: err,
@@ -408,6 +463,7 @@ module.exports = {
   savePost,
   getSavedPosts,
   deleteSavePost,
+  getPostAndComment,
 };
 
 // CREATE TABLE Posts (
