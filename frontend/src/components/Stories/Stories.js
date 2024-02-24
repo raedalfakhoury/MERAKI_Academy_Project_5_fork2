@@ -358,10 +358,28 @@ export default function Stories() {
                 slots={{ backdrop: StyledBackdrop }}
                 className="model-show-stories"
               >
-                <ModalContent sx={{ maxwidth: 100, maxHeight: 1200 }} className="model-content">
-                  <h2 id="unstyled-modal-title" className="modal-title">
-                    {userName}
-                  </h2>
+                <ModalContent
+                  sx={{ maxwidth: 100, maxHeight: 1200 }}
+                  className="model-content"
+                >
+                  <div className="show-story-user-information">
+                    {" "}
+                    <img
+                      src={My_Img}
+                      onClick={() => handleOpen(elem)}
+                      style={{
+                        color: "black",
+                        width: "40px",
+                        height: "35px",
+                        borderRadius: "25px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <h6 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h6>
+                  </div>
+
                   <p
                     id="unstyled-modal-description"
                     className="modal-description"
@@ -429,42 +447,41 @@ export default function Stories() {
             </Typography>
           }
         />
-<div
-  style={{
-    maxHeight: "220px",
-    overflowY: "scroll",
-  }}
->
-  {/* Render all friends */}
-  {Data.map((elem, indx) => (
-    <React.Fragment key={indx}>
-      <Divider component="div" role="presentation" />
-      <CardHeader
-        avatar={
-          <img
-            src={elem.profile_picture_url}
-            onClick={() => handleOpen(elem)}
-            style={{
-              color: "black",
-              width: "40px",
-              height: "35px",
-              borderRadius: "25px",
-              cursor: "pointer",
-            }}
-          />
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={elem.username}
-        subheader={elem.created_at}
-      />
-    </React.Fragment>
-  ))}
-</div>
-
+        <div
+          style={{
+            maxHeight: "220px",
+            overflowY: "scroll",
+          }}
+        >
+          {/* Render all friends */}
+          {Data.map((elem, indx) => (
+            <React.Fragment key={indx}>
+              <Divider component="div" role="presentation" />
+              <CardHeader
+                avatar={
+                  <img
+                    src={elem.profile_picture_url}
+                    onClick={() => handleOpen(elem)}
+                    style={{
+                      color: "black",
+                      width: "40px",
+                      height: "35px",
+                      borderRadius: "25px",
+                      cursor: "pointer",
+                    }}
+                  />
+                }
+                action={
+                  <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={elem.username}
+                subheader={elem.created_at}
+              />
+            </React.Fragment>
+          ))}
+        </div>
       </Card>
     </>
   );
