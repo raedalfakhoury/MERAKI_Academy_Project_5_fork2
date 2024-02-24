@@ -14,12 +14,12 @@ import Stories from "../Stories/Stories";
 
 import Loader from "../Loader/Loader";
 import Profile from "../Profile/Profile";
-
+import Socket from "../socket/Socket";
 import Explore from "../Explore/Explore";
 export default function CustomRoute() {
   return (
     <>
-
+{/* <Socket/> */}
       <Routes>
         <Route path="/users/register" element={<Register />} />
         <Route path="/Explore" element={<Explore />} />
