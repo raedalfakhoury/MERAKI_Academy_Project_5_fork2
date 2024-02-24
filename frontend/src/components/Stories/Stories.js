@@ -4,32 +4,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { styled, css } from "@mui/material/styles";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import PropTypes from "prop-types";
 import "./index.css";
 import clsx from "clsx";
 import { Modal as BaseModal } from "@mui/base/Modal";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Divider from "@mui/material/Divider";
-import Image from "mui-image";
-import Popup from "reactjs-popup";
-import ReactPlayer from "react-player";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import {
-  CardHeader,
-  Avatar,
-  IconButton,
-  Typography,
-  Button,
-} from "@mui/material";
+import { CardHeader, Avatar, IconButton, Typography } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -51,14 +34,21 @@ export default function Stories() {
   const [open1, setOpen1] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showStory, setShowStory] = useState(false);
-  const [userName, setUserName] = useState("Mohammad");
+  const [userName, setUserName] = useState("");
   const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
-  const [video, setVideo] = useState("");
+  const [userPhoto, setUserPhoto] = useState("");
   const [model, setModle] = useState(false);
   const [vidIndex, setVidIndex] = useState(0);
   const [usersStories, setUserStories] = useState([]);
   const temp = [];
+
+  // ================= My Informations From Local Storge =================================
+  const My_ID = localStorage.getItem("userId");
+  const My_userName = localStorage.getItem("name");
+  const My_Img = localStorage.getItem("image");
+
+  // ====================================================================================
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
@@ -88,13 +78,37 @@ export default function Stories() {
         setOpenResult(true);
       });
   };
+
+  const handleOpenMyStories = (e) => {
+    setOpen(true);
+    setUserName(My_userName);
+    setLoading(true);
+    axios
+      .get(`http://localhost:5000/story/${My_ID}`, {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data.result);
+        setUserStory(res.data.result);
+        console.log(userStory);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpen(false);
+
+        setOpenResult(true);
+      });
+  };
   const handleClose = () => {
     setOpen(false);
     setOpen1(false);
     setOpenResult(false);
   };
-const My_ID = localStorage.getItem("userId")
-  // ==========================  Get All Followers ======================================
+
+  // ==========================  Get All Following ======================================
   useEffect(() => {
     axios
       .get(`http://localhost:5000/followers/Following/${My_ID}`, {
@@ -105,10 +119,6 @@ const My_ID = localStorage.getItem("userId")
       .then((res) => {
         setData(res.data.result);
         console.log(Data);
-        res.data.result.map((elem, indx) => {
-         
-
-        });
       })
       .catch((err) => {
         console.log(err);
@@ -135,7 +145,7 @@ const My_ID = localStorage.getItem("userId")
     storyIndexRef.current = storyIndex;
   }, [storyIndex]);
 
-  // ===================================================================
+  //
   const handleAvatarClick = () => {
     setShowStory(true);
     console.log(showStory);
@@ -197,21 +207,57 @@ const My_ID = localStorage.getItem("userId")
     <>
       <Card
         style={{
-          // position: "absolute",
-          // top: "140px",
-          // right: "90px",
-          // marginTop:"100px",
           borderRadius: "10px",
           cursor: "pointer",
-          width:"100%"
+          width: "125%",
         }}
         sx={{}}
       >
-        <CardHeader />
         {/* Title of Stories Section */}
-        <h6 style={{ paddingLeft: "20px" }}>Stories</h6>
+        <h6 style={{ paddingLeft: "20px", paddingTop: "20px" }}>Stories</h6>
         <Divider component="div" role="presentation" />
 
+        {/* My stories Section  */}
+
+        <CardHeader
+          avatar={
+            <Avatar
+              sx={{
+                bgcolor: "#E8E8E8",
+                "&:hover": {
+                  bgcolor: "#0288D1",
+                  color: "#ffff",
+                },
+              }}
+              aria-label="recipe"
+            >
+              <img
+                src={My_Img}
+                onClick={() => handleOpenMyStories()}
+                style={{
+                  color: "black",
+                  width: "40px",
+                  height: "35px",
+                  borderRadius: "25px",
+                  cursor: "pointer",
+                }}
+              />
+            </Avatar>
+          }
+          action={<IconButton aria-label="settings"></IconButton>}
+          title={
+            <Typography variant="h6" sx={{ fontSize: "15px" }}>
+              My Stories
+            </Typography>
+          }
+          subheader={
+            <Typography variant="h6" sx={{ fontSize: "12px" }}>
+              {userName} 's Stories
+            </Typography>
+          }
+        />
+
+        {/* Add new Story Section  */}
         <CardHeader
           avatar={
             <Avatar
@@ -310,11 +356,30 @@ const My_ID = localStorage.getItem("userId")
                 open={open}
                 onClose={handleClose}
                 slots={{ backdrop: StyledBackdrop }}
+                className="model-show-stories"
               >
-                <ModalContent sx={{ maxwidth: 100, maxHeight: 1200 }}>
-                  <h2 id="unstyled-modal-title" className="modal-title">
-                    {userName}
-                  </h2>
+                <ModalContent
+                  sx={{ maxwidth: 100, maxHeight: 1200 }}
+                  className="model-content"
+                >
+                  <div className="show-story-user-information">
+                    {" "}
+                    <img
+                      src={My_Img}
+                      onClick={() => handleOpen(elem)}
+                      style={{
+                        color: "black",
+                        width: "40px",
+                        height: "35px",
+                        borderRadius: "25px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <h6 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h6>
+                  </div>
+
                   <p
                     id="unstyled-modal-description"
                     className="modal-description"
@@ -382,25 +447,41 @@ const My_ID = localStorage.getItem("userId")
             </Typography>
           }
         />
-        {Data.map((elem, indx) => (
-          <React.Fragment key={indx}>
-            <Divider component="div" role="presentation" />
-            <CardHeader
-              avatar={
-                <TriggerButton type="button" onClick={() => handleOpen(elem)}>
-                  R
-                </TriggerButton>
-              }
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={elem.username}
-              subheader={elem.created_at}
-            />
-          </React.Fragment>
-        ))}
+        <div
+          style={{
+            maxHeight: "220px",
+            overflowY: "scroll",
+          }}
+        >
+          {/* Render all friends */}
+          {Data.map((elem, indx) => (
+            <React.Fragment key={indx}>
+              <Divider component="div" role="presentation" />
+              <CardHeader
+                avatar={
+                  <img
+                    src={elem.profile_picture_url}
+                    onClick={() => handleOpen(elem)}
+                    style={{
+                      color: "black",
+                      width: "40px",
+                      height: "35px",
+                      borderRadius: "25px",
+                      cursor: "pointer",
+                    }}
+                  />
+                }
+                action={
+                  <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={elem.username}
+                subheader={elem.created_at}
+              />
+            </React.Fragment>
+          ))}
+        </div>
       </Card>
     </>
   );

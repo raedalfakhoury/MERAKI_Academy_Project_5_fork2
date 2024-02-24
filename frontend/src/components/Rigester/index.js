@@ -16,21 +16,20 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Rigester() {
-  const [userLastName, setUserFirstName] = useState("");
-  const [userFirstName, setUserLastName] = useState("");
+  const [userName, setUserName] = useState("");
   const [open1, setOpen1] = useState(false);
 
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [userCountry, setUserCountry] = useState("");
+  const [userPhoto, setUserPhoto] = useState("");
   const [userAge, setUserAge] = useState(0);
   const [result, setUserResult] = useState("");
   const [status, setStatus] = useState(false);
   const redirect = useNavigate();
   // const tese = localStorage("toke")
-    // Cloudinary Parameters
-    const pr_key = "nb0pjnta";
-    const cloud_name = "dalwd5c23";
+  // Cloudinary Parameters
+  const pr_key = "nb0pjnta";
+  const cloud_name = "dalwd5c23";
   // const handleButtonClick = () => {
   //   document.querySelector(".input-file").click();
   // };
@@ -41,44 +40,24 @@ export default function Rigester() {
     // Handle click action here
   };
 
-    // get Cloudinary URL
-    const handleButtonClick = (files) => {
-      setOpen1(true);
-      const formData = new FormData();
-      formData.append("file", files[0]);
-      formData.append("upload_preset", pr_key);
-  
-      fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data.url);
-  
-          postdata(data.url);
-        });
-    };
-  
-    // Post the Video in the database
-    const postdata = (Url) => {
-      axios
-        .post(
-          `http://localhost:5000/story`,
-          { video_url: Url },
-          {
-            headers: {
-              Authorization: `Bearer ${test}`,
-            },
-          }
-        )
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
+  // get Cloudinary URL
+  const handleButtonClick = (files) => {
+    const formData = new FormData();
+    console.log(files);
+    formData.append("file", files[0]);
+    formData.append("upload_preset", pr_key);
+
+    fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.url);
+        setUserPhoto(data.url)
+      });
+  };
+
   return (
     // <section className="background-radial-gradient overflow-hidden">
     //   <style>
@@ -316,12 +295,15 @@ export default function Rigester() {
               {/* Profile Picture Input */}
               <div className="mb-4">
                 {/* SVG Icon */}
-                <svg
+                {userPhoto? <img style={{width:"80px",height:"80px",borderRadius:"25px"}} src={userPhoto}/>:<svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="60"
                   height="60"
                   fill="currentColor"
-                  onClick={handleButtonClick}
+                  onClick={() => {
+                    document.querySelector(".input-file").click();
+                  }}
+                  // onClick={(e) => handleButtonClick(e.target.files)}
                   className="bi bi-person-square"
                   viewBox="0 0 16 16"
                   style={{
@@ -338,11 +320,11 @@ export default function Rigester() {
                 >
                   <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                   <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
-                </svg>
+                </svg>}
 
                 {/* Hidden Input File */}
                 <input
-                  onChange={handleFileInputChange}
+                  onChange={(e) => handleButtonClick(e.target.files)}
                   type="file"
                   className="input-file"
                   style={{ display: "none" }}
@@ -371,6 +353,9 @@ export default function Rigester() {
                   type="text"
                   placeholder="Your Name"
                   style={{ height: "50px", width: "350px" }}
+                  onChange={(e) => {
+                    setUserName(e.target.value);
+                  }}
                 />
               </div>
 
@@ -391,6 +376,9 @@ export default function Rigester() {
                   type="email"
                   placeholder="Your Email"
                   style={{ height: "50px", width: "350px" }}
+                  onChange={(e) => {
+                    setUserEmail(e.target.value);
+                  }}
                 />
               </div>
 
@@ -411,6 +399,9 @@ export default function Rigester() {
                   type="password"
                   placeholder="Password"
                   style={{ height: "50px", width: "350px" }}
+                  onChange={(e) => {
+                    setUserPassword(e.target.value);
+                  }}
                 />
               </div>
 
@@ -419,6 +410,25 @@ export default function Rigester() {
                 variant="primary"
                 size="lg"
                 style={{ height: "50px", width: "400px" }}
+                onClick={() => {
+                  axios
+                    .post("http://localhost:5000/users/register", {
+                      username: userName,
+                      email: userEmail,
+                      password_hash: userPassword,
+                      profile_picture_url: userPhoto
+
+                    })
+                    .then((res) => {
+                      setStatus(true);
+                      setUserResult(res.data.message);
+                      redirect("/users/login");
+                    })
+                    .catch((err) => {
+                      setUserResult(err.response.data.message);
+                      console.log(err);
+                    });
+                }}
               >
                 Register
               </Button>
