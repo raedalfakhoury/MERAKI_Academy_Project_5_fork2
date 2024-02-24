@@ -18,7 +18,7 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
-import savePostSlice, { setsavePost } from "../redux/reducers/savePost/index";
+import { setsavePost } from "../redux/reducers/savePost/index";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -37,6 +37,7 @@ const Profile = () => {
   const arr = useRef([]);
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
+  const [image, setImage] = useState();
   let bio = useRef("");
   const { token, savePost } = useSelector((state) => {
     return {
@@ -44,7 +45,7 @@ const Profile = () => {
       savePost: state.savePost.savePost,
     };
   });
-  console.log("save", savePost);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   // const searchQuery = queryParams.get("prf") || "";
@@ -65,12 +66,22 @@ const Profile = () => {
   const [showFollowers, setShow] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showPostPopup, setShowPostPopup] = useState(false);
+  const [postAndComment, setPostAndComment] = useState();
+
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
   const handleShowEditProfile = () => setShowEditProfile(true);
+  const handleShowPostPopup = () => setShowPostPopup(true);
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
   const handleCloseEditProfile = () => setShowEditProfile(false);
+  const handleClosePostPopup = () => {
+    setImage([]);
+    setPostAndComment([]);
+    setShowPostPopup(false);
+  };
+
   let filtration;
   window.scrollTo(0, 0);
 
@@ -507,7 +518,10 @@ const Profile = () => {
                       cols="50"
                       placeholder={ele.bio}
                       onChange={(e) => {
-                        bio = e.target.value;
+                        bio =
+                          e.target.value == null
+                            ? profileInfo[0]?.bio
+                            : e.target.value;
                       }}
                     ></textarea>
 
@@ -555,17 +569,138 @@ const Profile = () => {
       </>
     );
   }
+
+  function PostPopUp() {
+    return (
+      <>
+        <Modal
+          show={showPostPopup}
+          onHide={handleClosePostPopup}
+          animation={false}
+          centered
+        >
+          <Modal.Header
+            closeButton
+            style={{ borderBottom: "1px solid #808080", padding: "5px 10px" }}
+          >
+            <Modal.Title
+              style={{
+                justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+              }}
+             
+            >
+               <h4> {postAndComment?.length} comments</h4>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            id="Modal.Body"
+            style={{
+              padding: "10px",
+              display: "flex",
+              overflowY: "auto",
+            }}
+          >
+            {loader ? (
+              <Loader />
+            ) : (
+              <div className="mainPostPopup">
+                {image && image.length > 0 && postAndComment.length > 0 &&(
+                  <img
+                    alt=""
+                    src={postAndComment[0]?.media_url}
+                    style={{ height: "250px", width: "200px" }}
+                  />
+                )}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "250px",
+                    gap: "10px",
+                  }}
+                >
+                  {postAndComment?.map((ele) => {
+                    return (
+                      <>
+                        <div
+                          className="inPopup"
+                          style={{
+                            display: "flex",
+                            width: "100%",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              gap: "10px",
+                              height: "fit-content",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              alt=""
+                              src={ele.profile_picture_url}
+                              style={{
+                                height: "70px",
+                                width: "70px",
+                                borderRadius: "50%",
+                              }}
+                            ></img>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                              }}
+                            >
+                              <p style={{ marginBottom: "0px" }}>
+                                {ele.comment_content?.split("|")[0]}{" "}
+                              </p>
+                              <p style={{ marginBottom: "0px" }}>
+                                {ele.username}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </Modal.Body>
+        </Modal>
+      </>
+    );
+  }
+
   return (
     <div id="mainPage">
       <Followers />
       <Following />
       <EditProfile />
+      <PostPopUp />
       {loader ? (
         <Loader />
       ) : (
         profileInfo?.map((elm, i) => {
           return (
             <div key={elm.id} className="panel2">
+              <div class="container2">
+                <div class="cloud front">
+                  <span class="left-front"></span>
+                  <span class="right-front"></span>
+                </div>
+                <span class="sun sunshine"></span>
+                <span class="sun"></span>
+                <div class="cloud back">
+                  <span class="left-back"></span>
+                  <span class="right-back"></span>
+                </div>
+              </div>
               <div className="edit">
                 <img
                   className="ProfilePicture"
@@ -588,6 +723,8 @@ const Profile = () => {
                           );
                           setUser(result.data.result);
                           handleShowEditProfile();
+                          setShowPost(false);
+                          setShowSave(false);
                         } catch (error) {
                           console.log(error);
                         }
@@ -622,6 +759,8 @@ const Profile = () => {
                           //   localStorage.getItem("userId") == searchQuery2 &&
                           // }
                           serCountFollowers(countFollowers * 1 - 1);
+                          setShowPost(false);
+                          setShowSave(false);
                         } catch (error) {
                           console.log(error);
                         }
@@ -649,10 +788,10 @@ const Profile = () => {
                             );
                             arr.current.push(searchQuery2);
                             setRemove(!remove);
-                            // {
-                            //   localStorage.getItem("userId") == searchQuery2 &&
-                            // }
+
                             serCountFollowers(countFollowers * 1 + 1);
+                            setShowPost(false);
+                            setShowSave(false);
                           } catch (error) {
                             console.log(error);
                           }
@@ -682,6 +821,8 @@ const Profile = () => {
                         )
                         .then((result) => {
                           setFollowers(result?.data?.result);
+                          setShowPost(false);
+                          setShowSave(false);
                         })
                         .catch((err) => {
                           console.log(err);
@@ -707,6 +848,8 @@ const Profile = () => {
                           )
                           .then((result) => {
                             setFollowing(result?.data?.result);
+                            setShowPost(false);
+                            setShowSave(false);
                           })
                           .catch((err) => {
                             console.log(err);
@@ -720,6 +863,18 @@ const Profile = () => {
                   >
                     {countFollowing} following
                   </p>
+                </div>
+              </div>
+              <div class="container2">
+                <div class="cloud front">
+                  <span class="left-front"></span>
+                  <span class="right-front"></span>
+                </div>
+                <span class="sun sunshine"></span>
+                <span class="sun"></span>
+                <div class="cloud back">
+                  <span class="left-back"></span>
+                  <span class="right-back"></span>
                 </div>
               </div>
             </div>
@@ -737,7 +892,9 @@ const Profile = () => {
                 axios
                   .get(`http://localhost:5000/post/mypost/${searchQuery2}`)
                   .then((result) => {
+                    console.log(result.data);
                     setMyPosts(result?.data?.result);
+                    setShowSave(false);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -745,7 +902,7 @@ const Profile = () => {
                 setShowPost(!showPost);
               }}
             >
-              {countPosts} posts
+              posts
             </p>
           </div>
           <div className="p-s">
@@ -764,16 +921,16 @@ const Profile = () => {
                           },
                         }
                       );
-                      console.log(res?.data?.result);
+
                       dispatch(setsavePost(res?.data?.result));
-                      setShowPost(!showPost);
+                      setShowPost(false);
                       setShowSave(!showSave);
                     } catch (error) {
                       console.log(error);
                     }
                   }}
                 >
-                  saves
+                  Archives
                 </p>
               </>
             ) : null}
@@ -788,23 +945,44 @@ const Profile = () => {
                     key={ele.id}
                     className="img-post"
                     alt=""
+                    style={{ cursor: "pointer" }}
                     src={ele.media_url}
+                    onClick={async () => {
+                      handleShowPostPopup();
+                      console.log(ele.id);
+                      try {
+                        setLoader(false);
+                        // ! {The axios.get() method doesn't accept a second parameter for passing data in a GET request} مهم
+                        const res = await axios.get(
+                          `http://localhost:5000/post/postWComments/${ele.id}`
+                        );
+                        const images = await axios.get(
+                          `http://localhost:5000/post/${ele.id}`,
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                        console.log(res?.data?.result);
+                        console.log(images.data.post);
+                        setImage(images?.data?.post);
+                        setPostAndComment(res?.data?.result);
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
                   ></img>
                 ) : (
                   <video
+                    style={{ cursor: "pointer" }}
                     controls
                     muted
                     className="img-post"
-                    style={
-                      {
-                        // width: "100%",
-                        // height: "50vh",
-                        // // borderRadius: "600px",
-                        // border: "solid 1px #e8e8e8",
-                        // cursor: "pointer",
-                      }
-                    }
                     src={ele.media_url}
+                    onClick={() => {
+                      console.log(ele.id);
+                    }}
                   ></video>
                 )}
               </>
@@ -828,15 +1006,6 @@ const Profile = () => {
                   controls
                   muted
                   className="img-post"
-                  style={
-                    {
-                      // width: "100%",
-                      // height: "50vh",
-                      // // borderRadius: "600px",
-                      // border: "solid 1px #e8e8e8",
-                      // cursor: "pointer",
-                    }
-                  }
                   src={ele.media_url}
                 ></video>
               )}
@@ -844,6 +1013,14 @@ const Profile = () => {
           );
         })}
       </div>
+      <button
+        id="Floating"
+        onClick={() => {
+          Navigate("/home");
+        }}
+      >
+        HOME
+      </button>
     </div>
   );
 };

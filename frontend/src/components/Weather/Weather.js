@@ -159,30 +159,30 @@ const milliseconds = now.getMilliseconds();
           <span></span>
 
           <div className="tempreture">
-            <h1>{forecast?.current?.temp_c} </h1>°
+            <h1 style={{margin:"0px"}}>{forecast?.current?.temp_c} </h1>°
           </div>
           <img id="img" alt="" src={forecast?.current?.condition?.icon}></img>
-          <h3>{forecast?.current?.condition?.text}</h3>
+          <h4 style={{margin:"0px"}}>{forecast?.current?.condition?.text}</h4>
           <div className="reelFeel">
-            <p className="p">Real Feal : {forecast?.current?.feelslike_c} °</p>
-            <p className="p">humidity : {forecast?.current?.humidity} %</p>
+            <p className="p" >Real Feal : {forecast?.current?.feelslike_c} °</p>
+            <p className="p" >humidity : {forecast?.current?.humidity} %</p>
           </div>
 
           <div className="forThreeDays">
             {forecast?.forecast?.forecastday?.map((day, i) => {
               return (
                 <div key={i} className="forOneDay">
-                  <h5>{dayOfWeek(day?.date).slice(0, 3)}</h5>
+                  <h5 style={{margin:"0px"}}>{dayOfWeek(day?.date).slice(0, 3)}</h5>
                   <img alt="" src={day?.day?.condition?.icon}></img>
-                  <h5>{day?.day?.maxtemp_c}°</h5>
+                  <h5 style={{margin:"0px"}}>{day?.day?.maxtemp_c}°</h5>
                 </div>
               );
             })}
           </div>
 
-          <h4>{currentDay()}</h4>
+          <p >{currentDay()}</p>
           <div className="position">
-            <GiPositionMarker />
+           <div style={{color:"red" }}> <GiPositionMarker /></div>
             <p className="country">{forecast?.location?.country}</p> ,
             <p className="country">{forecast?.location?.name}</p>
           </div>

@@ -149,7 +149,6 @@ function Post() {
   };
 
   const postSavedArray = useRef([]);
-  console.log(postSavedArray.current);
   useEffect(() => {
     axios
       .get(`http://localhost:5000/post/allSavePost`, {
@@ -158,7 +157,6 @@ function Post() {
         },
       })
       .then((result) => {
-        console.log("from get save post", result.data.result);
         result?.data?.result?.map((ele) => {
           return postSavedArray.current.push(ele.post_id);
         });
