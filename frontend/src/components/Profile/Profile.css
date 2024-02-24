@@ -52,6 +52,7 @@ body {
   width: 100%;
   justify-content: space-between;
   gap: 40px;
+  align-items: center;
 }
 .followers {
   background-color: #efefef;
