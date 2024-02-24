@@ -39,6 +39,7 @@ export const authSlice = createSlice({
       localStorage.removeItem("image");
       // localStorage.clear()
     },
+
   },
 });
 

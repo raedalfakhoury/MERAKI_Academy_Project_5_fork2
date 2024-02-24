@@ -236,6 +236,7 @@ const getAllPostsMyFriends = (req, res) => {
   Posts.created_at,
   Users.profile_picture_url,
   Users.username,
+  Users.is_loggedin,
   (
       SELECT COUNT(*) 
       FROM Comments 
@@ -418,7 +419,7 @@ const getPostAndComment = (req, res) => {
 ;
 `;
   pool
-    .query(query,data)
+    .query(query, data)
     .then((result) => {
       res.status(200).json({
         successful: true,

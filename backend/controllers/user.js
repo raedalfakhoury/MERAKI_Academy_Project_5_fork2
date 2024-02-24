@@ -12,21 +12,27 @@ const is_deleted = 0;
 const SEC = process.env.SEC;
 
 const register = async (req, res) => {
-  const { username, email, password_hash,profile_picture_url, bio = "bio" } = req.body;
+  const {
+    username,
+    email,
+    password_hash,
+    profile_picture_url,
+    bio = "bio",
+  } = req.body;
 
   const salt = 5;
   const password = await bcryptjs.hash(password_hash, salt);
   const Email = email.toLowerCase();
   console.log(Email);
   console.log(password);
-    
-  let result = username.replace(/^\s+|\s+$/gm,'');
+
+  let result = username.replace(/^\s+|\s+$/gm, "");
   const VALUES = [
     result,
     Email,
     password,
     profile_picture_url,
-    bio  , 
+    bio,
     role_id,
     is_deleted,
   ]; // 7 elm
@@ -100,6 +106,23 @@ const login = (req, res) => {
             image: data.profile_picture_url,
             name: data.username,
           });
+
+          // UPDATE table_name
+          // SET column1 = value1, column2 = value2, ...
+          // WHERE condition;
+
+          const query_is_loggedin = `UPDATE Users SET is_loggedin=${true} WHERE id=${
+            data.id
+          }`;
+
+          pool
+            .query(query_is_loggedin)
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else {
           res.status(403).json({
             success: false,
@@ -182,7 +205,7 @@ const updateUser = (req, res) => {
 const getAllUser = (req, res) => {
   // const id = req.token.user_id;
   // console.log("id",id);
-  const query = `SELECT * FROM Users WHERE NOT id = 1 ;` ;
+  const query = `SELECT * FROM Users WHERE NOT id = 1 ;`;
   pool
     .query(query)
     .then((result) => {
@@ -200,18 +223,18 @@ const getAllUser = (req, res) => {
     });
 };
 const getUserById = (req, res) => {
-  const {id} = req.params; 
-  const data = [id]
-  const query = `SELECT * FROM Users WHERE id = $1 ;` ;
+  const { id } = req.params;
+  const data = [id];
+  const query = `SELECT * FROM Users WHERE id = $1 ;`;
   pool
-    .query(query,data)
+    .query(query, data)
     .then((result) => {
       res.status(200).json({
         message: "User get Successfully",
         result: result.rows,
       });
     })
-    .catch((err) => { 
+    .catch((err) => {
       res.status(500).json({
         message: "Server error",
         err: err,
@@ -219,6 +242,11 @@ const getUserById = (req, res) => {
     });
 };
 
-module.exports = { register, login, deleteUser, updateUser, getAllUser , getUserById};
-
-
+module.exports = {
+  register,
+  login,
+  deleteUser,
+  updateUser,
+  getAllUser,
+  getUserById,
+};
