@@ -81,7 +81,7 @@ export function TemporaryDrawer() {
 
   return (
     <div>
-      {["Home"].map((anchor) => (
+      {["NavBar"].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer
@@ -151,7 +151,7 @@ const Explore = () => {
               {Posts?.map((post, index) => {
                 return (
                   <>
-                    {post.media_url.includes(".mp4") && index > 41 && (
+                    {post.media_url.includes(".mp4") && index > 25 && (
                       <Col
                         style={{
                           display: "flex",
@@ -173,7 +173,7 @@ const Explore = () => {
                             position: "absolute",
                             right: "20",
                             top: "10",
-                            color: "#000",
+                            color: "#fff",
                           }}
                         />
 
@@ -186,6 +186,7 @@ const Explore = () => {
                             border: "none",
                             flexWrap: "nowrap",
                             padding: "0px",
+                            backgroundColor: "#000",
                             // marginTop: "2px",
                             // borderTop: "4px solid  #fff",
 
@@ -215,7 +216,7 @@ const Explore = () => {
               {Posts?.map((post, index) => {
                 return (
                   <>
-                    {post.media_url.includes(".jpg") && (
+                    {!post.media_url.includes(".mp4") && index > 10 &&(
                       <Col
                         style={{
                           position: "relative",
@@ -263,7 +264,7 @@ const Explore = () => {
               {Posts?.map((post, index) => {
                 return (
                   <>
-                    {post.media_url.includes(".mp4") && (
+                    {post.media_url.includes(".mp4") && index < 25 && (
                       <Col
                         style={{
                           display: "flex",

@@ -366,7 +366,7 @@ export default function Stories() {
                     {" "}
                     <img
                       src={My_Img}
-                      onClick={() => handleOpen(elem)}
+                      // onClick={() => handleOpen(elem)}
                       style={{
                         color: "black",
                         width: "40px",
