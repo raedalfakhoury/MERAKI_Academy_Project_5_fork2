@@ -81,9 +81,9 @@ export function TemporaryDrawer() {
 
   return (
     <div>
-      {["NavBar"].map((anchor) => (
+      {["Drawer"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Button style={{border:"2px solid #000"}} onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}
@@ -216,7 +216,7 @@ const Explore = () => {
               {Posts?.map((post, index) => {
                 return (
                   <>
-                    {!post.media_url.includes(".mp4") && index > 10 &&(
+                    {!post.media_url.includes(".mp4") && index > 10 && (
                       <Col
                         style={{
                           position: "relative",
