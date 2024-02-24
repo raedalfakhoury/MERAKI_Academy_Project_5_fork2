@@ -18,7 +18,7 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
-import savePostSlice, { setsavePost } from "../redux/reducers/savePost/index";
+import { setsavePost } from "../redux/reducers/savePost/index";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -44,7 +44,7 @@ const Profile = () => {
       savePost: state.savePost.savePost,
     };
   });
-  console.log("save", savePost);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   // const searchQuery = queryParams.get("prf") || "";
@@ -56,6 +56,7 @@ const Profile = () => {
   const [showPost, setShowPost] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [myPosts, setMyPosts] = useState();
+  console.log(myPosts?.length);
   const [followers, setFollowers] = useState();
   const [following, setFollowing] = useState();
   const [countFollowers, serCountFollowers] = useState(0);
@@ -566,6 +567,18 @@ const Profile = () => {
         profileInfo?.map((elm, i) => {
           return (
             <div key={elm.id} className="panel2">
+              <div class="container2">
+                <div class="cloud front">
+                  <span class="left-front"></span>
+                  <span class="right-front"></span>
+                </div>
+                <span class="sun sunshine"></span>
+                <span class="sun"></span>
+                <div class="cloud back">
+                  <span class="left-back"></span>
+                  <span class="right-back"></span>
+                </div>
+              </div>
               <div className="edit">
                 <img
                   className="ProfilePicture"
@@ -588,6 +601,8 @@ const Profile = () => {
                           );
                           setUser(result.data.result);
                           handleShowEditProfile();
+                          setShowPost(false);
+                          setShowSave(false);
                         } catch (error) {
                           console.log(error);
                         }
@@ -622,6 +637,8 @@ const Profile = () => {
                           //   localStorage.getItem("userId") == searchQuery2 &&
                           // }
                           serCountFollowers(countFollowers * 1 - 1);
+                          setShowPost(false);
+                          setShowSave(false);
                         } catch (error) {
                           console.log(error);
                         }
@@ -649,10 +666,10 @@ const Profile = () => {
                             );
                             arr.current.push(searchQuery2);
                             setRemove(!remove);
-                            // {
-                            //   localStorage.getItem("userId") == searchQuery2 &&
-                            // }
+                            
                             serCountFollowers(countFollowers * 1 + 1);
+                            setShowPost(false);
+                            setShowSave(false);
                           } catch (error) {
                             console.log(error);
                           }
@@ -682,6 +699,8 @@ const Profile = () => {
                         )
                         .then((result) => {
                           setFollowers(result?.data?.result);
+                          setShowPost(false);
+                          setShowSave(false);
                         })
                         .catch((err) => {
                           console.log(err);
@@ -707,6 +726,8 @@ const Profile = () => {
                           )
                           .then((result) => {
                             setFollowing(result?.data?.result);
+                            setShowPost(false);
+                            setShowSave(false);
                           })
                           .catch((err) => {
                             console.log(err);
@@ -720,6 +741,18 @@ const Profile = () => {
                   >
                     {countFollowing} following
                   </p>
+                </div>
+              </div>
+              <div class="container2">
+                <div class="cloud front">
+                  <span class="left-front"></span>
+                  <span class="right-front"></span>
+                </div>
+                <span class="sun sunshine"></span>
+                <span class="sun"></span>
+                <div class="cloud back">
+                  <span class="left-back"></span>
+                  <span class="right-back"></span>
                 </div>
               </div>
             </div>
@@ -738,6 +771,7 @@ const Profile = () => {
                   .get(`http://localhost:5000/post/mypost/${searchQuery2}`)
                   .then((result) => {
                     setMyPosts(result?.data?.result);
+                    setShowSave(false);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -745,7 +779,7 @@ const Profile = () => {
                 setShowPost(!showPost);
               }}
             >
-              {countPosts} posts
+              posts
             </p>
           </div>
           <div className="p-s">
@@ -764,9 +798,9 @@ const Profile = () => {
                           },
                         }
                       );
-                      console.log(res?.data?.result);
+
                       dispatch(setsavePost(res?.data?.result));
-                      setShowPost(!showPost);
+                      setShowPost(false);
                       setShowSave(!showSave);
                     } catch (error) {
                       console.log(error);
@@ -795,15 +829,6 @@ const Profile = () => {
                     controls
                     muted
                     className="img-post"
-                    style={
-                      {
-                        // width: "100%",
-                        // height: "50vh",
-                        // // borderRadius: "600px",
-                        // border: "solid 1px #e8e8e8",
-                        // cursor: "pointer",
-                      }
-                    }
                     src={ele.media_url}
                   ></video>
                 )}
@@ -828,15 +853,6 @@ const Profile = () => {
                   controls
                   muted
                   className="img-post"
-                  style={
-                    {
-                      // width: "100%",
-                      // height: "50vh",
-                      // // borderRadius: "600px",
-                      // border: "solid 1px #e8e8e8",
-                      // cursor: "pointer",
-                    }
-                  }
                   src={ele.media_url}
                 ></video>
               )}
@@ -844,6 +860,7 @@ const Profile = () => {
           );
         })}
       </div>
+      <button id="Floating" onClick={()=>{Navigate("/home")}}>HOME</button>
     </div>
   );
 };
