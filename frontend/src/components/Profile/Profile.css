@@ -127,7 +127,6 @@ body {
 }
 .posts-saved:hover {
   color: #8a90a3;
-
 }
 .grid-media {
   text-align: center;
@@ -480,7 +479,6 @@ body {
   font-weight: 700;
   left: 10px;
   bottom: 10px;
-  
 }
 
 #Floating:hover {
@@ -520,8 +518,8 @@ body {
   background: linear-gradient(32deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
 }
 
-.mainPostPopup{
+.mainPostPopup {
   display: flex;
   width: 100%;
-  gap: 15px
+  gap: 15px; 
 }

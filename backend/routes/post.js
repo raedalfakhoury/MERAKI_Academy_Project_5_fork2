@@ -19,7 +19,7 @@ const {
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
-PostRouter.get("/postWithComments/:Posts_id",   getPostAndComment);
+
 
 PostRouter.delete("/delete/saved", authentication, deleteSavePost);
 PostRouter.get("/allSavePost", authentication, getSavedPosts);
@@ -39,6 +39,7 @@ PostRouter.get("/:id/getPosts", authentication, getAllPosts);
 PostRouter.get("/countFAndDAndPo/:id", authentication, countFAndDAndPo);
 
 PostRouter.delete("/:id", authentication, deletePostById);
+PostRouter.get("/postWComments/:Posts_id", getPostAndComment);
 
 PostRouter.get(
   "/:id/getAllPostsMyFollower",

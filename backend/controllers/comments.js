@@ -50,6 +50,49 @@ const getCommentsByPostId = (req, res) => {
     });
 };
 
+const getCommentsAndLikeByPostId = (req, res) => {
+  const post_id = req.params.id;
+  const query = `
+  SELECT
+    Comments.comment_id,
+    Comments.post_id,
+    Comments.user_id,
+    Comments.content AS comment_content,
+    Users.username,
+    Users.profile_picture_url,
+    Posts.media_url,
+    Posts.content AS post_content,
+    (SELECT COUNT(*) FROM Likes WHERE Likes.post_id = Posts.id) AS like_count
+FROM
+    Comments
+JOIN
+    Users ON Users.id = Comments.user_id
+JOIN
+    Posts ON Posts.id = Comments.post_id
+WHERE
+    Comments.post_id = ${post_id}
+    AND Posts.is_deleted = 0;
+
+`;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: `All comments for post: ${post_id}`,
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err,
+      });
+    });
+};
+
 const updateCommentsById = (req, res) => {
   const comment_id = req.params.id;
   const user_id = req.token.user_id;
@@ -83,7 +126,6 @@ const deleteCommentsById = (req, res) => {
 
   const query = `DELETE FROM Comments WHERE comment_id=${comment_id} RETURNING *`;
 
-
   pool
     .query(query)
     .then((result) => {
@@ -111,4 +153,5 @@ module.exports = {
   getCommentsByPostId,
   updateCommentsById,
   deleteCommentsById,
+  getCommentsAndLikeByPostId,
 };

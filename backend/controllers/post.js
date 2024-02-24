@@ -404,36 +404,21 @@ const deleteSavePost = (req, res) => {
 const getPostAndComment = (req, res) => {
   const { Posts_id } = req.params;
   const data = [Posts_id];
-  const query = `SELECT 
-  Posts.id AS post_id,
-  Posts.user_id AS post_user_id,
-  Posts.content AS post_content,
-  Posts.media_url AS post_media_url,
-  Posts.created_at AS post_created_at,
-  Users.username AS post_username,
-  Users.profile_picture_url AS post_profile_picture_url,
-  COUNT(DISTINCT Comments.comment_id) AS comment_count,
-  STRING_AGG(Comments.content, '|') AS comment_content,
-  COUNT(DISTINCT Likes.like_id) AS like_count,
-  CommentUsers.id AS comment_user_id,
-  CommentUsers.username AS comment_username,
-  CommentUsers.profile_picture_url AS comment_profile_picture_url
-FROM 
-  Posts
-LEFT JOIN Users ON Posts.user_id = Users.id
-LEFT JOIN Comments ON Comments.post_id = Posts.id
-LEFT JOIN Likes ON Likes.post_id = Posts.id
-LEFT JOIN Users AS CommentUsers ON Comments.user_id = CommentUsers.id
-WHERE 
-  Posts.id = $1
-GROUP BY
-  Posts.id, 
-  Users.id,
-  CommentUsers.id;
+  const query = `SELECT Comments.comment_id ,
+  Comments.post_id,Comments.user_id,
+   Comments.created_at,
+   Comments.content AS COMMENT_CONTENT,
+   Users.username , 
+    Users.profile_picture_url ,
+    Posts.media_url  
+     FROM Comments
+      JOIN Users ON Users.id = Comments.user_id 
+      JOIN Posts ON Posts.id = Comments.post_id
+      WHERE post_id = $1 AND Posts.is_deleted=0;
 ;
 `;
   pool
-    .query(query, data)
+    .query(query,data)
     .then((result) => {
       res.status(200).json({
         successful: true,

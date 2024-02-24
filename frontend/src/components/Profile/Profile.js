@@ -37,7 +37,7 @@ const Profile = () => {
   const arr = useRef([]);
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
-
+  const [image, setImage] = useState();
   let bio = useRef("");
   const { token, savePost } = useSelector((state) => {
     return {
@@ -76,7 +76,11 @@ const Profile = () => {
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
   const handleCloseEditProfile = () => setShowEditProfile(false);
-  const handleClosePostPopup = () => setShowPostPopup(false);
+  const handleClosePostPopup = () => {
+    setImage([]);
+    setPostAndComment([]);
+    setShowPostPopup(false);
+  };
 
   let filtration;
   window.scrollTo(0, 0);
@@ -586,29 +590,7 @@ const Profile = () => {
                 alignItems: "center",
                 width: "100%",
               }}
-            >
-              {postAndComment?.map((e) => {
-                console.log(e);
-                return (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      width: "100%",
-                    }}
-                  >
-                    <p style={{ fontSize: "20px", margin: "0px" }}>
-                      {" "}
-                      {e.like_count}
-                    </p>
-                    <p style={{ fontSize: "20px", margin: "0px" }}>
-                      {" "}
-                      {e.comment_count}
-                    </p>
-                  </div>
-                );
-              })}
-            </Modal.Title>
+            ></Modal.Title>
           </Modal.Header>
           <Modal.Body
             id="Modal.Body"
@@ -618,60 +600,74 @@ const Profile = () => {
               overflowY: "auto",
             }}
           >
-            <div className="mainPostPopup">
-              {postAndComment?.map((ele) => {
-                console.log(ele);
-                return (
-                  <>
-                    <img
-                      alt=""
-                      src={ele.post_media_url}
-                      style={{ height: "250px", width: "200px" }}
-                    ></img>
-                    <div
-                      className="inPopup"
-                      style={{
-                        display: "flex",
-                        width: "100%",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          gap: "10px",
-                          height: "fit-content",
-                          alignItems: "center",
-                        }}
-                      >
-                        <img
-                          alt=""
-                          src={ele.post_profile_picture_url}
-                          style={{
-                            height: "70px",
-                            width: "70px",
-                            borderRadius: "50%",
-                          }}
-                        ></img>
+            {loader ? (
+              <Loader />
+            ) : (
+              <div className="mainPostPopup">
+                {image && image.length > 0 && (
+                  <img
+                    alt=""
+                    src={postAndComment[0]?.media_url}
+                    style={{ height: "250px", width: "200px" }}
+                  />
+                )}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "250px",
+                    gap: "10px",
+                  }}
+                >
+                  {postAndComment?.map((ele) => {
+                    return (
+                      <>
                         <div
+                          className="inPopup"
                           style={{
                             display: "flex",
-                            flexDirection: "column-reverse",
+                            width: "100%",
                           }}
                         >
-                          <p style={{ marginBottom: "0px" }}>
-                            {ele.comment_content?.split("|")[0]}{" "}
-                          </p>
-                          <p style={{ marginBottom: "0px" }}>
-                            {ele.comment_username}{" "}
-                          </p>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              gap: "10px",
+                              height: "fit-content",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              alt=""
+                              src={ele.profile_picture_url}
+                              style={{
+                                height: "70px",
+                                width: "70px",
+                                borderRadius: "50%",
+                              }}
+                            ></img>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                              }}
+                            >
+                              <p style={{ marginBottom: "0px" }}>
+                                {ele.comment_content?.split("|")[0]}{" "}
+                              </p>
+                              <p style={{ marginBottom: "0px" }}>
+                                {ele.username}{" "}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </Modal.Body>
         </Modal>
       </>
@@ -952,11 +948,22 @@ const Profile = () => {
                       handleShowPostPopup();
                       console.log(ele.id);
                       try {
+                        setLoader(false);
                         // ! {The axios.get() method doesn't accept a second parameter for passing data in a GET request} مهم
                         const res = await axios.get(
-                          `http://localhost:5000/post/postWithComments/${ele.id}`
+                          `http://localhost:5000/post/postWComments/${ele.id}`
                         );
-                        console.log(res?.data);
+                        const images = await axios.get(
+                          `http://localhost:5000/post/${ele.id}`,
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                        console.log(res?.data?.result);
+                        console.log(images.data.post);
+                        setImage(images?.data?.post);
                         setPostAndComment(res?.data?.result);
                       } catch (error) {
                         console.log(error);
