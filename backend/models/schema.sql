@@ -56,7 +56,16 @@ CREATE TABLE Posts (
     is_deleted SMALLINT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users (id)
 );
-
+-- Table: posts-users
+CREATE TABLE Posts_Users (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    post_id INT,  
+    created_at TIMESTAMP DEFAULT NOW(),
+    is_deleted INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES Users (id),
+    FOREIGN KEY (post_id) REFERENCES Posts (id)
+);
 -- Table: Comments
 CREATE TABLE Comments (
     comment_id SERIAL PRIMARY KEY,
@@ -64,7 +73,7 @@ CREATE TABLE Comments (
     post_id INT,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
-    is_deleted INT,
+    is_deleted INT ,
     FOREIGN KEY (user_id) REFERENCES Users (id),
     FOREIGN KEY (post_id) REFERENCES Posts (id)
 );

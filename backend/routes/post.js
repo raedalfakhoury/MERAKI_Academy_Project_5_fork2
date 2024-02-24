@@ -9,34 +9,40 @@ const {
   updatepostById,
   deletePostByUserId,
   getAllPosts,
-  deletePostById ,
+  deletePostById,
   getAllPostsMyFriends,
-  countFAndDAndPo
+  countFAndDAndPo,
+  savePost,
+  getSavedPosts,
+  deleteSavePost,
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
 
+PostRouter.delete("/delete/saved", authentication, deleteSavePost);
+PostRouter.get("/allSavePost", authentication, getSavedPosts);
 PostRouter.post("/create", authentication, createNewPost);
 
 PostRouter.get("/:postbyid", authentication, getPostById);
 
- 
-PostRouter.get("/mypost/:userId",   getpostByuserId);
- 
- 
-PostRouter.put("/update/:id", authentication, updatepostById);
-PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
- 
+PostRouter.get("/mypost/:userId", getpostByuserId);
 
+PostRouter.put("/update/:id", authentication, updatepostById);
+
+PostRouter.put("/save", authentication, savePost);
+
+PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
 
 PostRouter.get("/:id/getPosts", authentication, getAllPosts);
 PostRouter.get("/countFAndDAndPo/:id", authentication, countFAndDAndPo);
 
-PostRouter.delete("/:id", authentication,deletePostById );
+PostRouter.delete("/:id", authentication, deletePostById);
 
-
-PostRouter.get("/:id/getAllPostsMyFollower", authentication, getAllPostsMyFriends);
- 
+PostRouter.get(
+  "/:id/getAllPostsMyFollower",
+  authentication,
+  getAllPostsMyFriends
+);
 
 module.exports = PostRouter;
 
@@ -53,8 +59,6 @@ module.exports = PostRouter;
 //     "content": "NO ONE CAN BE AT PEACE UNLESS THEY HAVE FREEDOM",
 //     "media_url": "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
 // }
-
-
 
 //! http://localhost:5000/post/1/getAllPostsMyFollower  {API method : get}
 /* 
