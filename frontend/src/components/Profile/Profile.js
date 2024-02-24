@@ -590,7 +590,10 @@ const Profile = () => {
                 alignItems: "center",
                 width: "100%",
               }}
-            ></Modal.Title>
+             
+            >
+               <h4> {postAndComment?.length} comments</h4>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body
             id="Modal.Body"
@@ -604,7 +607,7 @@ const Profile = () => {
               <Loader />
             ) : (
               <div className="mainPostPopup">
-                {image && image.length > 0 && (
+                {image && image.length > 0 && postAndComment.length > 0 &&(
                   <img
                     alt=""
                     src={postAndComment[0]?.media_url}
