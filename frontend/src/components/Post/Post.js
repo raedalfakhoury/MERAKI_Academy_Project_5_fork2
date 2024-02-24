@@ -2,15 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable eqeqeq */
-import React, {
-  useEffect,
-  useState,
-  forwardRef,
-  ReactElement,
-  Ref,
-  useRef,
-} from "react";
-import NavBarPost from "../Navbar/NavBarPost";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
@@ -31,16 +23,18 @@ import {
   UpdateCommentByPostId,
 } from "../redux/reducers/Posts";
 import savePostSlice, { addsavePost } from "../redux/reducers/savePost/index";
-import { GiSelfLove } from "react-icons/gi";
+
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 import CloseButton from "react-bootstrap/CloseButton";
 import { IoCameraOutline } from "react-icons/io5";
 
-import { FcLike } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
+
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 
 import Spinner from "react-bootstrap/Spinner";
 // import Button from '@mui/material/Button';
@@ -57,7 +51,6 @@ import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa";
 
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 
 import { BiSolidLike } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
@@ -66,6 +59,8 @@ function Post() {
   const [Count_like_Comment_number, setCount_like_Comment_number] = useState(
     []
   );
+  const [all_user_like_post, set_all_user_like_post] = useState();
+
   const Count_like_Comment = (id) => {
     axios
       .get(`http://localhost:5000/LikeComments/${id}`, {
@@ -177,10 +172,10 @@ function Post() {
   const [toggleLike, setToggleLike] = useState(false);
   const [inputAddComment, setInputAddComment] = useState("");
   const [togComment, setTogComment] = useState(false);
-  const [x, setX] = useState(false);
+  // const [x, setX] = useState(false);
   const [IDPost, setIDPost] = useState("");
   const [image_url, setImage_url] = useState("");
-  const [image_url_update, setImage_url_update] = useState("");
+  // const [image_url_update, setImage_url_update] = useState("");
   const [ContentPost, setContentPost] = useState("");
   const [ToggleSpinnerCloudInN, setToggleSpinnerCloudInN] = useState(false);
   const [ToggleSpinnerCloudInNUpdate, setToggleSpinnerCloudInUpdate] =
@@ -365,6 +360,8 @@ function Post() {
         }
       )
       .then((result) => {
+        const {comment_id}=  result.data.result
+        // console.log(result.data.result.comment_id);
         const dataCommentMax = {
           ...result.data.result,
           profile_picture_url: image,
@@ -372,6 +369,11 @@ function Post() {
         };
         dispatch(addCommentByPostId({ id: id, comment: dataCommentMax }));
         setInputAddComment("");
+
+        console.log(Count_like_Comment_number);
+        setCount_like_Comment_number([...Count_like_Comment_number,{comment_id:comment_id,like_count:0}])
+
+      
       })
       .catch((err) => {
         console.log(err);
@@ -497,7 +499,7 @@ function Post() {
         console.log(err);
       });
   };
-  const GetAllLikesByPostID = (id) => {
+  const getAllUserLikedPost = (id) => {
     axios
       .get(`http://localhost:5000/likes/AllLikeByPost/${id}`, {
         headers: {
@@ -505,6 +507,7 @@ function Post() {
         },
       })
       .then((result) => {
+        set_all_user_like_post(result.data.result);
         console.log(result.data.result);
       })
       .catch((err) => {
@@ -606,11 +609,12 @@ function Post() {
                   xs={6}
                   style={{ maxHeight: "40px", maxWidth: "70px" }}
                 >
-                  <Image
-                    style={{ width: "100%", height: "100%" }}
-                    src={image}
-                    roundedCircle
-                  />
+                           <Stack direction="row" spacing={2}>
+                      <Avatar style={{cursor:"pointer"}}
+                        alt="Remy Sharp"
+                        src={image}
+                      />
+                    </Stack>
                 </Col>
 
                 <Col>
@@ -739,6 +743,7 @@ function Post() {
                             cursor: "pointer",
                           }}
                           src={elm.profile_picture_url}
+                          alt="Remy Sharp"
                           roundedCircle
                         />
 
@@ -760,6 +765,7 @@ function Post() {
                             cursor: "pointer",
                           }}
                           src={elm.profile_picture_url}
+                          alt="Remy Sharp"
                           roundedCircle
                         />
 
@@ -1088,7 +1094,7 @@ function Post() {
                       <span
                         onClick={() => {
                           handleShowF();
-                          GetAllLikesByPostID(elm.id);
+                          getAllUserLikedPost(elm.id);
                         }}
                         style={{
                           fontWeight: "bold",
@@ -1151,6 +1157,7 @@ function Post() {
                                     cursor: "pointer",
                                   }}
                                   src={comment.profile_picture_url}
+                                  alt="Remy Sharp"
                                   roundedCircle
                                 />
                               </Col>
@@ -1341,7 +1348,7 @@ function Post() {
                                       <>
                                         {element?.comment_id ===
                                           comment?.comment_id && (
-                                          <span>{element.like_count}</span>
+                                          <span>{element.like_count || 0}</span>
                                         )}
                                       </>
                                     );
@@ -1561,13 +1568,32 @@ function Post() {
 
       <Modal style={{ top: "30%" }} show={showF} onHide={handleCloseF}>
         <Modal.Header closeButton>
-          <Modal.Title>Likes</Modal.Title>
+          <Modal.Title>Likes ({all_user_like_post?.length})</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
-            <Row>
-              <Col xs={2}>dsad</Col>
-              <Col>dsadsdasdsa</Col>
+            <Row style={{ gap: "10px" }}>
+              {all_user_like_post?.map((elm, i) => {
+                return (
+                  <>
+                    <Stack direction="row" spacing={2}>
+                      <Avatar style={{cursor:"pointer"}}
+                        onClick={() => {
+                          Navigate({
+                            pathname: "/profile",
+                            search: `?prf=${elm.id}`,
+                          });
+                        }}
+                        alt="Remy Sharp"
+                        src={elm.profile_picture_url}
+                      />
+                      <Col style={{ display: "flex", alignItems: "center" }}>
+                        {elm.username}
+                      </Col>
+                    </Stack>
+                  </>
+                );
+              })}
             </Row>
           </Container>
         </Modal.Body>
