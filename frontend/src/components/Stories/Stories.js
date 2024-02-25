@@ -108,6 +108,8 @@ export default function Stories() {
     setOpen(false);
     setOpen1(false);
     setOpenResult(false);
+    setLoading1(true);
+    setUploadedStory("");
   };
 
   // ==========================  Get All Following ======================================
@@ -307,6 +309,8 @@ export default function Stories() {
                   sx={{ maxWidth: 1000, maxHeight: 1200 }}
                   className="model-content"
                 >
+                  <h2>welcome</h2>
+                  <h2>{userName}</h2>
                   <TriggerButton
                     className="close-button"
                     type="button"
@@ -319,24 +323,25 @@ export default function Stories() {
                   >
                     <span aria-hidden="true">&times;</span>
                   </TriggerButton>
-
-                  {uploadedStory ? (
-                    <video
-                      width={"300px"}
-                      height={"300px"}
-                      id="video"
-                      src={uploadedStory}
-                      autoPlay
-                      controls
-                    ></video>
-                  ) : loading1 ? (
-                    <>Upload your Story</>
-                  ) : (
-                    <Box sx={{ display: "flex" }}>
-                      <CircularProgress />
-                    </Box>
-                  )}
-
+                  <div className="show-content">
+                    {uploadedStory ? (
+                      <video
+                        width={"300px"}
+                        height={"300px"}
+                        id="video"
+                        src={uploadedStory}
+                        autoPlay
+                        controls
+                      ></video>
+                    ) : loading1 ? (
+                      <>Upload your Story</>
+                    ) : (
+                      <Box sx={{ display: "flex" }}>
+                        <CircularProgress />
+                      </Box>
+                    )}
+                  </div>
+                  
                   <div
                     className="input-file-section"
                     style={{ textAlign: "center", padding: "20px" }}

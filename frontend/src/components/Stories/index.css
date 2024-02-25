@@ -89,34 +89,81 @@ border: solid 1px;
 
 
 
-/*===================== Styles for the container of the new story model */
+/*====================== Styles for the container of the new story model =================================*/ 
+
 .add-new-story-model .model-content {
     display: grid;
-    grid-template-rows: auto auto 1fr; /* Three rows: first and second auto-sized, last takes remaining space */
-    grid-template-columns: 1fr; /* Single column */
+    grid-template-rows: 1fr 5fr 1fr; /* Three rows: first and second auto-sized, last takes remaining space */
+
+    grid-template-columns:1fr 1fr; /* Single column */
+    width: 50%;
+    height: 80%;
+
 }
 
-.close-button {
+.model-content .close-button {
+    position: relative;
+    grid-column-start: 2;
+    grid-row-start: 1;
     border: solid 2px;
-    margin: 10px; /* Adjust as needed */
+    margin-left: auto; /* Adjust as needed */
+    background-color: aqua;
+
+}
+
+
+.show-content{
+    position: relative;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    background-color: aquamarine;
 }
 
 .new-story-content {
+    position: relative;
+    grid-row-start: 2;
+    
+    width: 100%;
+background-color: antiquewhite;
     padding: 20px;
-    text-align: center; /* Center the content */
+    text-align: center; 
     border: solid 1px;
 }
-
+/* 
 .input-file-section,
 .submit-section {
     display: flex;
-    justify-content: center; /* Center the elements horizontally */
-    margin-top: 20px; /* Adjust as needed */
-}
+    justify-content: center;
+    margin-top: 20px;
+} */
 
 .add-story-button,
 .submit-story-button {
     background-color: aquamarine;
-    border: solid 2px;
+    /* border: solid 2px; */
     padding: 10px 20px;
+}
+.submit-section{
+    position: relative;
+    /* border: solid 4px; */
+    grid-row-start: 3;
+    margin-left:160% ;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.input-file-section {
+    position: relative;
+    /* border: solid 4px; */
+    grid-row-start: 2;
+    grid-column-start: 1;
+}
+
+.model-content .submit-story-button{
+    position: relative;
+
+    grid-row-start: 2;
+    background-color: aquamarine;
+
 }
