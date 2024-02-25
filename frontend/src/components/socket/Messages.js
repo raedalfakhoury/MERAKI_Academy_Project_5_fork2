@@ -137,7 +137,7 @@ function Messages({ data, posts }) {
             Message
           </Modal.Title> */}
         </Modal.Header>
-        <Modal.Body style={{ overflowY: "scroll", maxHeight: "40vh" }}>
+        <Modal.Body style={{ overflowY: "auto", maxHeight: "40vh" }}>
           {all_message.length > 0 &&
             all_message.map((mess, index) => {
               return (
@@ -155,10 +155,10 @@ function Messages({ data, posts }) {
                             display: "flex",
                             alignItems: "center",
                             backgroundColor: "gray",
-                            borderRadius: "14px",
-                            padding: "10px",
+                            borderRadius: "17px",
+                            padding: " 5px 15px",
                             color: "white",
-                            justifyContent: "flex-end",
+                            justifyContent: "center",
                           }}
                         >
                           {mess.message}
@@ -191,6 +191,7 @@ function Messages({ data, posts }) {
                             borderRadius: "14px",
                             padding: "10px",
                             color: "white",
+                            justifyContent: "center",
                           }}
                         >
                           {mess.message}
