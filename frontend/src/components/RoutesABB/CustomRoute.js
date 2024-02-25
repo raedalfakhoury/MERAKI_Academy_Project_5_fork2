@@ -19,8 +19,8 @@ import Explore from "../Explore/Explore";
 export default function CustomRoute() {
   return (
     <>
-{/* <Socket/> */}
-      <Routes>
+<Socket/>
+      {/* <Routes>
         <Route path="/users/register" element={<Register />} />
         <Route path="/Explore" element={<Explore />} />
         <Route path="/users/login" element={<LoginPage />} />
@@ -29,7 +29,7 @@ export default function CustomRoute() {
         <Route path="/" element={<WelcomePage />} />
 
         <Route path="/home" element={<Home />} />
-      </Routes>
+      </Routes> */}
       {/* <Weather/> */}
       {/* <Stories/> */}
       {/* <RecommendedFreind/> */}
