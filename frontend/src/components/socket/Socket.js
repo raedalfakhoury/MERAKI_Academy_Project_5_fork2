@@ -6,50 +6,52 @@ import socketInit from "./socket.server";
 // import Message from "./Message";
 import Messages from "./Messages";
 
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setPosts } from "../redux/reducers/Posts";
+
 function Socket() {
+  const dispatch = useDispatch();
+
+  const { posts, token, userId } = useSelector((state) => {
+    return {
+      posts: state.posts.posts,
+      userId: state.auth.userId,
+      token: state.auth.token,
+      name: state.auth.name,
+      image: state.auth.image,
+    };
+  });
+
   const [data, setData] = useState({
-    token: "",
-    id: "",
+    token: token,
+    id: userId,
     socket: null,
   });
-  const [is_connected , set_is_connected] =useState(false)
+  const [is_connected, set_is_connected] = useState(false);
 
   useEffect(() => {
     data.socket?.on("connect", () => {
       console.log(true);
-      set_is_connected(true)
+      set_is_connected(true);
       // setData({ ...data, is_connected: true });
     });
     data.socket?.on("connect_error", (error) => {
       console.log(error.message);
-      set_is_connected(false)
+      set_is_connected(false);
       // setData({ ...data, is_connected: false });
     });
 
     return () => {
       data.socket?.close();
       data.socket?.removeAllListeners();
-      set_is_connected(false)
+      set_is_connected(false);
     };
   }, [data.socket]);
 
   return (
     <>
       <h1>socket io</h1>
-      <textarea
-        type="text"
-        placeholder="user_id"
-        onChange={(e) => {
-          setData({ ...data, id: e.target.value });
-        }}
-      />
-      <textarea
-        type="text"
-        placeholder="token"
-        onChange={(e) => {
-          setData({ ...data, token: e.target.value });
-        }}
-      />
 
       <button
         onClick={() => {
@@ -59,9 +61,9 @@ function Socket() {
           });
         }}
       >
-        connect
+        open Messages
       </button>
-      {is_connected&& <Messages data={data} />}
+      {is_connected && <Messages data={data} posts={posts} />}
     </>
   );
 }

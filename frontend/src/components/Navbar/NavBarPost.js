@@ -312,7 +312,9 @@ export default function NavBarPost() {
             </IconButton>
 
             {/* Message Notifications */}
-            <IconButton
+            <IconButton onClick={()=>{
+               redirect("/messages");
+            }}
               sx={{
                 "&:hover": { backgroundColor: "#659BDC" },
               }}
