@@ -404,6 +404,8 @@ export default function Stories() {
                       <video
                         src={uploadedStory}
                         autoPlay
+                        width={"300px"}
+                        height={"300px"}
                         controls
                         className="video-inside-addingStory"
                       ></video>
