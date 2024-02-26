@@ -16,10 +16,13 @@ import Loader from "../Loader/Loader";
 import Profile from "../Profile/Profile";
 import Socket from "../socket/Socket";
 import Explore from "../Explore/Explore";
+import Admin from "../AdminDashboard/Admin";
 export default function CustomRoute() {
   return (
     <>
-
+ 
+{/* <Socket/> */}
+ 
       <Routes>
         <Route path="/users/register" element={<Register />} />
         <Route path="/Explore" element={<Explore />} />
@@ -29,7 +32,11 @@ export default function CustomRoute() {
         <Route path="/" element={<WelcomePage />} />
 
         <Route path="/home" element={<Home />} />
+ 
+        <Route path="/admin" element={<Admin/>} />
+ 
         <Route path="/messages" element={<Socket/>} />
+ 
       </Routes>
       {/* <Weather/> */}
       {/* <Stories/> */}
