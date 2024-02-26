@@ -27,6 +27,7 @@ const ExpandMore = styled((props) => {
 
 export default function Stories() {
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [openResult, setOpenResult] = useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
@@ -38,6 +39,7 @@ export default function Stories() {
   const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
   const [userPhoto, setUserPhoto] = useState("");
+  const [uploadedStory, setUploadedStory] = useState("");
   const [model, setModle] = useState(false);
   const [vidIndex, setVidIndex] = useState(0);
   const [usersStories, setUserStories] = useState([]);
@@ -106,6 +108,8 @@ export default function Stories() {
     setOpen(false);
     setOpen1(false);
     setOpenResult(false);
+    setLoading1(true);
+    setUploadedStory("");
   };
 
   // ==========================  Get All Following ======================================
@@ -165,6 +169,9 @@ export default function Stories() {
   // get Cloudinary URL
   const StoryHandle = (files) => {
     setOpen1(true);
+    setLoading1(false);
+
+    console.log("Start Story Handle Function >> [+]");
     const formData = new FormData();
     formData.append("file", files[0]);
     formData.append("upload_preset", pr_key);
@@ -176,8 +183,7 @@ export default function Stories() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data.url);
-
-        postdata(data.url);
+        setUploadedStory(data.url);
       });
   };
 
@@ -200,7 +206,6 @@ export default function Stories() {
         console.log(err);
       });
   };
-
   // ===========================================================================================
 
   return (
@@ -298,33 +303,51 @@ export default function Stories() {
                 open={open1}
                 onClose={handleClose}
                 slots={{ backdrop: StyledBackdrop }}
+                className="add-new-story-model"
               >
-                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
-                  <div style={{ padding: "20px" }}>
-                    <h2 id="unstyled-modal-title" className="modal-title">
-                      Add New Story
-                    </h2>
-                    <p
-                      id="unstyled-modal-description"
-                      className="modal-description"
-                    >
-                      Your Story
-                    </p>
-                    <textarea
-                      id="publish"
-                      style={{ border: "solid 1px" }}
-                      className="textarea"
-                      rows="3"
-                      placeholder="Write something about you..."
-                      spellCheck="false"
-                    ></textarea>
-                  </div>
-                  <div style={{ textAlign: "center", padding: "20px" }}>
+                <ModalContent
+                  sx={{ maxWidth: 1000, maxHeight: 1200 }}
+                  className="model-content"
+                >
+                  <h2>welcome</h2>
+                  <h2>{userName}</h2>
+                  <TriggerButton
+                    className="close-button"
+                    type="button"
+                    onClick={() => {
+                      console.log(11);
+                      setOpen1(false); // Close the modal
+                      setLoading1(true);
+                      setUploadedStory("");
+                    }}
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </TriggerButton>
+                  <div className="show-content">
+                    {uploadedStory ? (
+                      <video
+                        src={uploadedStory}
+                        autoPlay
+                        controls
+                        className="video-inside-addingStory"
+                      ></video>
+                    ) : loading1 ? (
+                      <>Upload your Story</>
+                    ) : (
+                      <Box sx={{ display: "flex" }}>
+                        <CircularProgress />
+                      </Box>
+                    )}
+                     <div
+                    className="input-file-section"
+                    
+                  >
                     <TriggerButton
+                      className="add-story-button"
                       type="button"
                       onClick={() => {
                         document.querySelector(".input-file").click();
-                        setOpen1(false); // Close the modal after upload
+                        // setOpen1(false); // Close the modal after upload
                       }}
                     >
                       <input
@@ -335,16 +358,27 @@ export default function Stories() {
                         className="input-file"
                         style={{ display: "none" }} // hide the input element visually
                       />
-                      Button 1
+                      Choose File
                     </TriggerButton>
+                  </div>
+                  </div>
+
+                 
+
+                  <div
+                    className="submit-section"
+                    style={{ textAlign: "center", padding: "20px" }}
+                  >
                     <TriggerButton
+                      className="submit-story-button"
                       type="button"
                       onClick={() => {
-                        console.log(11);
-                        setOpen1(false); // Close the modal
+                        // Function to submit story
+                        postdata(uploadedStory);
+                        setOpen1(false); // Close the modal after submission
                       }}
                     >
-                      Button 2
+                      Submit Story
                     </TriggerButton>
                   </div>
                 </ModalContent>
@@ -365,8 +399,13 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
-                      src={My_Img}
-                      // onClick={() => handleOpen(elem)}
+
+//                       src={My_userName === userName ? My_Img : userPhoto}
+//                       onClick={() => handleOpen(elem)}
+
+//                       src={My_Img}
+//                       // onClick={() => handleOpen(elem)}
+
                       style={{
                         color: "black",
                         width: "40px",
@@ -379,13 +418,6 @@ export default function Stories() {
                       {userName}
                     </h6>
                   </div>
-
-                  <p
-                    id="unstyled-modal-description"
-                    className="modal-description"
-                  >
-                    Your Story
-                  </p>
 
                   <div className="video">
                     {loading ? (

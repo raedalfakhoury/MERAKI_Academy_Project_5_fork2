@@ -14,7 +14,7 @@ import {
   Image,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import './index.css';
 export default function Rigester() {
   const [userName, setUserName] = useState("");
   const [open1, setOpen1] = useState(false);
@@ -281,7 +281,7 @@ export default function Rigester() {
     //   </Container>
     // </section>
     <Container fluid>
-      <Card className="text-black m-5" style={{ borderRadius: "25px" }}>
+      <Card className="text-black m-5 containers" style={{ borderRadius: "25px" , }}>
         <Card.Body>
           <Row>
             <Col
@@ -289,11 +289,11 @@ export default function Rigester() {
               lg="6"
               className="order-2 order-lg-1 d-flex flex-column align-items-center"
             >
-              <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+              <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{color: "#ffff"}}>
                 Sign up
               </p>
               {/* Profile Picture Input */}
-              <div className="mb-4">
+              <div className="mb-4" style={{color: "#E8EFFD"}}>
                 {/* SVG Icon */}
                 {userPhoto? <img style={{width:"80px",height:"80px",borderRadius:"25px"}} src={userPhoto}/>:<svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +332,7 @@ export default function Rigester() {
                 <Form.Label className="mt-4">Profile Picture</Form.Label>
               </div>
 
-              <div className="d-flex flex-row align-items-center mb-4 ">
+              <div className="d-flex flex-row align-items-center mb-4 " style={{color: "#E8EFFD"}}>
                 <Form.Label className="me-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -359,7 +359,7 @@ export default function Rigester() {
                 />
               </div>
 
-              <div className="d-flex flex-row align-items-center mb-4">
+              <div className="d-flex flex-row align-items-center mb-4" style={{color: "#E8EFFD"}}>
                 <Form.Label className="me-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -382,7 +382,7 @@ export default function Rigester() {
                 />
               </div>
 
-              <div className="d-flex flex-row align-items-center mb-4">
+              <div className="d-flex flex-row align-items-center mb-4" style={{color: "#E8EFFD"}}>
                 <Form.Label className="me-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -405,11 +405,11 @@ export default function Rigester() {
                 />
               </div>
 
-              <Button
+              <Button 
                 className="mb-4"
                 variant="primary"
                 size="lg"
-                style={{ height: "50px", width: "400px" }}
+                style={{ height: "50px", width: "350px",marginLeft:"23px",}}
                 onClick={() => {
                   axios
                     .post("http://localhost:5000/users/register", {
@@ -433,6 +433,7 @@ export default function Rigester() {
                 Register
               </Button>
             </Col>
+            <div className="d-none d-lg-block vertical-line"></div>
 
             <Col
               md="10"
@@ -440,8 +441,8 @@ export default function Rigester() {
               className="order-1 order-lg-2 d-flex align-items-center"
             >
               <Card.Img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                fluid
+                src="https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
+                style={{width:"600px"}}
               />
             </Col>
           </Row>

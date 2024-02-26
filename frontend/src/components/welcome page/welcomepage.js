@@ -21,7 +21,7 @@ function FeaturedSection() {
   return (
     <Container className="px-4 py-5" id="featured-3">
       <h2 className="pb-2 border-bottom" style={{ textAlign: "left" }}>
-        Discover Our Featured Courses
+        TALAQI Happy Hangout: Share Smiles and Stories{" "}
       </h2>
       <Row className="g-4 py-5 row-cols-1 row-cols-lg-3">
         <Col>
@@ -38,31 +38,19 @@ function FeaturedSection() {
               </svg>
             </div>
             <Card.Body className="flex-grow-1">
-              <Card.Title>Elevate Your Skills in Digital Marketing</Card.Title>
+              <Card.Title>Start Chats, Make Friends</Card.Title>
               <Card.Text>
-                Embark on a transformative journey in Marketing and Business
-                with our dynamic courses designed to enhance your digital
-                marketing skills and strategic thinking.
+                Say hello, share stories, and make new friends from all over!
+                Dive into discussions, ask questions, or just share a smile.
+                Let's make this space warm and welcoming for everyone!
               </Card.Text>
-              <a href="#" className="icon-link">
-                Explore Courses
-                <svg
-                  className="bi"
-                  width="1em"
-                  height="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                >
-                  <use xlinkHref="#chevron-right" />
-                </svg>
-              </a>
             </Card.Body>
           </Card>
         </Col>
 
         <Col>
           <Card className="feature d-flex flex-column h-100">
-            <div className="feature-icon bg- bg-gradient">
+            <div className="feature-icon bg-primary bg-gradient">
               <svg
                 className="bi"
                 width="1em"
@@ -74,23 +62,12 @@ function FeaturedSection() {
               </svg>
             </div>
             <Card.Body className="flex-grow-1">
-              <Card.Title>Master Personal Finance and Economics</Card.Title>
+              <Card.Title>Get Talking, Stay Connected</Card.Title>
               <Card.Text>
-                Take control of
-                your................................................
+                Jump into conversations, stay in touch, and keep the vibes
+                positive! Whether it's a quick comment or a longer chat, let's
+                keep the lines of communication open and the friendships strong!
               </Card.Text>
-              <a href="#" className="icon-link">
-                Discover Courses
-                <svg
-                  className="bi"
-                  width="1em"
-                  height="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                >
-                  <use xlinkHref="#chevron-right" />
-                </svg>
-              </a>
             </Card.Body>
           </Card>
         </Col>
@@ -109,26 +86,13 @@ function FeaturedSection() {
               </svg>
             </div>
             <Card.Body className="flex-grow-1">
-              <Card.Title>
-                Unleash Your Creativity with Arts and Photography
-              </Card.Title>
+              <Card.Title>Stay Social</Card.Title>
               <Card.Text>
-                Dive into a world of creativity with our Arts and Photography
-                courses, where every brushstroke, click of the camera, or
-                digital creation becomes a unique masterpiece.
+                Keep the conversation flowing and the friendships growing with
+                our easy-to-use communication tools. Whether you're chatting
+                one-on-one, joining group discussions, or sharing updates with
+                your network, staying social has never been more fun!
               </Card.Text>
-              <a href="#" className="icon-link">
-                Start Learning
-                <svg
-                  className="bi"
-                  width="1em"
-                  height="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                >
-                  <use xlinkHref="#chevron-right" />
-                </svg>
-              </a>
             </Card.Body>
           </Card>
         </Col>
@@ -212,12 +176,12 @@ function WelcomeSection() {
             textAlign: "left",
           }}
         >
-          Welcome to [social media name], your ultimate social destination where
-          connections flourish and communities come alive! Dive into a world
-          where every interaction is an opportunity to connect with friends,
-          family, and like-minded individuals from across the globe. Here, we're
-          all about fostering meaningful relationships and creating memories
-          that last a lifetime.
+          Welcome to TALAQI, your ultimate social destination where connections
+          flourish and communities come alive! Dive into a world where every
+          interaction is an opportunity to connect with friends, family, and
+          like-minded individuals from across the globe. Here, we're all about
+          fostering meaningful relationships and creating memories that last a
+          lifetime.
         </p>
         <p
           className="lead"
@@ -287,7 +251,7 @@ class WelcomePage extends React.Component {
         <AboutSection />
         <FeaturedSection />
         <WelcomeSection />
-        <div style={{ padding: "25px", margin: "25px" }}>
+        {/* <div style={{ padding: "25px", margin: "25px" }}>
           <Carousel>
             <Carousel.Item>
               <img
@@ -342,121 +306,112 @@ class WelcomePage extends React.Component {
               </Carousel.Caption>
             </Carousel.Item>
           </Carousel>
-        </div>
+        </div> */}
 
-        <Container className="px-4 py-5" style={{ textAlign: "left" }}>
-          <h2 className="pb-2 border-bottom">
-            Unleash Your Learning Experience
-          </h2>
+<Container className="px-4 py-5" style={{ textAlign: "left" }}>
+  <h2 className="pb-2 border-bottom">
+    Welcome to TALAQI!
+  </h2>
 
-          <Row className="row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
-            <Col className="d-flex flex-column align-items-start gap-2">
-              <h2
-                className="fw-bold text-primary"
-                style={{
-                  fontFamily: "Montserrat, sans-serif",
-                  fontSize: "2rem",
-                }}
-              >
-                Unlocking Limitless Potential
-              </h2>
-              <p
-                className="text-secondary"
-                style={{
-                  fontFamily: "Open Sans, sans-serif",
-                  fontSize: "1.1rem",
-                }}
-              >
-                Embark on a learning journey with features designed to elevate
-                your experience. Our commitment to excellence ensures a seamless
-                exploration of knowledge and skills.
-              </p>
-              <Button href="#" variant="primary" size="lg">
-                Start Your Journey
-              </Button>
-            </Col>
+  <Row className="row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+    <Col className="d-flex flex-column align-items-start gap-2">
+      <h2
+        className="fw-bold text-primary"
+        style={{
+          fontFamily: "Montserrat, sans-serif",
+          fontSize: "2rem",
+        }}
+      >
+        Connect, Share, Engage
+      </h2>
+      <p
+        className="text-secondary"
+        style={{
+          fontFamily: "Open Sans, sans-serif",
+          fontSize: "1.1rem",
+        }}
+      >
+        Join our vibrant community where you can connect with friends, share your thoughts and experiences, and engage in meaningful conversations.
+      </p>
+      <Button href="#" variant="primary" size="lg">
+        Start Your Journey
+      </Button>
+    </Col>
 
-            <Col>
-              <Row className="row-cols-1 row-cols-sm-2 g-4">
-                <Col className="d-flex flex-column gap-2">
-                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-                    <svg className="bi" width="1em" height="1em">
-                      <use xlinkHref="#collection"></use>
-                    </svg>
-                  </div>
-                  <h4
-                    className="fw-semibold mb-0 text-primary"
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    Diverse Content
-                  </h4>
-                  <p className="text-secondary">
-                    Explore a rich collection of courses covering a wide range
-                    of subjects. From technology to arts, we have curated
-                    content to spark your curiosity.
-                  </p>
-                </Col>
+    <Col>
+      <Row className="row-cols-1 row-cols-sm-2 g-4">
+        <Col className="d-flex flex-column gap-2">
+          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+            <svg className="bi" width="1em" height="1em">
+              <use xlinkHref="#collection"></use>
+            </svg>
+          </div>
+          <h4
+            className="fw-semibold mb-0 text-primary"
+            style={{ fontSize: "1.2rem" }}
+          >
+            Explore Content
+          </h4>
+          <p className="text-secondary">
+            Dive into a vast array of content ranging from posts, articles, videos, and more, curated just for you.
+          </p>
+        </Col>
 
-                <Col className="d-flex flex-column gap-2">
-                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-                    <svg className="bi" width="1em" height="1em">
-                      <use xlinkHref="#gear-fill"></use>
-                    </svg>
-                  </div>
-                  <h4
-                    className="fw-semibold mb-0 text-primary"
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    Interactive Learning
-                  </h4>
-                  <p className="text-secondary">
-                    Engage in interactive learning experiences that go beyond
-                    traditional methods. Our platform provides hands-on
-                    activities and real-world applications.
-                  </p>
-                </Col>
+        <Col className="d-flex flex-column gap-2">
+          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+            <svg className="bi" width="1em" height="1em">
+              <use xlinkHref="#gear-fill"></use>
+            </svg>
+          </div>
+          <h4
+            className="fw-semibold mb-0 text-primary"
+            style={{ fontSize: "1.2rem" }}
+          >
+            Customize Your Profile
+          </h4>
+          <p className="text-secondary">
+            Personalize your profile with photos, bio, and interests to showcase your personality and connect with others who share your passions.
+          </p>
+        </Col>
 
-                <Col className="d-flex flex-column gap-2">
-                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-                    <svg className="bi" width="1em" height="1em">
-                      <use xlinkHref="#speedometer"></use>
-                    </svg>
-                  </div>
-                  <h4
-                    className="fw-semibold mb-0 text-primary"
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    Personalized Pace
-                  </h4>
-                  <p className="text-secondary">
-                    Tailor your learning journey with our personalized pace
-                    feature. Whether you prefer a quick sprint or a steady
-                    marathon, we cater to your unique learning style.
-                  </p>
-                </Col>
+        <Col className="d-flex flex-column gap-2">
+          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+            <svg className="bi" width="1em" height="1em">
+              <use xlinkHref="#speedometer"></use>
+            </svg>
+          </div>
+          <h4
+            className="fw-semibold mb-0 text-primary"
+            style={{ fontSize: "1.2rem" }}
+          >
+            Stay Updated
+          </h4>
+          <p className="text-secondary">
+            Get real-time updates on new posts, comments, and messages so you never miss out on what's happening in your network.
+          </p>
+        </Col>
 
-                <Col className="d-flex flex-column gap-2">
-                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-                    <svg className="bi" width="1em" height="1em">
-                      <use xlinkHref="#table"></use>
-                    </svg>
-                  </div>
-                  <h4
-                    className="fw-semibold mb-0 text-primary"
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    Comprehensive Resources
-                  </h4>
-                  <p className="text-secondary">
-                    Access a wealth of comprehensive resources, including study
-                    materials, quizzes, and discussion forums. Our platform
-                    ensures you have everything you need to succeed.
-                  </p>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+        <Col className="d-flex flex-column gap-2">
+          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+            <svg className="bi" width="1em" height="1em">
+              <use xlinkHref="#table"></use>
+            </svg>
+          </div>
+          <h4
+            className="fw-semibold mb-0 text-primary"
+            style={{ fontSize: "1.2rem" }}
+          >
+            Engage with Community
+          </h4>
+          <p className="text-secondary">
+            Participate in discussions, like and comment on posts, and connect with other members of the TALAQI community.
+          </p>
+        </Col>
+      </Row>
+    </Col>
+  </Row>
+</Container>
+
       </div>
     );
   }
