@@ -13,18 +13,22 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setadminUsers } from "../redux/reducers/Admin";
+import { setadminPosts } from "../redux/reducers/Admin/post";
+import shadows from "@mui/material/styles/shadows";
 const Admin = () => {
   const [toggleUser, setToggleUser] = useState(false);
   const [togglePost, setTogglePost] = useState(false);
   const dispatch = useDispatch();
-  const { users, token } = useSelector((state) => {
+  const { users, token, posts } = useSelector((state) => {
     return {
       users: state.adminUsers.adminUsers,
       token: state.auth.token,
+      posts: state.adminPosts.adminPosts,
     };
   });
 
   const [userCount, setUserCount] = useState();
+  const [postCount, setPostCount] = useState();
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/admin`)
@@ -45,8 +49,8 @@ const Admin = () => {
       })
       .then((result) => {
         console.log(result.data.posts);
-        // setUserCount(result?.data?.length);
-        // dispatch(setadminUsers(result?.data?.result));
+        setPostCount(result?.data?.length);
+        dispatch(setadminPosts(result?.data?.posts));
       })
       .catch((err) => {
         console.log(err);
@@ -155,7 +159,10 @@ const Admin = () => {
                 }}
               >
                 <div class="card_box2">
-                  <MailIcon />
+                  <h1>
+                    <MailIcon />
+                  </h1>
+                  {<h3>{postCount}</h3>}
                   <span></span>
                 </div>
               </div>
@@ -193,6 +200,8 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
                     }}
                   >
                     profile Image
@@ -202,6 +211,8 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
                     }}
                   >
                     username
@@ -211,6 +222,8 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
                     }}
                   >
                     Bio
@@ -220,6 +233,8 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
                     }}
                   >
                     E-mail
@@ -229,15 +244,19 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
                     }}
                   >
-                    Status
+                    Status account
                   </p>
                   <p
                     style={{
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
                     }}
                   >
                     Action
@@ -259,18 +278,40 @@ const Admin = () => {
                         alt=""
                         src={ele.profile_picture_url}
                         style={{
-                          height: "105px",
-                          width: "105px",
+                          height: "130px",
+                          width: "130px",
                           borderRadius: "50%",
                           margin: "5px 0px",
                           padding: "2px",
                           border: "1px solid grey",
                         }}
                       ></img>
-                      <p>{ele.username}</p>
-                      <p>{ele.bio}</p>
-                      <p>{ele.email}</p>
-                      <p>{ele.bio}</p>
+                      <p style={{ width: "130px", textAlign: "center" }}>
+                        {ele.username}
+                      </p>
+                      <p style={{ width: "130px", textAlign: "center" }}>
+                        {ele.bio}
+                      </p>
+                      <p
+                        style={{ width: "130px", textAlign: "center" }}
+                        title={ele.email}
+                      >
+                        {ele.email.length > 13 ? (
+                          <span>{ele.email.slice(0, 14)}...</span>
+                        ) : (
+                          ele.email
+                        )}
+                      </p>
+                      <p
+                        style={{
+                          width: "130px",
+                          color: "green",
+                          fontWeight: "600",
+                          textAlign: "center",
+                        }}
+                      >
+                        Active
+                      </p>
                       <button class="btn" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
@@ -289,6 +330,153 @@ const Admin = () => {
             ) : (
               ""
             )}
+
+
+{/* -------------------------Posts------------------------------------------------------ */}
+ 
+            {togglePost ? <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    borderBottom: "1px solid",
+                    position: "sticky",
+                    top: "0px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Post Image
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Owner
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Content
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    E-mail
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Status account
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Action
+                  </p>
+                </div>
+                {posts?.map((ele) => {
+                    console.log(ele);
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid #ff9b9b",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        alt=""
+                        src={ele.media_url}
+                        style={{
+                          height: "100px",
+                          width: "130px",
+                          borderRadius: "5px",
+                          margin: "5px 0px",
+                          padding: "2px", 
+                          boxShadow:"#5c62685c 3px 3px 3px"
+                        }}
+                      ></img>
+                      <p style={{ width: "130px", textAlign: "center" }}>
+                        {ele.username}
+                      </p>
+                      <p style={{ width: "130px", textAlign: "center" }} title={ele.content}>
+                        {ele.content.length > 13  ? <span>{ele.content.slice(0,13)}</span> : ele.content}
+                      </p>
+                      <p
+                        style={{ width: "130px", textAlign: "center" }}
+                        title={ele.email}
+                      >
+                        {ele.email.length > 13 ? (
+                          <span>{ele.email.slice(0, 14)}...</span>
+                        ) : (
+                          ele.email
+                        )}
+                      </p>
+                      <p
+                        style={{
+                          width: "130px",
+                          color: "green",
+                          fontWeight: "600",
+                          textAlign: "center",
+                        }}
+                      >
+                        Active
+                      </p>
+                      <button class="btn" type="button">
+                        <strong>Block</strong>
+                        <div id="container-stars">
+                          <div id="stars"></div>
+                        </div>
+
+                        <div id="glow">
+                          <div class="circle"></div>
+                          <div class="circle"></div>
+                        </div>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div> : ""}
           </Typography>
         </Box>
       </Box>

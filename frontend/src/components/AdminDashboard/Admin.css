@@ -89,7 +89,8 @@
 }
 
 .card_box2 {
-  display: flex;
+    display: flex;
+  flex-direction: column;
   width: 250px;
   height: 180px;
   border-radius: 20px;
@@ -331,9 +332,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 5rem;
+    width: 130px;
     overflow: hidden;
-    height: 2rem;
+    height: 35px;
     background-size: 300% 300%;
     backdrop-filter: blur(1rem);
     border-radius: 5rem;
