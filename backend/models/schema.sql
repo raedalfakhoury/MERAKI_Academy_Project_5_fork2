@@ -35,13 +35,21 @@ CREATE TABLE Users (
     is_deleted INT DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES Roles (id)
 );
-
+CREATE TABLE Messages (
+    MessageID SERIAL PRIMARY KEY,
+    SenderID INT NOT NULL,
+    RecipientID INT NOT NULL,
+    Content TEXT ,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (SenderID) REFERENCES Users(id),
+    FOREIGN KEY (RecipientID) REFERENCES Users(id)
+);
 -- Table: Follows (Many-to-Many)
 CREATE TABLE Follows (
     follow_id SERIAL PRIMARY KEY,
     follower_id INT,
     followed_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT  NOW(),
     FOREIGN KEY (follower_id) REFERENCES Users (id),
     FOREIGN KEY (followed_id) REFERENCES Users (id)
 );

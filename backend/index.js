@@ -18,8 +18,10 @@ const commentsRouter = require("./routes/comments");
 const likesRouter = require("./routes/likes")
 const searchRouter = require("./routes/search")
 const LikeCommentsR = require("./routes/LikeComments")
+const routerMessage = require("./routes/messageRout")
 
 app.use("/users", userRouter);
+app.use("/message", routerMessage);
 app.use("/roles", roleRouter);
 app.use("/post",PostRouter)
 app.use("/followers",followersRouter)
