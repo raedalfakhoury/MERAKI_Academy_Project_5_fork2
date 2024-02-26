@@ -7,13 +7,15 @@ const {
   updateUser,
   getAllUser,
   getUserById,
+  getAllUsersAdminDashboard
 } = require("../controllers/user");
 
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 
-const userRouter = express();
+const userRouter = express.Router();
 
+userRouter.get("/admin", getAllUsersAdminDashboard);
 userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.delete("/delete", authentication, deleteUser);

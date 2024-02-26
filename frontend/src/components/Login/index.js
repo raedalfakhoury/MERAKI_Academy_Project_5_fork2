@@ -249,7 +249,7 @@ function LoginPage() {
 
                                       {
                                         userEmail == "raed@gmail.com"
-                                          ? redirect("/users/register")
+                                          ? redirect("/admin")
                                           : redirect("/home");
                                       }
                                     })

@@ -222,6 +222,7 @@ const getAllUser = (req, res) => {
       });
     });
 };
+
 const getUserById = (req, res) => {
   const { id } = req.params;
   const data = [id];
@@ -241,6 +242,24 @@ const getUserById = (req, res) => {
       });
     });
 };
+const getAllUsersAdminDashboard = (req, res) => {
+  pool
+    .query(`SELECT * FROM Users;`)
+    .then((result) => {
+      res.status(200).json({
+        message: "All Users",
+        length:result.rows.length,
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log("admin", err);
+      res.status(500).json({
+        message: "Server error",
+        err: err.massage,
+      });
+    });
+};
 
 module.exports = {
   register,
@@ -249,4 +268,5 @@ module.exports = {
   updateUser,
   getAllUser,
   getUserById,
+  getAllUsersAdminDashboard,
 };
