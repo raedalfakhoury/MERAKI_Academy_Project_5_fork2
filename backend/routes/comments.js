@@ -6,6 +6,7 @@ const {
   getCommentsByPostId,
   updateCommentsById,
   deleteCommentsById,
+  getAllCommentAdmin
   // getCommentsAndLikeByPostId
 } = require("../controllers/comments");
 
@@ -17,6 +18,8 @@ const commentsRouter = express.Router();
 
 commentsRouter.post("/:id",authentication,createNewComment);
 commentsRouter.get("/:id",authentication ,getCommentsByPostId);
+
+commentsRouter.get("/comments/admin",authentication ,getAllCommentAdmin);
 
 // commentsRouter.get("/:id/withcomment",authentication ,getCommentsAndLikeByPostId);
 
