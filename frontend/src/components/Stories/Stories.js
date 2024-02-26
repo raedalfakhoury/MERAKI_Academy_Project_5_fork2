@@ -35,6 +35,7 @@ export default function Stories() {
   const [open1, setOpen1] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showStory, setShowStory] = useState(false);
+  const [user_Id, setUser_Id] = useState("");
   const [userName, setUserName] = useState("");
   const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
@@ -54,12 +55,34 @@ export default function Stories() {
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
+  // =================== Delete Story =================================
+
+  const deleteStory = (e) => {
+    console.log(userStory[storyIndex].id);
+    console.log("Deleted");
+const story_id = userStory[storyIndex].id
+    axios
+      .delete(`http://localhost:5000/story/${story_id}`, {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      })
+
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // ===============================   get all stories by user Id ==============================
   const handleOpen = (e) => {
     setOpen(true);
     console.log(e.id, e.username);
     setUserName(e.username);
+    setUser_Id(e.id);
+
     setLoading(true);
     axios
       .get(`http://localhost:5000/story/${e.id}`, {
@@ -338,32 +361,27 @@ export default function Stories() {
                         <CircularProgress />
                       </Box>
                     )}
-                     <div
-                    className="input-file-section"
-                    
-                  >
-                    <TriggerButton
-                      className="add-story-button"
-                      type="button"
-                      onClick={() => {
-                        document.querySelector(".input-file").click();
-                        // setOpen1(false); // Close the modal after upload
-                      }}
-                    >
-                      <input
-                        onChange={(e) => {
-                          StoryHandle(e.target.files);
+                    <div className="input-file-section">
+                      <TriggerButton
+                        className="add-story-button"
+                        type="button"
+                        onClick={() => {
+                          document.querySelector(".input-file").click();
+                          // setOpen1(false); // Close the modal after upload
                         }}
-                        type="file"
-                        className="input-file"
-                        style={{ display: "none" }} // hide the input element visually
-                      />
-                      Choose File
-                    </TriggerButton>
+                      >
+                        <input
+                          onChange={(e) => {
+                            StoryHandle(e.target.files);
+                          }}
+                          type="file"
+                          className="input-file"
+                          style={{ display: "none" }} // hide the input element visually
+                        />
+                        Choose File
+                      </TriggerButton>
+                    </div>
                   </div>
-                  </div>
-
-                 
 
                   <div
                     className="submit-section"
@@ -399,13 +417,6 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
-
-//                       src={My_userName === userName ? My_Img : userPhoto}
-//                       onClick={() => handleOpen(elem)}
-
-//                       src={My_Img}
-//                       // onClick={() => handleOpen(elem)}
-
                       style={{
                         color: "black",
                         width: "40px",
@@ -417,6 +428,13 @@ export default function Stories() {
                     <h6 id="unstyled-modal-title" className="modal-title">
                       {userName}
                     </h6>
+                    <button
+                      style={{ marginLeft: "auto" }}
+                      onClick={(e) => deleteStory(e)}
+                    >
+                      {" "}
+                      Delete Story
+                    </button>
                   </div>
 
                   <div className="video">
