@@ -1,5 +1,5 @@
 const express = require("express");
-
+const likesRouter = express.Router();
 //controllers
 const {
   createNewLike,counterOfLikes,GetAllUserLikedPost
@@ -9,7 +9,7 @@ const {
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 
-const likesRouter = express.Router();
+
 
 likesRouter.post("/:id",authentication,createNewLike);
 likesRouter.get("/:id",authentication,counterOfLikes)

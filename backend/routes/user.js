@@ -1,5 +1,5 @@
 const express = require("express");
-
+const userRouter = express.Router();
 const {
   register,
   login,
@@ -7,13 +7,11 @@ const {
   updateUser,
   getAllUser,
   getUserById,
-  getAllUsersAdminDashboard
+  getAllUsersAdminDashboard,
 } = require("../controllers/user");
 
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
-
-const userRouter = express.Router();
 
 userRouter.get("/admin", getAllUsersAdminDashboard);
 userRouter.post("/register", register);

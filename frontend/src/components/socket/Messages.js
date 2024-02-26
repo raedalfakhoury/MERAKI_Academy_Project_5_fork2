@@ -28,7 +28,7 @@ function Messages({ data, posts, setData }) {
   });
 
   const addID = (users) => {
-    setDate_message({ ...data_message, to: users.id });
+    setDate_message({ ...data_message, to: users.user_id });
 
     set_data_user_for_sind(users);
   };
@@ -84,12 +84,16 @@ function Messages({ data, posts, setData }) {
             //   left: "100%",
             top: "-25px",
             //   right:"1px"
-       
           }}
         >
-          <Row style={{     display:"flex",
-            flexDirection:"column",
-            gap: "10px", paddingTop:"2px"}}>
+          <Row
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              paddingTop: "2px",
+            }}
+          >
             {posts?.map((users, index) => {
               if (!comber.current[users.user_id]) {
                 comber.current[users.user_id] = 1;
@@ -161,12 +165,15 @@ function Messages({ data, posts, setData }) {
             Message
           </Modal.Title> */}
         </Modal.Header>
-        <Modal.Body className="Modal-Body-messages-send" style={{ overflowY: "auto", maxHeight: "30vh" }}>
+        <Modal.Body
+          className="Modal-Body-messages-send"
+          style={{ overflowY: "auto", maxHeight: "30vh" }}
+        >
           {all_message.length > 0 &&
             all_message.map((mess, index) => {
               return (
                 <>
-                  {mess.from === data.id ? (
+                  {mess.from === data.id  ? (
                     <p>
                       <Stack
                         direction="row"
@@ -192,7 +199,6 @@ function Messages({ data, posts, setData }) {
                           alt="Remy Sharp"
                           src={localStorage.getItem("image")}
                         />
-               
                       </Stack>
                     </p>
                   ) : (
@@ -217,7 +223,6 @@ function Messages({ data, posts, setData }) {
                         >
                           {mess.message}
                         </Col>
-                 
                       </Stack>
                     </p>
                   )}

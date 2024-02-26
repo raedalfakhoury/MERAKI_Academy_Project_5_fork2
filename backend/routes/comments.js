@@ -1,5 +1,5 @@
 const express = require("express");
-
+const commentsRouter = express.Router();
 //controllers
 const {
   createNewComment,
@@ -13,7 +13,7 @@ const {
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 
-const commentsRouter = express.Router();
+
 
 commentsRouter.post("/:id",authentication,createNewComment);
 commentsRouter.get("/:id",authentication ,getCommentsByPostId);

@@ -38,6 +38,11 @@ app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
 
+
+
+
+
+
 const { Server, Socket } = require("socket.io");
 const auth = require("./middlewares/auth");
 const messageHandler = require("./controllers/message");

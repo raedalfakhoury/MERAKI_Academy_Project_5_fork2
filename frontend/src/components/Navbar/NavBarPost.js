@@ -29,9 +29,6 @@ import { useNavigate } from "react-router-dom";
 
 import "./style.css";
 
-
-
-
 // import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import "font-awesome/css/font-awesome.css";
@@ -44,49 +41,12 @@ import { setPosts } from "../redux/reducers/Posts";
 
 // export  function Socket() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //   return (
 //     <>
 
 //     </>
 //   );
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -129,8 +89,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBarPost() {
-  
-
   // const dispatch = useDispatch();
 
   const { posts, token, userId } = useSelector((state) => {
@@ -143,20 +101,15 @@ export default function NavBarPost() {
     };
   });
 
-
-
   const [is_connected, set_is_connected] = useState(false);
 
-  
   const [data, setData] = useState({
     token: token,
     id: userId,
-    socket:  null,
+    socket: null,
   });
 
-
   useEffect(() => {
-
     data.socket?.on("connect", () => {
       console.log(true);
       set_is_connected(true);
@@ -175,40 +128,19 @@ export default function NavBarPost() {
     };
   }, [data.socket]);
 
-
-  const addSocket = ()=>{
-    if(data.socket){
+  const addSocket = () => {
+    if (data.socket) {
       setData({
         ...data,
         socket: null,
       });
-    }else{
+    } else {
       setData({
         ...data,
         socket: socketInit({ id: data.id, token: data.token }),
       });
     }
-   
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  };
 
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
@@ -344,7 +276,10 @@ export default function NavBarPost() {
   );
 
   return (
-    <Box style={{ paddingBottom: "80px" ,position:"relative" }} sx={{ flexGrow: 1 }}>
+    <Box
+      style={{ paddingBottom: "80px", position: "relative" }}
+      sx={{ flexGrow: 1 }}
+    >
       <AppBar
         position="fixed"
         sx={{ bgcolor: "#ffff", color: "black", height: "55px" }}
@@ -371,7 +306,14 @@ export default function NavBarPost() {
 
           {/* Notifications Box */}
           <Box
-            sx={{ display: { xs: "none", md: "flex", paddingLeft: "40px" ,position:"relative" } }}
+            sx={{
+              display: {
+                xs: "none",
+                md: "flex",
+                paddingLeft: "40px",
+                position: "relative",
+              },
+            }}
           >
             {/* Likes Notifications */}
             <IconButton
@@ -452,10 +394,11 @@ export default function NavBarPost() {
             </IconButton>
 
             {/* Message Notifications */}
-            <IconButton onClick={()=>{
-              //  redirect("/messages");
-               addSocket()
-            }}
+            <IconButton
+              onClick={() => {
+                //  redirect("/messages");
+                addSocket();
+              }}
               sx={{
                 "&:hover": { backgroundColor: "#659BDC" },
               }}
@@ -463,7 +406,6 @@ export default function NavBarPost() {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-          
               <Badge
                 badgeContent={17}
                 color="info"
@@ -545,7 +487,6 @@ export default function NavBarPost() {
       {renderMobileMenu}
       {renderMenu}
       {/* <h1>socket io</h1> */}
-
 
       {is_connected && <Messages setData={setData} data={data} posts={posts} />}
     </Box>

@@ -4,6 +4,7 @@ const auth = (socket, next) => {
   if (!headers.token) {
     next(new Error("invalid"));
   } else {
+    console.log(headers);
     socket.join("room-name-"+headers.id);
     socket.user = { token: headers.token, user_id: headers.id };
     next();
