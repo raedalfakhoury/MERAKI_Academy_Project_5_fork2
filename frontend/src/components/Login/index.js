@@ -1,3 +1,5 @@
+/* eslint-disable no-lone-blocks */
+/* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -163,7 +165,14 @@ function LoginPage() {
                                 Log in with Google
                               </span>
                             </Button> */}
-                            <div className="Container_Google_Login" style={{width:"100%",display:"flex",justifyContent:"center"}}>
+                            <div
+                              className="Container_Google_Login"
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
                               <GoogleLogin
                                 onSuccess={(credentialResponse) => {
                                   const credentialResponseDecode = jwtDecode(
@@ -238,7 +247,11 @@ function LoginPage() {
                                         })
                                       );
 
-                                      redirect("/home");
+                                      {
+                                        userEmail == "raed@gmail.com"
+                                          ? redirect("/admin")
+                                          : redirect("/home");
+                                      }
                                     })
                                     .catch((err) => {
                                       console.log(err.response.data.massage);

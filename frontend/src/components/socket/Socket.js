@@ -1,44 +1,100 @@
-import React ,{useState} from "react";
-import { io } from "socket.io-client";
-import "font-awesome/css/font-awesome.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import React, { useEffect, useState } from "react";
+// import { io } from "socket.io-client";
+// import "font-awesome/css/font-awesome.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import socketInit from "./socket.server";
+// // import Message from "./Message";
+// import Messages from "./Messages";
 
-function Socket() {
-    const [value_io_message,set_value_io_message] =useState("")
-  return (
-    <>
-      <main className="content" >
-        <div className="container mt-3">
-        <div className="card w-100 text-container border-white">
-          <div className="row">
-       
-              <div style={{display:"flex",justifyContent:"center"}}>
-                <h5>Enter username</h5>
-              </div>
-     
+// import { useDispatch, useSelector } from "react-redux";
+// import axios from "axios";
+// import { setPosts } from "../redux/reducers/Posts";
 
-            <div className="d-flex justify-content-center py-1">
-              <div className="col-3">
-                {" "}
-                <input
-                  type="text"
-                  name="username"
-                  value={value_io_message}
-                  className="form-control"
-                  placeholder="username"
-                  autoComplete="off"
-                  onChange={(e)=>{
-                    set_value_io_message(e.target.value)
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </main>
-    </>
-  );
-}
+// function Socket() {
 
-export default Socket;
+
+
+
+//   const dispatch = useDispatch();
+
+//   const { posts, token, userId } = useSelector((state) => {
+//     return {
+//       posts: state.posts.posts,
+//       userId: state.auth.userId,
+//       token: state.auth.token,
+//       name: state.auth.name,
+//       image: state.auth.image,
+//     };
+//   });
+
+
+
+//   const [is_connected, set_is_connected] = useState(false);
+
+
+//   const [data, setData] = useState({
+//     token: token,
+//     id: userId,
+//     socket:  null,
+//   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   useEffect(() => {
+
+//     data.socket?.on("connect", () => {
+//       console.log(true);
+//       set_is_connected(true);
+//       // setData({ ...data, is_connected: true });
+//     });
+//     data.socket?.on("connect_error", (error) => {
+//       console.log(error.message);
+//       set_is_connected(false);
+//       // setData({ ...data, is_connected: false });
+//     });
+
+//     return () => {
+//       data.socket?.close();
+//       data.socket?.removeAllListeners();
+//       set_is_connected(false);
+//     };
+//   }, [data.socket]);
+
+
+//   const addSocket = ()=>{
+//     setData({
+//       ...data,
+//       socket: socketInit({ id: data.id, token: data.token }),
+//     });
+//   }
+
+
+
+//   return (
+//     <>
+//       <h1>socket io</h1>
+
+//       <button
+//         onClick={() => {
+//       addSocket()
+//         }}
+//       >
+//         open Messages
+//       </button>
+//       {is_connected && <Messages data={data} posts={posts} />}
+//     </>
+//   );
+// }
+
+// export default Socket;

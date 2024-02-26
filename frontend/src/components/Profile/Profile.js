@@ -18,7 +18,7 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
-import savePostSlice, { setsavePost } from "../redux/reducers/savePost/index";
+import { setsavePost } from "../redux/reducers/savePost/index";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -31,20 +31,49 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 const Profile = () => {
+  const [data_user, set_data_user] = useState({
+    bio: "",
+    image: "",
+  });
+
+  const pr_key = "rllytlm7";
+  const cloud_name = "dmmo3zzyc";
+
+  const handleImageJamal = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", pr_key);
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        formData
+      )
+      .then((result) => {
+        console.log(result.data.url);
+        set_data_user({ ...data_user, image: result.data.url });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const dispatch = useDispatch();
 
   const Navigate = useNavigate();
   const arr = useRef([]);
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
-  let bio = useRef("");
+  const [image, setImage] = useState();
+  // let bio = useRef("");
   const { token, savePost } = useSelector((state) => {
     return {
       token: state.auth.token,
       savePost: state.savePost.savePost,
     };
   });
-  console.log("save", savePost);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   // const searchQuery = queryParams.get("prf") || "";
@@ -65,12 +94,22 @@ const Profile = () => {
   const [showFollowers, setShow] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showPostPopup, setShowPostPopup] = useState(false);
+  const [postAndComment, setPostAndComment] = useState();
+
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
   const handleShowEditProfile = () => setShowEditProfile(true);
+  const handleShowPostPopup = () => setShowPostPopup(true);
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
   const handleCloseEditProfile = () => setShowEditProfile(false);
+  const handleClosePostPopup = () => {
+    setImage([]);
+    setPostAndComment([]);
+    setShowPostPopup(false);
+  };
+
   let filtration;
   window.scrollTo(0, 0);
 
@@ -93,7 +132,8 @@ const Profile = () => {
         console.log(err);
       });
   };
-
+  // console.log(profileInfo); // array
+  // console.log(profile_picture_url);
   useEffect(() => {
     getMyFollowing();
 
@@ -444,18 +484,26 @@ const Profile = () => {
     );
   }
 
-  function EditProfile() {
+  // function EditProfile() {
+  //   return (
+  //     <>
+
+  //     </>
+  //   );
+  // }
+
+  function PostPopUp() {
     return (
       <>
         <Modal
-          show={showEditProfile}
-          onHide={handleCloseEditProfile}
+          show={showPostPopup}
+          onHide={handleClosePostPopup}
           animation={false}
           centered
         >
           <Modal.Header
             closeButton
-            style={{ borderBottom: "none", padding: "10px 10px" }}
+            style={{ borderBottom: "1px solid #808080", padding: "5px 10px" }}
           >
             <Modal.Title
               style={{
@@ -463,11 +511,9 @@ const Profile = () => {
                 display: "flex",
                 alignItems: "center",
                 width: "100%",
-                paddingBottom: "10px",
-                borderBottom: "1px solid #808080",
               }}
             >
-              Public info
+              <h4> {postAndComment?.length} comments</h4>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body
@@ -478,94 +524,93 @@ const Profile = () => {
               overflowY: "auto",
             }}
           >
-            <div className="mainEditProfile">
-              {user?.map((ele, i) => {
-                return (
-                  <>
-                    <img
-                      key={i}
-                      className="imgEditProfile"
-                      alt=""
-                      src={ele.profile_picture_url}
-                    />
-                    <div>
-                      <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudUploadIcon />}
-                      >
-                        Upload image
-                        <VisuallyHiddenInput type="file" />
-                      </Button>
-                    </div>
-                    <textarea
-                      id="w3review"
-                      name="w3review"
-                      rows="4"
-                      cols="50"
-                      placeholder={ele.bio}
-                      onChange={(e) => {
-                        bio = e.target.value;
-                      }}
-                    ></textarea>
-
-                    <button
-                      id="btn2"
-                      onClick={async () => {
-                        try {
-                          const result = await axios.put(
-                            `http://localhost:5000/users/update`,
-                            {
-                              bio: bio,
-                            },
-                            {
-                              headers: {
-                                Authorization: `Bearer ${token}`,
-                              },
-                            }
-                          );
-                          Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Successfully changed",
-                            showConfirmButton: false,
-                            timer: 1000,
-                          });
-                          const edit = profileInfo.map((ele) => {
-                            ele.bio = bio;
-                            return ele;
-                          });
-                          setProfileInfo(edit);
-                          handleCloseEditProfile();
-                        } catch (error) {
-                          console.log("error from update profile bio", error);
-                        }
-                      }}
-                    >
-                      SAVE CHANGE
-                    </button>
-                  </>
-                );
-              })}
-            </div>
+            {loader ? (
+              <Loader />
+            ) : (
+              <div className="mainPostPopup">
+                {image && image.length > 0 && postAndComment.length > 0 && (
+                  <img
+                    alt=""
+                    src={postAndComment[0]?.media_url}
+                    style={{ height: "250px", width: "200px" }}
+                  />
+                )}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "250px",
+                    gap: "10px",
+                  }}
+                >
+                  {postAndComment?.map((ele) => {
+                    return (
+                      <>
+                        <div
+                          className="inPopup"
+                          style={{
+                            display: "flex",
+                            width: "100%",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              gap: "10px",
+                              height: "fit-content",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              alt=""
+                              src={ele.profile_picture_url}
+                              style={{
+                                height: "70px",
+                                width: "70px",
+                                borderRadius: "50%",
+                              }}
+                            ></img>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column-reverse",
+                              }}
+                            >
+                              <p style={{ marginBottom: "0px" }}>
+                                {ele.comment_content?.split("|")[0]}{" "}
+                              </p>
+                              <p style={{ marginBottom: "0px" }}>
+                                {ele.username}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </Modal.Body>
         </Modal>
       </>
     );
   }
+
   return (
     <div id="mainPage">
       <Followers />
       <Following />
-      <EditProfile />
+      {/* <EditProfile /> */}
+      <PostPopUp />
       {loader ? (
         <Loader />
       ) : (
         profileInfo?.map((elm, i) => {
           return (
             <div key={elm.id} className="panel2">
+               
               <div className="edit">
                 <img
                   className="ProfilePicture"
@@ -587,7 +632,20 @@ const Profile = () => {
                             `http://localhost:5000/users/${searchQuery2}`
                           );
                           setUser(result.data.result);
+                          const { bio, profile_picture_url } =
+                            result.data.result[0];
+                          // console.log(result.data.result[0]);
+                          set_data_user({
+                            ...data_user,
+                            bio: bio,
+                            image: profile_picture_url,
+                          });
+                          // bio: "",
+                          // image: "",
+                          // console.log(result.data.result[0]);
                           handleShowEditProfile();
+                          setShowPost(false);
+                          setShowSave(false);
                         } catch (error) {
                           console.log(error);
                         }
@@ -622,6 +680,8 @@ const Profile = () => {
                           //   localStorage.getItem("userId") == searchQuery2 &&
                           // }
                           serCountFollowers(countFollowers * 1 - 1);
+                          setShowPost(false);
+                          setShowSave(false);
                         } catch (error) {
                           console.log(error);
                         }
@@ -649,10 +709,10 @@ const Profile = () => {
                             );
                             arr.current.push(searchQuery2);
                             setRemove(!remove);
-                            // {
-                            //   localStorage.getItem("userId") == searchQuery2 &&
-                            // }
+
                             serCountFollowers(countFollowers * 1 + 1);
+                            setShowPost(false);
+                            setShowSave(false);
                           } catch (error) {
                             console.log(error);
                           }
@@ -682,6 +742,8 @@ const Profile = () => {
                         )
                         .then((result) => {
                           setFollowers(result?.data?.result);
+                          setShowPost(false);
+                          setShowSave(false);
                         })
                         .catch((err) => {
                           console.log(err);
@@ -707,6 +769,8 @@ const Profile = () => {
                           )
                           .then((result) => {
                             setFollowing(result?.data?.result);
+                            setShowPost(false);
+                            setShowSave(false);
                           })
                           .catch((err) => {
                             console.log(err);
@@ -722,6 +786,7 @@ const Profile = () => {
                   </p>
                 </div>
               </div>
+               
             </div>
           );
         })
@@ -737,7 +802,9 @@ const Profile = () => {
                 axios
                   .get(`http://localhost:5000/post/mypost/${searchQuery2}`)
                   .then((result) => {
+                    console.log(result.data);
                     setMyPosts(result?.data?.result);
+                    setShowSave(false);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -745,7 +812,7 @@ const Profile = () => {
                 setShowPost(!showPost);
               }}
             >
-              {countPosts} posts
+              posts
             </p>
           </div>
           <div className="p-s">
@@ -764,16 +831,16 @@ const Profile = () => {
                           },
                         }
                       );
-                      console.log(res?.data?.result);
+
                       dispatch(setsavePost(res?.data?.result));
-                      setShowPost(!showPost);
+                      setShowPost(false);
                       setShowSave(!showSave);
                     } catch (error) {
                       console.log(error);
                     }
                   }}
                 >
-                  saves
+                  Archives
                 </p>
               </>
             ) : null}
@@ -788,23 +855,44 @@ const Profile = () => {
                     key={ele.id}
                     className="img-post"
                     alt=""
+                    style={{ cursor: "pointer" }}
                     src={ele.media_url}
+                    onClick={async () => {
+                      handleShowPostPopup();
+                      // console.log(ele.id);
+                      try {
+                        setLoader(false);
+                        // ! {The axios.get() method doesn't accept a second parameter for passing data in a GET request} مهم
+                        const res = await axios.get(
+                          `http://localhost:5000/post/postWComments/${ele.id}`
+                        );
+                        const images = await axios.get(
+                          `http://localhost:5000/post/${ele.id}`,
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                        // console.log(res?.data?.result);
+                        // console.log(images.data.post);
+                        setImage(images?.data?.post);
+                        setPostAndComment(res?.data?.result);
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
                   ></img>
                 ) : (
                   <video
+                    style={{ cursor: "pointer" }}
                     controls
                     muted
                     className="img-post"
-                    style={
-                      {
-                        // width: "100%",
-                        // height: "50vh",
-                        // // borderRadius: "600px",
-                        // border: "solid 1px #e8e8e8",
-                        // cursor: "pointer",
-                      }
-                    }
                     src={ele.media_url}
+                    onClick={() => {
+                      console.log(ele.id);
+                    }}
                   ></video>
                 )}
               </>
@@ -828,15 +916,6 @@ const Profile = () => {
                   controls
                   muted
                   className="img-post"
-                  style={
-                    {
-                      // width: "100%",
-                      // height: "50vh",
-                      // // borderRadius: "600px",
-                      // border: "solid 1px #e8e8e8",
-                      // cursor: "pointer",
-                    }
-                  }
                   src={ele.media_url}
                 ></video>
               )}
@@ -844,6 +923,135 @@ const Profile = () => {
           );
         })}
       </div>
+      <button
+        id="Floating"
+        onClick={() => {
+          Navigate("/home");
+        }}
+      >
+        HOME
+      </button>
+      <Modal
+        show={showEditProfile}
+        onHide={handleCloseEditProfile}
+        animation={false}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{ borderBottom: "none", padding: "10px 10px" }}
+        >
+          <Modal.Title
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+              borderBottom: "1px solid #808080",
+            }}
+          >
+            Public info
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          id="Modal.Body"
+          style={{
+            padding: "10px",
+            display: "flex",
+            overflowY: "auto",
+          }}
+        >
+          <div className="mainEditProfile">
+            {user?.map((ele, i) => {
+              return (
+                <>
+                  <img
+                    key={i}
+                    className="imgEditProfile"
+                    alt=""
+                    src={data_user.image}
+                  />
+                  <div>
+                    <Button
+                      component="label"
+                      role={undefined}
+                      variant="contained"
+                      tabIndex={-1}
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload image
+                      <VisuallyHiddenInput
+                        type="file"
+                        onChange={(e) => {
+                          handleImageJamal(e);
+                          // console.log(e.target.value);
+                        }}
+                      />
+                    </Button>
+                  </div>
+                  <textarea
+                    value={data_user.bio}
+                    id="w3review"
+                    name="w3review"
+                    rows="4"
+                    cols="50"
+                    // placeholder={ele.bio}
+                    onChange={(e) => {
+                      set_data_user({ ...data_user, bio: e.target.value });
+                    }}
+                  ></textarea>
+
+                  <button
+                    id="btn2"
+                    onClick={async () => {
+                      try {
+                        const result = await axios.put(
+                          `http://localhost:5000/users/update`,
+                          {
+                            bio: data_user.bio,
+                            profile_picture_url: data_user.image,
+                          },
+                          {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
+                          }
+                        );
+                   
+                        const newProfileInfo_X = profileInfo.map(
+                          (elm, index) => {
+                            elm.profile_picture_url = data_user.image;
+                            return elm
+                          }
+                        );
+                             setProfileInfo(newProfileInfo_X)
+                        Swal.fire({
+                          position: "center",
+                          icon: "success",
+                          title: "Successfully changed",
+                          showConfirmButton: false,
+                          timer: 1000,
+                        });
+                        const edit = profileInfo.map((ele) => {
+                          ele.bio = data_user.bio;
+                          return ele;
+                        });
+                        setProfileInfo(edit);
+                        handleCloseEditProfile();
+                      } catch (error) {
+                        console.log("error from update profile bio", error);
+                      }
+                    }}
+                  >
+                    SAVE CHANGE
+                  </button>
+                </>
+              );
+            })}
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

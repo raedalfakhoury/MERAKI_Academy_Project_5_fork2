@@ -399,8 +399,13 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
-                      src={My_userName === userName ? My_Img : userPhoto}
-                      onClick={() => handleOpen(elem)}
+
+//                       src={My_userName === userName ? My_Img : userPhoto}
+//                       onClick={() => handleOpen(elem)}
+
+//                       src={My_Img}
+//                       // onClick={() => handleOpen(elem)}
+
                       style={{
                         color: "black",
                         width: "40px",

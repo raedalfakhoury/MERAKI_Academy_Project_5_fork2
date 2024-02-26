@@ -1,13 +1,13 @@
 const express = require("express")
 
-
+const searchRouter = express.Router();
 const {
     search
 } = require("../controllers/SearchNavBar");
 
 
 
-const searchRouter = express();
+
 
 
 searchRouter.post("/", search);

@@ -69,7 +69,13 @@ const getpostByuserId = (req, res) => {
   const userId = req.params.userId;
 
   const query = `
-          SELECT * FROM 
+          SELECT Posts.id,
+          Posts.user_id,
+          Posts.content,
+          Posts.media_url,
+          Posts.created_at,
+          Users.profile_picture_url,
+          Users.username FROM 
           Posts
           JOIN Users ON Posts.user_id = Users.id 
           WHERE Posts.user_id=$1 AND Posts.is_deleted=0 AND Users.is_deleted=0;
@@ -160,6 +166,7 @@ const getAllPosts = (req, res) => {
       res.status(200).json({
         success: true,
         message: "All posts retrieved successfully",
+        length: result.rows.length,
         posts: result.rows,
       });
     })
@@ -230,6 +237,7 @@ const getAllPostsMyFriends = (req, res) => {
   Posts.created_at,
   Users.profile_picture_url,
   Users.username,
+  Users.is_loggedin,
   (
       SELECT COUNT(*) 
       FROM Comments 
@@ -380,14 +388,48 @@ const deleteSavePost = (req, res) => {
   const query = ` DELETE FROM Posts_Users WHERE Posts_Users.user_id = $1 AND Posts_Users.post_id = $2  ;`;
   pool
     .query(query, data)
-    .then((result) => { 
+    .then((result) => {
       res.status(200).json({
         successful: true,
         message: "deleted successfully",
         result: result.rows,
-      }) 
+      });
     })
-    .catch((err) => { 
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        err: err,
+      });
+    });
+};
+
+const getPostAndComment = (req, res) => {
+  const { Posts_id } = req.params;
+  const data = [Posts_id];
+  const query = `SELECT Comments.comment_id ,
+  Comments.post_id,Comments.user_id,
+   Comments.created_at,
+   Comments.content AS COMMENT_CONTENT,
+   Users.username , 
+    Users.profile_picture_url ,
+    Posts.media_url  
+     FROM Comments
+      JOIN Users ON Users.id = Comments.user_id 
+      JOIN Posts ON Posts.id = Comments.post_id
+      WHERE post_id = $1 AND Posts.is_deleted=0;
+;
+`;
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(200).json({
+        successful: true,
+        message: "get Posts with comments",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
       res.status(500).json({
         success: false,
         err: err,
@@ -408,6 +450,7 @@ module.exports = {
   savePost,
   getSavedPosts,
   deleteSavePost,
+  getPostAndComment,
 };
 
 // CREATE TABLE Posts (

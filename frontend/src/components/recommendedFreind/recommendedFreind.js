@@ -67,7 +67,7 @@ const RecommendedFreind = () => {
         <h6>{length}</h6>
       </div>
       {length === 0 ? (
-        <h1>No Suggested Friends</h1>
+       <div style={{display:"flex" , justifyContent:"center" , height:"100%",alignItems:"center"}}> <p >No Suggested Friends</p></div>
       ) : (
         suggestedFreinds?.slice(0, 5).map((item, i) => (
           <div key={item.id} className="panel">
