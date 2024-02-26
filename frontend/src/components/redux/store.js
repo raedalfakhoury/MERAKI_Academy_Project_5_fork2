@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import forecastReducer from "./reducers/weather/index";
-
+import MessagesReducer from "./reducers/Messages/message"
 import authReducer from "./reducers/auth/index";
 import suggestedFreindsSlice from "../redux/reducers/users/users";
 import savePostReducer from "./reducers/savePost/index";
@@ -18,6 +18,7 @@ export default configureStore({
     auth: authReducer,
     adminUsers:adminReducer,
     adminPosts:adminPostsReducer,
-    adminComments:adminCommentReducer
+    adminComments:adminCommentReducer,
+    Messages:MessagesReducer
   },
 });
