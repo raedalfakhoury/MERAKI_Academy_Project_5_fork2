@@ -8,8 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import MailIcon from "@mui/icons-material/Mail";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline"; 
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setadminUsers } from "../redux/reducers/Admin";
@@ -28,7 +27,7 @@ const Admin = () => {
       comments: state.adminComments.adminComments,
     };
   });
-
+console.log(users);
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
@@ -123,8 +122,9 @@ const Admin = () => {
               <div
                 class="container1"
                 onClick={() => {
-                  setToggleUser(!toggleUser);
                   setTogglePost(false);
+                  setToggleComment(false)
+                  setToggleUser(!toggleUser);
                 }}
               >
                 <div class="card_box">
@@ -140,6 +140,7 @@ const Admin = () => {
                 class="container2"
                 onClick={() => {
                   setToggleUser(false);
+                  setToggleComment(false)
                   setTogglePost(!togglePost);
                 }}
               >
@@ -167,12 +168,12 @@ const Admin = () => {
                 </div>
               </div>
               {/* Likes */}
-              <div class="container4">
+              {/* <div class="container4">
                 <div class="card_box4">
                   <ThumbUpIcon />
                   <span></span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Typography>
           <Typography paragraph>
@@ -296,7 +297,7 @@ const Admin = () => {
                           ele.email
                         )}
                       </p>
-                      <p
+                     {ele.is_band === "false" ? <p
                         style={{
                           width: "130px",
                           color: "green",
@@ -305,7 +306,16 @@ const Admin = () => {
                         }}
                       >
                         Active
-                      </p>
+                      </p> :  <p
+                        style={{
+                          width: "130px",
+                          color: "red",
+                          fontWeight: "600",
+                          textAlign: "center",
+                        }}
+                      >
+                        Deactive
+                      </p>}
                       <button class="btn12" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
@@ -490,7 +500,7 @@ const Admin = () => {
                           )}
                         </p>
                       </div>
-                      <p
+                      {ele.is_band === "false" ? <p
                         style={{
                           width: "130px",
                           color: "green",
@@ -499,7 +509,16 @@ const Admin = () => {
                         }}
                       >
                         Accept
-                      </p>
+                      </p> :  <p
+                        style={{
+                          width: "130px",
+                          color: "red",
+                          fontWeight: "600",
+                          textAlign: "center",
+                        }}
+                      >
+                        Reported
+                      </p>}
                       <button class="btn12" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
@@ -537,7 +556,7 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
-                      width: "130px",
+                      width: "150px",
                       textAlign: "center",
                     }}
                   >
@@ -548,7 +567,7 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
-                      width: "130px",
+                      width: "150px",
                       textAlign: "center",
                     }}
                   >
@@ -559,7 +578,7 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
-                      width: "130px",
+                      width: "150px",
                       textAlign: "center",
                     }}
                   >
@@ -570,7 +589,7 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
-                      width: "130px",
+                      width: "150px",
                       textAlign: "center",
                     }}
                   >
@@ -581,7 +600,7 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
-                      width: "130px",
+                      width: "150px",
                       textAlign: "center",
                     }}
                   >
@@ -592,7 +611,7 @@ const Admin = () => {
                       fontWeight: "600",
                       fontSize: "18px",
                       margin: "0px 0px 5px 0px",
-                      width: "130px",
+                      width: "150px",
                       textAlign: "center",
                     }}
                   >
@@ -616,7 +635,7 @@ const Admin = () => {
                           style={{
                             cursor: "pointer",
                             height: "100px",
-                            width: "130px",
+                            width: "150px",
                           }}
                           controls
                           muted
@@ -632,7 +651,7 @@ const Admin = () => {
                           src={ele.media_url}
                           style={{
                             height: "100px",
-                            width: "130px",
+                            width: "150px",
                             borderRadius: "5px",
                             margin: "5px 0px",
                             padding: "2px",
@@ -640,11 +659,11 @@ const Admin = () => {
                           }}
                         ></img>
                       )}
-                      <p style={{ width: "130px", textAlign: "center" }}>
+                      <p style={{ width: "150px", textAlign: "center" }}>
                         {ele.username}
                       </p>
                       <p
-                        style={{ width: "130px", textAlign: "center" }}
+                        style={{ width: "150px", textAlign: "center" }}
                         title={ele.content}
                       >
                         {ele.content.length > 13 ? (
@@ -657,7 +676,7 @@ const Admin = () => {
                       </p>
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <p
-                          style={{ width: "130px", textAlign: "center" }}
+                          style={{ width: "150px", textAlign: "center" }}
                           title={ele.created_at}
                         >
                           {ele.created_at.length > 13 ? (
@@ -668,7 +687,7 @@ const Admin = () => {
                         </p>
 
                         <p
-                          style={{ width: "130px", textAlign: "center" }}
+                          style={{ width: "150px", textAlign: "center" }}
                           title={ele.created_at}
                         >
                           {ele.created_at.length > 13 ? (
@@ -683,7 +702,7 @@ const Admin = () => {
                           )}
                         </p>
                       </div>
-                      <p
+                      {ele.is_band === "false" ? <p
                         style={{
                           width: "130px",
                           color: "green",
@@ -692,8 +711,17 @@ const Admin = () => {
                         }}
                       >
                         Accept
-                      </p>
-                      <button class="btn12" type="button">
+                      </p> :  <p
+                        style={{
+                          width: "130px",
+                          color: "red",
+                          fontWeight: "600",
+                          textAlign: "center",
+                        }}
+                      >
+                        Reported
+                      </p>}
+                      <button class="btn123" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
                           <div id="stars"></div>
