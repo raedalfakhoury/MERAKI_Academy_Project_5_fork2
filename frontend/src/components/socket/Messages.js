@@ -7,10 +7,10 @@ import Avatar from "@mui/material/Avatar";
 // import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
-function Messages({ data, posts }) {
+import "./message.css";
+function Messages({ data, posts, setData }) {
   const comber = useRef({});
-
+  const [toggleBoxMessage, set_toggleBoxMessage] = useState(true);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -54,7 +54,7 @@ function Messages({ data, posts }) {
   };
 
   return (
-    <div>
+    <div style={{ position: "absolute", zIndex: "5px", top: "100%" }}>
       {/* <textarea
         type="text"
         placeholder="to"
@@ -69,45 +69,69 @@ function Messages({ data, posts }) {
       >
         Send
       </button> */}
+      {toggleBoxMessage && (
+        <Container
+          className="box_Users_message"
+          style={{
+            border: "solid 1px #000",
+            width: "30vw",
+            overflowY: "auto",
+            height: "20vw",
+            zIndex: "50",
+            position: "absolute",
+            backgroundColor: "#fff",
+            borderRadius: "2px",
+            //   left: "100%",
+            top: "-25px",
+            //   right:"1px"
+       
+          }}
+        >
+          <Row style={{     display:"flex",
+            flexDirection:"column",
+            gap: "10px", paddingTop:"2px"}}>
+            {posts?.map((users, index) => {
+              if (!comber.current[users.user_id]) {
+                comber.current[users.user_id] = 1;
+              } else {
+                comber.current[users.user_id]++;
+              }
 
-      <Container>
-        <Row>
-          {posts?.map((users, index) => {
-            if (!comber.current[users.user_id]) {
-              comber.current[users.user_id] = 1;
-            } else {
-              comber.current[users.user_id]++;
-            }
-
-            return (
-              <>
-                {users.user_id * 1 !== data.id * 1 &&
-                  comber.current[users.user_id] === 1 && (
-                    <Col xs={7}>
-                      {" "}
-                      <Stack direction="row" spacing={2}>
-                        <Avatar
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            console.log(users.user_id);
-                            addID(users);
-                            handleShow();
-                          }}
-                          alt="Remy Sharp"
-                          src={users.profile_picture_url}
-                        />
-                        <Col style={{ display: "flex", alignItems: "center" }}>
-                          {users.username}
-                        </Col>
-                      </Stack>
-                    </Col>
-                  )}
-              </>
-            );
-          })}
-        </Row>
-      </Container>
+              return (
+                <>
+                  {users.user_id * 1 !== data.id * 1 &&
+                    comber.current[users.user_id] === 1 && (
+                      <Col xs={12}>
+                        {" "}
+                        <Stack direction="row" spacing={2}>
+                          <Avatar
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              console.log(users.user_id);
+                              addID(users);
+                              handleShow();
+                              // setData({...data,socket:null})
+                              set_toggleBoxMessage(false);
+                            }}
+                            alt="Remy Sharp"
+                            src={users.profile_picture_url}
+                          />
+                          <Col
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {users.username}
+                          </Col>
+                        </Stack>
+                      </Col>
+                    )}
+                </>
+              );
+            })}
+          </Row>
+        </Container>
+      )}
       <Modal
+        style={{ top: "20%" }}
         show={show}
         onHide={handleClose}
         backdrop="static"
@@ -137,7 +161,7 @@ function Messages({ data, posts }) {
             Message
           </Modal.Title> */}
         </Modal.Header>
-        <Modal.Body style={{ overflowY: "auto", maxHeight: "40vh" }}>
+        <Modal.Body className="Modal-Body-messages-send" style={{ overflowY: "auto", maxHeight: "30vh" }}>
           {all_message.length > 0 &&
             all_message.map((mess, index) => {
               return (
@@ -150,13 +174,13 @@ function Messages({ data, posts }) {
                         style={{ justifyContent: "flex-end" }}
                       >
                         <Col
-                          xs={3}
+                          xs={4}
                           style={{
                             display: "flex",
                             alignItems: "center",
                             backgroundColor: "gray",
                             borderRadius: "17px",
-                            padding: " 5px 15px",
+                            padding: " 5px 10px",
                             color: "white",
                             justifyContent: "center",
                           }}
@@ -168,10 +192,7 @@ function Messages({ data, posts }) {
                           alt="Remy Sharp"
                           src={localStorage.getItem("image")}
                         />
-                        {/* {mess.from} id form socket */}
-                        {/* <Col xs={1}>
-                        : {mess.from} {mess.message}
-                      </Col> */}
+               
                       </Stack>
                     </p>
                   ) : (
@@ -183,23 +204,20 @@ function Messages({ data, posts }) {
                           src={data_user_for_sind.profile_picture_url}
                         />
                         <Col
-                          xs={3}
+                          xs={4}
                           style={{
                             display: "flex",
                             alignItems: "center",
                             backgroundColor: "gray",
                             borderRadius: "14px",
-                            padding: "10px",
+                            padding: " 5px 10px",
                             color: "white",
                             justifyContent: "center",
                           }}
                         >
                           {mess.message}
                         </Col>
-                        {/* {mess.from} id form socket */}
-                        {/* <Col xs={1}>
-                        : {mess.from} {mess.message}
-                      </Col> */}
+                 
                       </Stack>
                     </p>
                   )}
@@ -209,6 +227,7 @@ function Messages({ data, posts }) {
         </Modal.Body>
         <Modal.Footer>
           <textarea
+            style={{ height: "10vh" }}
             value={data_message.message}
             type="text"
             placeholder="message"
@@ -216,7 +235,19 @@ function Messages({ data, posts }) {
               setDate_message({ ...data_message, message: e.target.value });
             }}
           />
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              handleClose();
+              setData({
+                ...data,
+                socket: null,
+              });
+              setTimeout(() => {
+                set_toggleBoxMessage(true);
+              }, 1000);
+            }}
+          >
             Close
           </Button>
           <Button
