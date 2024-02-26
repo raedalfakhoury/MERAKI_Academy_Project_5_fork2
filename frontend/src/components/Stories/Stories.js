@@ -13,6 +13,7 @@ import Divider from "@mui/material/Divider";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CardHeader, Avatar, IconButton, Typography } from "@mui/material";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -29,12 +30,15 @@ export default function Stories() {
   const [loading, setLoading] = useState(true);
   const [loading1, setLoading1] = useState(true);
   const [openResult, setOpenResult] = useState(false);
+  const [openDeleteStory, setopenDeleteStory] = useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showStory, setShowStory] = useState(false);
+  const [openAddedStory, setOpenAddedStory] = useState(false);
+  const [user_Id, setUser_Id] = useState("");
   const [userName, setUserName] = useState("");
   const [userStory, setUserStory] = useState([]);
   const [Data, setData] = useState([]);
@@ -54,12 +58,36 @@ export default function Stories() {
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
   };
+  // =================== Delete Story =================================
+
+  const deleteStory = (e) => {
+    console.log(userStory[storyIndex].id);
+    console.log("Deleted");
+    const story_id = userStory[storyIndex].id;
+    axios
+      .delete(`http://localhost:5000/story/${story_id}`, {
+        headers: {
+          Authorization: `Bearer ${test}`,
+        },
+      })
+
+      .then((result) => {
+        console.log(result);
+        setOpen(false);
+        setopenDeleteStory(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // ===============================   get all stories by user Id ==============================
   const handleOpen = (e) => {
     setOpen(true);
     console.log(e.id, e.username);
     setUserName(e.username);
+    setUser_Id(e.id);
+
     setLoading(true);
     axios
       .get(`http://localhost:5000/story/${e.id}`, {
@@ -107,8 +135,11 @@ export default function Stories() {
   const handleClose = () => {
     setOpen(false);
     setOpen1(false);
+    setOpenAddedStory(false);
+
     setOpenResult(false);
     setLoading1(true);
+    setopenDeleteStory(false);
     setUploadedStory("");
   };
 
@@ -201,6 +232,7 @@ export default function Stories() {
       )
       .then((result) => {
         console.log(result);
+        setOpenAddedStory(true);
       })
       .catch((err) => {
         console.log(err);
@@ -257,7 +289,7 @@ export default function Stories() {
           }
           subheader={
             <Typography variant="h6" sx={{ fontSize: "12px" }}>
-              {userName} 's Stories
+              {My_userName} 's Stories
             </Typography>
           }
         />
@@ -275,6 +307,50 @@ export default function Stories() {
               }}
               aria-label="recipe"
             >
+              {/* Deleted Model  */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={openDeleteStory}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Story Deleted Succsifully
+                    </p>
+                  </div>
+                </ModalContent>
+              </Modal>
+              {/* Adding Story Succefully Model */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={openAddedStory}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Story Added Succsifully
+                    </p>
+                  </div>
+                </ModalContent>
+              </Modal>
               <Modal
                 aria-labelledby="unstyled-modal-title"
                 aria-describedby="unstyled-modal-description"
@@ -328,6 +404,8 @@ export default function Stories() {
                       <video
                         src={uploadedStory}
                         autoPlay
+                        width={"300px"}
+                        height={"300px"}
                         controls
                         className="video-inside-addingStory"
                       ></video>
@@ -338,32 +416,27 @@ export default function Stories() {
                         <CircularProgress />
                       </Box>
                     )}
-                     <div
-                    className="input-file-section"
-                    
-                  >
-                    <TriggerButton
-                      className="add-story-button"
-                      type="button"
-                      onClick={() => {
-                        document.querySelector(".input-file").click();
-                        // setOpen1(false); // Close the modal after upload
-                      }}
-                    >
-                      <input
-                        onChange={(e) => {
-                          StoryHandle(e.target.files);
+                    <div className="input-file-section">
+                      <TriggerButton
+                        className="add-story-button"
+                        type="button"
+                        onClick={() => {
+                          document.querySelector(".input-file").click();
+                          // setOpen1(false); // Close the modal after upload
                         }}
-                        type="file"
-                        className="input-file"
-                        style={{ display: "none" }} // hide the input element visually
-                      />
-                      Choose File
-                    </TriggerButton>
+                      >
+                        <input
+                          onChange={(e) => {
+                            StoryHandle(e.target.files);
+                          }}
+                          type="file"
+                          className="input-file"
+                          style={{ display: "none" }} // hide the input element visually
+                        />
+                        Choose File
+                      </TriggerButton>
+                    </div>
                   </div>
-                  </div>
-
-                 
 
                   <div
                     className="submit-section"
@@ -399,13 +472,6 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
-
-//                       src={My_userName === userName ? My_Img : userPhoto}
-//                       onClick={() => handleOpen(elem)}
-
-//                       src={My_Img}
-//                       // onClick={() => handleOpen(elem)}
-
                       style={{
                         color: "black",
                         width: "40px",
@@ -417,6 +483,32 @@ export default function Stories() {
                     <h6 id="unstyled-modal-title" className="modal-title">
                       {userName}
                     </h6>
+                    {My_userName === userName ? (
+                      // <button
+                      //   style={{ marginLeft: "auto" }}
+                      //   onClick={(e) => deleteStory(e)}
+                      // >
+                      //   {" "}
+                      //   Delete Story
+                      // </button>
+                      <Dropdown style={{ marginLeft: "auto" }}>
+                        <Dropdown.Toggle style={{backgroundColor:"#659BDC"}} id="dropdown-basic">
+                          :
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item  onClick={(e) => deleteStory(e)}>
+                            Delete Story
+                          </Dropdown.Item>
+                          <Dropdown.Item  onClick={(e) => handleClose(e)}>
+                            Close
+                          </Dropdown.Item>
+                          
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    ) : (
+                      <></>
+                    )}
                   </div>
 
                   <div className="video">
