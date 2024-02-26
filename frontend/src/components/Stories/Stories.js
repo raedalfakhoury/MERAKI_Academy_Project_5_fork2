@@ -13,6 +13,7 @@ import Divider from "@mui/material/Divider";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CardHeader, Avatar, IconButton, Typography } from "@mui/material";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -232,7 +233,6 @@ export default function Stories() {
       .then((result) => {
         console.log(result);
         setOpenAddedStory(true);
-
       })
       .catch((err) => {
         console.log(err);
@@ -484,13 +484,28 @@ export default function Stories() {
                       {userName}
                     </h6>
                     {My_userName === userName ? (
-                      <button
-                        style={{ marginLeft: "auto" }}
-                        onClick={(e) => deleteStory(e)}
-                      >
-                        {" "}
-                        Delete Story
-                      </button>
+                      // <button
+                      //   style={{ marginLeft: "auto" }}
+                      //   onClick={(e) => deleteStory(e)}
+                      // >
+                      //   {" "}
+                      //   Delete Story
+                      // </button>
+                      <Dropdown style={{ marginLeft: "auto" }}>
+                        <Dropdown.Toggle style={{backgroundColor:"#659BDC"}} id="dropdown-basic">
+                          :
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item  onClick={(e) => deleteStory(e)}>
+                            Delete Story
+                          </Dropdown.Item>
+                          <Dropdown.Item  onClick={(e) => handleClose(e)}>
+                            Close
+                          </Dropdown.Item>
+                          
+                        </Dropdown.Menu>
+                      </Dropdown>
                     ) : (
                       <></>
                     )}
