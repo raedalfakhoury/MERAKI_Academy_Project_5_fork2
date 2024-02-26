@@ -1,28 +1,58 @@
-import * as React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
+import "../AdminDashboard/Admin.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import MailIcon from "@mui/icons-material/Mail";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import axios from "axios";
-import "../AdminDashboard/Admin.css";
-const drawerWidth = 240;
-
+import { useDispatch, useSelector } from "react-redux";
+import { setadminUsers } from "../redux/reducers/Admin";
 const Admin = () => {
- React.useEffect(()=>{
-// axios.get()
- },[])
+  const [toggleUser, setToggleUser] = useState(false);
+  const [togglePost, setTogglePost] = useState(false);
+  const dispatch = useDispatch();
+  const { users, token } = useSelector((state) => {
+    return {
+      users: state.adminUsers.adminUsers,
+      token: state.auth.token,
+    };
+  });
+
+  const [userCount, setUserCount] = useState();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users/admin`)
+      .then((result) => {
+        setUserCount(result?.data?.length);
+        dispatch(setadminUsers(result?.data?.result));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/post/1/getPosts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log(result.data.posts);
+        // setUserCount(result?.data?.length);
+        // dispatch(setadminUsers(result?.data?.result));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -30,11 +60,12 @@ const Admin = () => {
         <AppBar
           position="fixed"
           sx={{
-            width: `calc(100% - ${drawerWidth}px)`,
-            ml: `${drawerWidth}px`,
+            // width: `calc(100% - ${drawerWidth}px)`,
+            width: "100%",
+            margin: "0px",
           }}
         >
-          <Toolbar sx={{ justifyContent: "center" }}>
+          <Toolbar sx={{ justifyContent: "center", margin: "0px" }}>
             <Typography
               color="white"
               fontWeight="600"
@@ -46,7 +77,7 @@ const Admin = () => {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer
+        {/* <Drawer
           sx={{
             width: drawerWidth,
             flexShrink: 0,
@@ -73,10 +104,23 @@ const Admin = () => {
             ))}
           </List>
           <Divider />
-        </Drawer>
+        </Drawer> */}
 
-        <Box component="main" sx={{ flexGrow: 1, bgcolor: "white", p: 3 }}>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: "white",
+            margin: "0px 100px",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
+        >
           <Toolbar />
+          {/* <div style={{margin:"0px 100px", display:"flex" , flexDirection:"column", justifyContent:""}}>
+         
+          </div> */}
+
           <Typography paragraph>
             <div
               style={{
@@ -87,49 +131,164 @@ const Admin = () => {
               }}
             >
               {/* users */}
-              <div class="container1">
+              <div
+                class="container1"
+                onClick={() => {
+                  setToggleUser(!toggleUser);
+                  setTogglePost(false);
+                }}
+              >
                 <div class="card_box">
-                 <PeopleAltTwoToneIcon /> 
+                  <h1 style={{ margin: "0px" }}>
+                    <PeopleAltTwoToneIcon />
+                  </h1>
+                  <h3>{userCount}</h3>
                   <span> </span>
                 </div>
               </div>
               {/* Posts */}
-              <div class="container2">
+              <div
+                class="container2"
+                onClick={() => {
+                  setToggleUser(false);
+                  setTogglePost(!togglePost);
+                }}
+              >
                 <div class="card_box2">
-                <MailIcon />
+                  <MailIcon />
                   <span></span>
                 </div>
               </div>
               {/* Comments */}
               <div class="container3">
                 <div class="card_box3">
-                <ChatBubbleOutlineIcon /> 
+                  <ChatBubbleOutlineIcon />
                   <span></span>
                 </div>
               </div>
               {/* Likes */}
               <div class="container4">
                 <div class="card_box4">
-                <ThumbUpIcon /> 
+                  <ThumbUpIcon />
                   <span></span>
                 </div>
               </div>
             </div>
           </Typography>
           <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-            ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-            elementum integer enim neque volutpat ac tincidunt. Ornare
-            suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-            volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
-            Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
-            ornare massa eget egestas purus viverra accumsan in. In hendrerit
-            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
-            aliquam sem et tortor. Habitant morbi tristique senectus et.
-            Adipiscing elit duis tristique sollicitudin nibh sit. Ornare aenean
-            euismod elementum nisi quis eleifend. Commodo viverra maecenas
-            accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam
-            ultrices sagittis orci a.
+            {toggleUser ? (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    borderBottom: "1px solid",
+                    position: "sticky",
+                    top: "0",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                    }}
+                  >
+                    profile Image
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                    }}
+                  >
+                    username
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                    }}
+                  >
+                    Bio
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                    }}
+                  >
+                    E-mail
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                    }}
+                  >
+                    Status
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                    }}
+                  >
+                    Action
+                  </p>
+                </div>
+                {users?.map((ele) => {
+                  //   console.log(ele);
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid #ff9b9b",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        alt=""
+                        src={ele.profile_picture_url}
+                        style={{
+                          height: "105px",
+                          width: "105px",
+                          borderRadius: "50%",
+                          margin: "5px 0px",
+                          padding: "2px",
+                          border: "1px solid grey",
+                        }}
+                      ></img>
+                      <p>{ele.username}</p>
+                      <p>{ele.bio}</p>
+                      <p>{ele.email}</p>
+                      <p>{ele.bio}</p>
+                      <button class="btn" type="button">
+                        <strong>Block</strong>
+                        <div id="container-stars">
+                          <div id="stars"></div>
+                        </div>
+
+                        <div id="glow">
+                          <div class="circle"></div>
+                          <div class="circle"></div>
+                        </div>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              ""
+            )}
           </Typography>
         </Box>
       </Box>
