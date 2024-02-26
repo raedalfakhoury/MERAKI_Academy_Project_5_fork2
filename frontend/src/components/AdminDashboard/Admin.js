@@ -14,21 +14,23 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setadminUsers } from "../redux/reducers/Admin";
 import { setadminPosts } from "../redux/reducers/Admin/post";
-import shadows from "@mui/material/styles/shadows";
+import { setadminComments } from "../redux/reducers/Admin/comment";
 const Admin = () => {
   const [toggleUser, setToggleUser] = useState(false);
   const [togglePost, setTogglePost] = useState(false);
   const dispatch = useDispatch();
-  const { users, token, posts } = useSelector((state) => {
+  const { users, token, posts, comments } = useSelector((state) => {
     return {
       users: state.adminUsers.adminUsers,
       token: state.auth.token,
       posts: state.adminPosts.adminPosts,
+      comments: state.adminComments.adminComments,
     };
   });
 
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
+  const [commentsCount, setCommentsCount] = useState();
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/admin`)
@@ -48,9 +50,24 @@ const Admin = () => {
         },
       })
       .then((result) => {
-        console.log(result.data.posts);
         setPostCount(result?.data?.length);
         dispatch(setadminPosts(result?.data?.posts));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/comments/comments/admin`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log(result.data);
+        setCommentsCount(result?.data?.length);
+        dispatch(setadminComments(result?.data?.result));
       })
       .catch((err) => {
         console.log(err);
@@ -169,7 +186,11 @@ const Admin = () => {
               {/* Comments */}
               <div class="container3">
                 <div class="card_box3">
-                  <ChatBubbleOutlineIcon />
+                  <h1>
+                    {" "}
+                    <ChatBubbleOutlineIcon />
+                  </h1>
+                  <h3>{commentsCount}</h3>
                   <span></span>
                 </div>
               </div>
@@ -263,9 +284,10 @@ const Admin = () => {
                   </p>
                 </div>
                 {users?.map((ele) => {
-                  //   console.log(ele);
+                  console.log(ele);
                   return (
                     <div
+                      key={ele.id}
                       style={{
                         display: "flex",
                         width: "100%",
@@ -312,7 +334,7 @@ const Admin = () => {
                       >
                         Active
                       </p>
-                      <button class="btn" type="button">
+                      <button class="btn12" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
                           <div id="stars"></div>
@@ -331,10 +353,10 @@ const Admin = () => {
               ""
             )}
 
+            {/* -------------------------Posts------------------------------------------------------ */}
 
-{/* -------------------------Posts------------------------------------------------------ */}
- 
-            {togglePost ? <div style={{ display: "flex", flexDirection: "column" }}>
+            {togglePost ? (
+              <div style={{ display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
                     display: "flex",
@@ -387,7 +409,7 @@ const Admin = () => {
                       textAlign: "center",
                     }}
                   >
-                    E-mail
+                    created_at
                   </p>
                   <p
                     style={{
@@ -398,7 +420,7 @@ const Admin = () => {
                       textAlign: "center",
                     }}
                   >
-                    Status account
+                    Status post
                   </p>
                   <p
                     style={{
@@ -413,7 +435,7 @@ const Admin = () => {
                   </p>
                 </div>
                 {posts?.map((ele) => {
-                    console.log(ele);
+                  console.log(ele);
                   return (
                     <div
                       style={{
@@ -424,34 +446,78 @@ const Admin = () => {
                         alignItems: "center",
                       }}
                     >
-                      <img
-                        alt=""
-                        src={ele.media_url}
-                        style={{
-                          height: "100px",
-                          width: "130px",
-                          borderRadius: "5px",
-                          margin: "5px 0px",
-                          padding: "2px", 
-                          boxShadow:"#5c62685c 3px 3px 3px"
-                        }}
-                      ></img>
+                      {ele.media_url.includes(".mp4") ? (
+                        <video
+                          style={{
+                            cursor: "pointer",
+                            height: "100px",
+                            width: "130px",
+                          }}
+                          controls
+                          muted
+                          className="img-post"
+                          src={ele.media_url}
+                          onClick={() => {
+                            console.log(ele.id);
+                          }}
+                        ></video>
+                      ) : (
+                        <img
+                          alt=""
+                          src={ele.media_url}
+                          style={{
+                            height: "100px",
+                            width: "130px",
+                            borderRadius: "5px",
+                            margin: "5px 0px",
+                            padding: "2px",
+                            boxShadow: "#5c62685c 3px 3px 3px",
+                          }}
+                        ></img>
+                      )}
                       <p style={{ width: "130px", textAlign: "center" }}>
                         {ele.username}
                       </p>
-                      <p style={{ width: "130px", textAlign: "center" }} title={ele.content}>
-                        {ele.content.length > 13  ? <span>{ele.content.slice(0,13)}</span> : ele.content}
-                      </p>
                       <p
                         style={{ width: "130px", textAlign: "center" }}
-                        title={ele.email}
+                        title={ele.content}
                       >
-                        {ele.email.length > 13 ? (
-                          <span>{ele.email.slice(0, 14)}...</span>
+                        {ele.content.length > 13 ? (
+                          <span>{ele.content.slice(0, 13)}</span>
+                        ) : ele.content.length === 0 ? (
+                          <p style={{ color: "red" }}>No Content</p>
                         ) : (
-                          ele.email
+                          ele.content
                         )}
                       </p>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <p
+                          style={{ width: "130px", textAlign: "center" }}
+                          title={ele.created_at}
+                        >
+                          {ele.created_at.length > 13 ? (
+                            <span>{ele.created_at.slice(0, 10)}</span>
+                          ) : (
+                            ele.created_at
+                          )}
+                        </p>
+
+                        <p
+                          style={{ width: "130px", textAlign: "center" }}
+                          title={ele.created_at}
+                        >
+                          {ele.created_at.length > 13 ? (
+                            <span>
+                              {ele.created_at.slice(
+                                11,
+                                ele.created_at.length - 5
+                              )}
+                            </span>
+                          ) : (
+                            ele.created_at
+                          )}
+                        </p>
+                      </div>
                       <p
                         style={{
                           width: "130px",
@@ -460,9 +526,9 @@ const Admin = () => {
                           textAlign: "center",
                         }}
                       >
-                        Active
+                        Accept
                       </p>
-                      <button class="btn" type="button">
+                      <button class="btn12" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
                           <div id="stars"></div>
@@ -476,7 +542,10 @@ const Admin = () => {
                     </div>
                   );
                 })}
-              </div> : ""}
+              </div>
+            ) : (
+              ""
+            )}
           </Typography>
         </Box>
       </Box>

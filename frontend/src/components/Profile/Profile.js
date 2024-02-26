@@ -610,18 +610,7 @@ const Profile = () => {
         profileInfo?.map((elm, i) => {
           return (
             <div key={elm.id} className="panel2">
-              <div class="container2">
-                <div class="cloud front">
-                  <span class="left-front"></span>
-                  <span class="right-front"></span>
-                </div>
-                <span class="sun sunshine"></span>
-                <span class="sun"></span>
-                <div class="cloud back">
-                  <span class="left-back"></span>
-                  <span class="right-back"></span>
-                </div>
-              </div>
+               
               <div className="edit">
                 <img
                   className="ProfilePicture"
@@ -797,18 +786,7 @@ const Profile = () => {
                   </p>
                 </div>
               </div>
-              <div class="container2">
-                <div class="cloud front">
-                  <span class="left-front"></span>
-                  <span class="right-front"></span>
-                </div>
-                <span class="sun sunshine"></span>
-                <span class="sun"></span>
-                <div class="cloud back">
-                  <span class="left-back"></span>
-                  <span class="right-back"></span>
-                </div>
-              </div>
+               
             </div>
           );
         })

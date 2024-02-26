@@ -148,10 +148,31 @@ const deleteCommentsById = (req, res) => {
     });
 };
 
+const getAllCommentAdmin = (req, res) => {
+  pool.query(`SELECT Comments.content , Comments.is_deleted ,Comments.comment_id ,Users.username,Users.id,Comments.post_id , Posts.media_url
+  FROM 
+  Comments 
+  JOIN Users ON Users.id = Comments.user_id 
+  JOIN Posts ON Posts.id = Comments.post_id 
+  ;`).then((result) => {
+    res.status(200).json({
+      success: true,
+      length:result.rows.length,
+      result: result.rows,
+    });
+  }).catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      err: err,
+    });
+  });
+};
 module.exports = {
   createNewComment,
   getCommentsByPostId,
   updateCommentsById,
   deleteCommentsById,
   getCommentsAndLikeByPostId,
+  getAllCommentAdmin
 };
