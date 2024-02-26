@@ -47,8 +47,8 @@ function Messages({ data, posts, setData }) {
 
   const sendMessage = () => {
     data.socket.emit("message", {
-      to: data_message.to,
-      from: data_message.from,
+      to: data_message.to *1,
+      from: data_message.from *1,
       message: data_message.message,
     });
   };
@@ -173,7 +173,7 @@ function Messages({ data, posts, setData }) {
             all_message.map((mess, index) => {
               return (
                 <>
-                  {mess.from === data.id  ? (
+                  {mess.from == data.id  ? (
                     <p>
                       <Stack
                         direction="row"
