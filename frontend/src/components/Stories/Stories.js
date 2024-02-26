@@ -29,12 +29,14 @@ export default function Stories() {
   const [loading, setLoading] = useState(true);
   const [loading1, setLoading1] = useState(true);
   const [openResult, setOpenResult] = useState(false);
+  const [openDeleteStory, setopenDeleteStory] = useState(false);
   const [storyIndex, setStoryIndex] = useState(0);
   const storyIndexRef = useRef(0);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showStory, setShowStory] = useState(false);
+  const [openAddedStory, setOpenAddedStory] = useState(false);
   const [user_Id, setUser_Id] = useState("");
   const [userName, setUserName] = useState("");
   const [userStory, setUserStory] = useState([]);
@@ -60,7 +62,7 @@ export default function Stories() {
   const deleteStory = (e) => {
     console.log(userStory[storyIndex].id);
     console.log("Deleted");
-const story_id = userStory[storyIndex].id
+    const story_id = userStory[storyIndex].id;
     axios
       .delete(`http://localhost:5000/story/${story_id}`, {
         headers: {
@@ -70,6 +72,8 @@ const story_id = userStory[storyIndex].id
 
       .then((result) => {
         console.log(result);
+        setOpen(false);
+        setopenDeleteStory(true);
       })
       .catch((err) => {
         console.log(err);
@@ -130,8 +134,11 @@ const story_id = userStory[storyIndex].id
   const handleClose = () => {
     setOpen(false);
     setOpen1(false);
+    setOpenAddedStory(false);
+
     setOpenResult(false);
     setLoading1(true);
+    setopenDeleteStory(false);
     setUploadedStory("");
   };
 
@@ -224,6 +231,8 @@ const story_id = userStory[storyIndex].id
       )
       .then((result) => {
         console.log(result);
+        setOpenAddedStory(true);
+
       })
       .catch((err) => {
         console.log(err);
@@ -280,7 +289,7 @@ const story_id = userStory[storyIndex].id
           }
           subheader={
             <Typography variant="h6" sx={{ fontSize: "12px" }}>
-              {userName} 's Stories
+              {My_userName} 's Stories
             </Typography>
           }
         />
@@ -298,6 +307,50 @@ const story_id = userStory[storyIndex].id
               }}
               aria-label="recipe"
             >
+              {/* Deleted Model  */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={openDeleteStory}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Story Deleted Succsifully
+                    </p>
+                  </div>
+                </ModalContent>
+              </Modal>
+              {/* Adding Story Succefully Model */}
+              <Modal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={openAddedStory}
+                onClose={handleClose}
+                slots={{ backdrop: StyledBackdrop }}
+              >
+                <ModalContent sx={{ maxWidth: 1000, maxHeight: 1200 }}>
+                  <div style={{ padding: "20px" }}>
+                    <h2 id="unstyled-modal-title" className="modal-title">
+                      {userName}
+                    </h2>
+                    <p
+                      id="unstyled-modal-description"
+                      className="modal-description"
+                    >
+                      Story Added Succsifully
+                    </p>
+                  </div>
+                </ModalContent>
+              </Modal>
               <Modal
                 aria-labelledby="unstyled-modal-title"
                 aria-describedby="unstyled-modal-description"
@@ -428,13 +481,17 @@ const story_id = userStory[storyIndex].id
                     <h6 id="unstyled-modal-title" className="modal-title">
                       {userName}
                     </h6>
-                    <button
-                      style={{ marginLeft: "auto" }}
-                      onClick={(e) => deleteStory(e)}
-                    >
-                      {" "}
-                      Delete Story
-                    </button>
+                    {My_userName === userName ? (
+                      <button
+                        style={{ marginLeft: "auto" }}
+                        onClick={(e) => deleteStory(e)}
+                      >
+                        {" "}
+                        Delete Story
+                      </button>
+                    ) : (
+                      <></>
+                    )}
                   </div>
 
                   <div className="video">
