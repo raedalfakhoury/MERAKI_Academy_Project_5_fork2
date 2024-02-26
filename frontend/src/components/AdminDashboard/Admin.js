@@ -18,6 +18,7 @@ import { setadminComments } from "../redux/reducers/Admin/comment";
 const Admin = () => {
   const [toggleUser, setToggleUser] = useState(false);
   const [togglePost, setTogglePost] = useState(false);
+  const [toggleComment, setToggleComment] = useState(false);
   const dispatch = useDispatch();
   const { users, token, posts, comments } = useSelector((state) => {
     return {
@@ -64,8 +65,7 @@ const Admin = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((result) => {
-        console.log(result.data);
+      .then((result) => { 
         setCommentsCount(result?.data?.length);
         dispatch(setadminComments(result?.data?.result));
       })
@@ -97,36 +97,7 @@ const Admin = () => {
               Admin Dashboard
             </Typography>
           </Toolbar>
-        </AppBar>
-        {/* <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              boxSizing: "border-box",
-            },
-          }}
-          variant="permanent"
-          anchor="left"
-        >
-          <Toolbar />
-          <Divider />
-          <List>
-            {["Users", "Posts"].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <PeopleAltTwoToneIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-        </Drawer> */}
-
+        </AppBar> 
         <Box
           component="main"
           sx={{
@@ -138,10 +109,7 @@ const Admin = () => {
           }}
         >
           <Toolbar />
-          {/* <div style={{margin:"0px 100px", display:"flex" , flexDirection:"column", justifyContent:""}}>
-         
-          </div> */}
-
+          
           <Typography paragraph>
             <div
               style={{
@@ -184,7 +152,11 @@ const Admin = () => {
                 </div>
               </div>
               {/* Comments */}
-              <div class="container3">
+              <div class="container3" onClick={() => {
+                  setToggleUser(false);
+                  setTogglePost(false);
+                  setToggleComment(!toggleComment)
+                }}>
                 <div class="card_box3">
                   <h1>
                     {" "}
@@ -435,6 +407,199 @@ const Admin = () => {
                   </p>
                 </div>
                 {posts?.map((ele) => {
+                  console.log(ele);
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid #ff9b9b",
+                        alignItems: "center",
+                      }}
+                    >
+                      {ele.media_url.includes(".mp4") ? (
+                        <video
+                          style={{
+                            cursor: "pointer",
+                            height: "100px",
+                            width: "130px",
+                          }}
+                          controls
+                          muted
+                          className="img-post"
+                          src={ele.media_url}
+                          onClick={() => {
+                            console.log(ele.id);
+                          }}
+                        ></video>
+                      ) : (
+                        <img
+                          alt=""
+                          src={ele.media_url}
+                          style={{
+                            height: "100px",
+                            width: "130px",
+                            borderRadius: "5px",
+                            margin: "5px 0px",
+                            padding: "2px",
+                            boxShadow: "#5c62685c 3px 3px 3px",
+                          }}
+                        ></img>
+                      )}
+                      <p style={{ width: "130px", textAlign: "center" }}>
+                        {ele.username}
+                      </p>
+                      <p
+                        style={{ width: "130px", textAlign: "center" }}
+                        title={ele.content}
+                      >
+                        {ele.content.length > 13 ? (
+                          <span>{ele.content.slice(0, 13)}</span>
+                        ) : ele.content.length === 0 ? (
+                          <p style={{ color: "red" }}>No Content</p>
+                        ) : (
+                          ele.content
+                        )}
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <p
+                          style={{ width: "130px", textAlign: "center" }}
+                          title={ele.created_at}
+                        >
+                          {ele.created_at.length > 13 ? (
+                            <span>{ele.created_at.slice(0, 10)}</span>
+                          ) : (
+                            ele.created_at
+                          )}
+                        </p>
+
+                        <p
+                          style={{ width: "130px", textAlign: "center" }}
+                          title={ele.created_at}
+                        >
+                          {ele.created_at.length > 13 ? (
+                            <span>
+                              {ele.created_at.slice(
+                                11,
+                                ele.created_at.length - 5
+                              )}
+                            </span>
+                          ) : (
+                            ele.created_at
+                          )}
+                        </p>
+                      </div>
+                      <p
+                        style={{
+                          width: "130px",
+                          color: "green",
+                          fontWeight: "600",
+                          textAlign: "center",
+                        }}
+                      >
+                        Accept
+                      </p>
+                      <button class="btn12" type="button">
+                        <strong>Block</strong>
+                        <div id="container-stars">
+                          <div id="stars"></div>
+                        </div>
+
+                        <div id="glow">
+                          <div class="circle"></div>
+                          <div class="circle"></div>
+                        </div>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              ""
+            )}
+
+  {/* -------------------------Comments------------------------------------------------------ */}
+  {toggleComment ? (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    borderBottom: "1px solid",
+                    position: "sticky",
+                    top: "0px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Post Image
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Commenter
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Comments
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    created_at
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Status Comment
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "600",
+                      fontSize: "18px",
+                      margin: "0px 0px 5px 0px",
+                      width: "130px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Action
+                  </p>
+                </div>
+                {comments?.map((ele) => {
                   console.log(ele);
                   return (
                     <div
