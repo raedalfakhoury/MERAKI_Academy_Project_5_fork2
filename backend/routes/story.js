@@ -1,6 +1,6 @@
 const express = require("express")
 
-
+const storyRouter = express.Router();
 const {
     addStory,removeStory,getAllStoryById
 } = require("../controllers/story");
@@ -8,7 +8,7 @@ const {
 const authentication = require("../middlewares/authentication");
 const authorization = require("../middlewares/authorization");
 
-const storyRouter = express();
+
 
 
 storyRouter.post("/", authentication,addStory);
