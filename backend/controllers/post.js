@@ -166,6 +166,7 @@ const getAllPosts = (req, res) => {
       res.status(200).json({
         success: true,
         message: "All posts retrieved successfully",
+        length: result.rows.length,
         posts: result.rows,
       });
     })
