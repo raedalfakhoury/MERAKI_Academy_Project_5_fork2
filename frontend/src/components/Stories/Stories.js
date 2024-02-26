@@ -326,12 +326,10 @@ export default function Stories() {
                   <div className="show-content">
                     {uploadedStory ? (
                       <video
-                        width={"300px"}
-                        height={"300px"}
-                        id="video"
                         src={uploadedStory}
                         autoPlay
                         controls
+                        className="video-inside-addingStory"
                       ></video>
                     ) : loading1 ? (
                       <>Upload your Story</>
@@ -340,11 +338,9 @@ export default function Stories() {
                         <CircularProgress />
                       </Box>
                     )}
-                  </div>
-                  
-                  <div
+                     <div
                     className="input-file-section"
-                    style={{ textAlign: "center", padding: "20px" }}
+                    
                   >
                     <TriggerButton
                       className="add-story-button"
@@ -365,6 +361,9 @@ export default function Stories() {
                       Choose File
                     </TriggerButton>
                   </div>
+                  </div>
+
+                 
 
                   <div
                     className="submit-section"

@@ -114,10 +114,22 @@ border: solid 1px;
 
 .show-content{
     position: relative;
+    display: flex;
+    /* justify-content: flex-start; */
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 2;
     background-color: aquamarine;
+}
+
+
+.video-inside-addingStory{
+    position: relative;
+    width: 100%;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    margin: 10px;
 }
 
 .new-story-content {
@@ -142,7 +154,7 @@ background-color: antiquewhite;
 .submit-story-button {
     background-color: aquamarine;
     /* border: solid 2px; */
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
 }
 .submit-section{
     position: relative;
@@ -155,9 +167,9 @@ background-color: antiquewhite;
 
 .input-file-section {
     position: relative;
-    /* border: solid 4px; */
-    grid-row-start: 2;
-    grid-column-start: 1;
+    border: solid 4px;
+top:0;
+    
 }
 
 .model-content .submit-story-button{

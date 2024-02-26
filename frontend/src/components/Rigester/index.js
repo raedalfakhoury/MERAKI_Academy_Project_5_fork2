@@ -440,8 +440,8 @@ export default function Rigester() {
               className="order-1 order-lg-2 d-flex align-items-center"
             >
               <Card.Img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                fluid
+                src="https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
+                style={{width:"600px"}}
               />
             </Col>
           </Row>
