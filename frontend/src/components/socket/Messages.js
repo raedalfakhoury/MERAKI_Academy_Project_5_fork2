@@ -13,6 +13,10 @@ import axios from "axios";
 import { TbSquareRoundedNumber1Filled } from "react-icons/tb";
 
 function Messages({ data, posts, setData }) {
+
+  useEffect(()=>{
+    getMessagesDataBK();
+  },[])
   const dispatch = useDispatch();
   const [myFollowing, set_myFollowing] = useState();
 
