@@ -10,9 +10,13 @@ import Modal from "react-bootstrap/Modal";
 import { setMessages, addMessages } from "../redux/reducers/Messages/message";
 import "./message.css";
 import axios from "axios";
+import { TbSquareRoundedNumber1Filled } from "react-icons/tb";
+
 function Messages({ data, posts, setData }) {
   const dispatch = useDispatch();
-  const { token, MessagesALL } = useSelector((state) => {
+  const [myFollowing, set_myFollowing] = useState();
+
+  const { token, MessagesALL,userId } = useSelector((state) => {
     return {
       posts: state.posts.posts,
       userId: state.auth.userId,
@@ -22,12 +26,14 @@ function Messages({ data, posts, setData }) {
       MessagesALL: state.Messages.Messages,
     };
   });
-  console.log("=>>>>>>>>>>>>>>>>>>", MessagesALL);
+  // console.log("=>>>>>>>>>>>>>>>>>>", MessagesALL);
   const [send_for_id, set_send_for_id] = useState("");
   const [Content, set_Content] = useState("");
 
   const comber = useRef({});
   const [toggleBoxMessage, set_toggleBoxMessage] = useState(true);
+
+  const [compar_icn_not, set_compar_icn_not] = useState();
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -45,43 +51,70 @@ function Messages({ data, posts, setData }) {
   });
 
   const addID = (users) => {
-    setDate_message({ ...data_message, to: users.user_id });
+    setDate_message({ ...data_message, to: users.id });
 
     set_data_user_for_sind(users);
-    set_send_for_id(users.user_id);
+    set_send_for_id(users.id);
   };
 
   const ReserveMessage = (dataM) => {
+    if(dataM.from *1 !== userId *1){
+      SoundEffects()
+    }
+
+    sendMessageBK(dataM);
     console.log(dataM);
     set_all_message([...all_message, dataM]);
+    set_compar_icn_not(dataM);
   };
-
+const SoundEffects= ()=>{
+let audio = new Audio("notifications-sound-127856.mp3")
+audio.play()
+audio.loop =false
+}
   useEffect(() => {
-    getMessagesDataBK();
+    //  getMessagesDataBK()
+
+    getMyFollowing();
+
     data.socket.on("message", ReserveMessage);
     return () => {
       data.socket.off("message", ReserveMessage);
+      // getMessagesDataBK()
     };
   }, [all_message]);
 
   // useEffect(() => {
   //   axios.get()
   // }, []);
-
+  const getMyFollowing = () => {
+    axios
+      .get(
+        `http://localhost:5000/followers/Following/${localStorage.getItem(
+          "userId"
+        )}`
+      )
+      .then((result) => {
+        console.log(result.data.result);
+        set_myFollowing(result.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const sendMessage = () => {
-    sendMessageBK();
     data.socket.emit("message", {
       to: data_message.to * 1,
       from: data_message.from * 1,
       message: data_message.message,
     });
   };
-  const sendMessageBK = () => {
+  const sendMessageBK = (dataM) => {
     console.log("jamal");
     axios
       .post(
         `http://localhost:5000/message/send`,
-        { send_for_id, Content },
+        { send_for_id: dataM.to, Content: dataM.message },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,20 +147,6 @@ function Messages({ data, posts, setData }) {
 
   return (
     <div style={{ position: "absolute", zIndex: "5px", top: "100%" }}>
-      {/* <textarea
-        type="text"
-        placeholder="to"
-        onChange={(e) => {
-          setDate_message({ ...data_message, to: e.target.value });
-        }}
-      /> */}
-      {/* <button
-        onClick={() => {
-          sendMessage();
-        }}
-      >
-        Send
-      </button> */}
       {toggleBoxMessage && (
         <Container
           className="box_Users_message"
@@ -153,40 +172,48 @@ function Messages({ data, posts, setData }) {
               paddingTop: "2px",
             }}
           >
-            {posts?.map((users, index) => {
-              if (!comber.current[users.user_id]) {
-                comber.current[users.user_id] = 1;
-              } else {
-                comber.current[users.user_id]= +1;
-              }
-
+            {myFollowing?.map((users, index) => {
               return (
                 <>
-                  {users.user_id * 1 !== data.id * 1 &&
-                  (
-                      <Col xs={12}>
-                        {" "}
-                        <Stack direction="row" spacing={2}>
-                          <Avatar
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              console.log(users.user_id);
-                              addID(users);
-                              handleShow();
-                              // setData({...data,socket:null})
-                              set_toggleBoxMessage(false);
+                  {users.id * 1 !== data.id * 1 && (
+                    <Col xs={12}>
+                      {" "}
+                      <Stack
+                        
+                        direction="row"
+                        spacing={2}
+                      >
+                     
+                        <Avatar
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            console.log(users.id);
+                            addID(users);
+                            handleShow();
+                            // setData({...data,socket:null})
+                            set_toggleBoxMessage(false);
+                          }}
+                          alt="Remy Sharp"
+                          src={users.profile_picture_url}
+                        />
+                        <Col style={{ display: "flex", alignItems: "center" }}>
+                          {users.username}
+                        </Col>
+                        <Col style={{ display: "flex",justifyContent:"flex-end", alignItems: "center" }}>
+                        {compar_icn_not?.from === users.id && (
+                          <TbSquareRoundedNumber1Filled    number={4}
+                            style={{
+                              width: "20px",
+                              // backgroundColor:"red",
+                              color:"red"
                             }}
-                            alt="Remy Sharp"
-                            src={users.profile_picture_url}
                           />
-                          <Col
-                            style={{ display: "flex", alignItems: "center" }}
-                          >
-                            {users.username}
-                          </Col>
-                        </Stack>
-                      </Col>
-                    )}
+                        )}
+                        </Col>
+                    
+                      </Stack>
+                    </Col>
+                  )}
                 </>
               );
             })}
@@ -228,6 +255,71 @@ function Messages({ data, posts, setData }) {
           className="Modal-Body-messages-send"
           style={{ overflowY: "auto", maxHeight: "30vh" }}
         >
+          {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! data backend */}
+          {MessagesALL.length > 0 &&
+            MessagesALL.map((mess, index) => {
+              return (
+                <>
+                  {mess.senderid == data.id ? (
+                    mess.recipientid === data_message?.to && (
+                      <p>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          style={{ justifyContent: "flex-end" }}
+                        >
+                          <Col
+                            xs={4}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              backgroundColor: "blue",
+                              borderRadius: "17px",
+                              padding: " 5px 10px",
+                              color: "white",
+                              justifyContent: "center",
+                            }}
+                          >
+                            {mess.content}
+                          </Col>
+                          <Avatar
+                            style={{ cursor: "pointer" }}
+                            alt="Remy Sharp"
+                            src={localStorage.getItem("image")}
+                          />
+                        </Stack>
+                      </p>
+                    )
+                  ) : (
+                    <p>
+                      <Stack direction="row" spacing={1}>
+                        <Avatar
+                          style={{ cursor: "pointer" }}
+                          alt="Remy Sharp"
+                          src={data_user_for_sind.profile_picture_url}
+                        />
+                        <Col
+                          xs={4}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            backgroundColor: "blue",
+                            borderRadius: "14px",
+                            padding: " 5px 10px",
+                            color: "white",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {mess.content}
+                        </Col>
+                      </Stack>
+                    </p>
+                  )}
+                </>
+              );
+            })}
+
+          {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! socket io  */}
           {all_message.length > 0 &&
             all_message.map((mess, index) => {
               return (
@@ -245,7 +337,7 @@ function Messages({ data, posts, setData }) {
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              backgroundColor: "gray",
+                              backgroundColor: "blue",
                               borderRadius: "17px",
                               padding: " 5px 10px",
                               color: "white",
@@ -275,7 +367,7 @@ function Messages({ data, posts, setData }) {
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            backgroundColor: "gray",
+                            backgroundColor: "blue",
                             borderRadius: "14px",
                             padding: " 5px 10px",
                             color: "white",
@@ -312,6 +404,7 @@ function Messages({ data, posts, setData }) {
               });
               setTimeout(() => {
                 set_toggleBoxMessage(true);
+                getMessagesDataBK();
               }, 1000);
             }}
           >
@@ -319,7 +412,7 @@ function Messages({ data, posts, setData }) {
           </Button>
           <Button
             onClick={() => {
-              getMessagesDataBK();
+              // getMessagesDataBK();
               sendMessage();
               setDate_message({ ...data_message, message: "" });
             }}
