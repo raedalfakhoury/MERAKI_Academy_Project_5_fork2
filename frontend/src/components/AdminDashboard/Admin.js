@@ -8,7 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import MailIcon from "@mui/icons-material/Mail";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline"; 
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setadminUsers } from "../redux/reducers/Admin";
@@ -27,7 +27,7 @@ const Admin = () => {
       comments: state.adminComments.adminComments,
     };
   });
-console.log(users);
+  console.log(users);
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
@@ -64,7 +64,7 @@ console.log(users);
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((result) => { 
+      .then((result) => {
         setCommentsCount(result?.data?.length);
         dispatch(setadminComments(result?.data?.result));
       })
@@ -96,7 +96,7 @@ console.log(users);
               Admin Dashboard
             </Typography>
           </Toolbar>
-        </AppBar> 
+        </AppBar>
         <Box
           component="main"
           sx={{
@@ -108,7 +108,7 @@ console.log(users);
           }}
         >
           <Toolbar />
-          
+
           <Typography paragraph>
             <div
               style={{
@@ -123,7 +123,7 @@ console.log(users);
                 class="container1"
                 onClick={() => {
                   setTogglePost(false);
-                  setToggleComment(false)
+                  setToggleComment(false);
                   setToggleUser(!toggleUser);
                 }}
               >
@@ -140,7 +140,7 @@ console.log(users);
                 class="container2"
                 onClick={() => {
                   setToggleUser(false);
-                  setToggleComment(false)
+                  setToggleComment(false);
                   setTogglePost(!togglePost);
                 }}
               >
@@ -153,11 +153,14 @@ console.log(users);
                 </div>
               </div>
               {/* Comments */}
-              <div class="container3" onClick={() => {
+              <div
+                class="container3"
+                onClick={() => {
                   setToggleUser(false);
                   setTogglePost(false);
-                  setToggleComment(!toggleComment)
-                }}>
+                  setToggleComment(!toggleComment);
+                }}
+              >
                 <div class="card_box3">
                   <h1>
                     {" "}
@@ -257,7 +260,6 @@ console.log(users);
                   </p>
                 </div>
                 {users?.map((ele) => {
-                  console.log(ele);
                   return (
                     <div
                       key={ele.id}
@@ -297,25 +299,35 @@ console.log(users);
                           ele.email
                         )}
                       </p>
-                     {ele.is_band === "false" ? <p
-                        style={{
-                          width: "130px",
-                          color: "green",
-                          fontWeight: "600",
-                          textAlign: "center",
-                        }}
-                      >
-                        Active
-                      </p> :  <p
-                        style={{
-                          width: "130px",
-                          color: "red",
-                          fontWeight: "600",
-                          textAlign: "center",
-                        }}
-                      >
-                        Deactive
-                      </p>}
+                      {ele.is_band === "false" ? (
+                        <p
+                          style={{
+                            width: "130px",
+                            color: "green",
+                            fontWeight: "600",
+                            textAlign: "center",
+                          }}
+                        >
+                          Active
+                        </p>
+                      ) : (
+                        <p
+                          style={{
+                            width: "130px",
+                            color: "red",
+                            fontWeight: "600",
+                            textAlign: "center",
+                            backgroundColor: "rgb(230 216 216)",
+                            cursor: "pointer",
+                            margin: "0px",
+                            padding: "5px",
+                            borderRadius: "5px",
+                          }}
+                          onClick={() => {}}
+                        >
+                          Reported
+                        </p>
+                      )}
                       <button class="btn12" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
@@ -500,25 +512,29 @@ console.log(users);
                           )}
                         </p>
                       </div>
-                      {ele.is_band === "false" ? <p
-                        style={{
-                          width: "130px",
-                          color: "green",
-                          fontWeight: "600",
-                          textAlign: "center",
-                        }}
-                      >
-                        Accept
-                      </p> :  <p
-                        style={{
-                          width: "130px",
-                          color: "red",
-                          fontWeight: "600",
-                          textAlign: "center",
-                        }}
-                      >
-                        Reported
-                      </p>}
+                      {ele.is_band === "false" ? (
+                        <p
+                          style={{
+                            width: "130px",
+                            color: "green",
+                            fontWeight: "600",
+                            textAlign: "center",
+                          }}
+                        >
+                          Accept
+                        </p>
+                      ) : (
+                        <p
+                          style={{
+                            width: "130px",
+                            color: "red",
+                            fontWeight: "600",
+                            textAlign: "center",
+                          }}
+                        >
+                          Reported
+                        </p>
+                      )}
                       <button class="btn12" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">
@@ -538,8 +554,8 @@ console.log(users);
               ""
             )}
 
-  {/* -------------------------Comments------------------------------------------------------ */}
-  {toggleComment ? (
+            {/* -------------------------Comments------------------------------------------------------ */}
+            {toggleComment ? (
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
@@ -702,25 +718,29 @@ console.log(users);
                           )}
                         </p>
                       </div>
-                      {ele.is_band === "false" ? <p
-                        style={{
-                          width: "130px",
-                          color: "green",
-                          fontWeight: "600",
-                          textAlign: "center",
-                        }}
-                      >
-                        Accept
-                      </p> :  <p
-                        style={{
-                          width: "130px",
-                          color: "red",
-                          fontWeight: "600",
-                          textAlign: "center",
-                        }}
-                      >
-                        Reported
-                      </p>}
+                      {ele.is_band === "false" ? (
+                        <p
+                          style={{
+                            width: "130px",
+                            color: "green",
+                            fontWeight: "600",
+                            textAlign: "center",
+                          }}
+                        >
+                          Accept
+                        </p>
+                      ) : (
+                        <p
+                          style={{
+                            width: "130px",
+                            color: "red",
+                            fontWeight: "600",
+                            textAlign: "center",
+                          }}
+                        >
+                          Reported
+                        </p>
+                      )}
                       <button class="btn123" type="button">
                         <strong>Block</strong>
                         <div id="container-stars">

@@ -67,6 +67,9 @@ const Profile = () => {
   const [remove, setRemove] = useState(false);
   const [test, setTest] = useState(true);
   const [image, setImage] = useState();
+  const [report, setReport] = useState({
+    reporting: "",
+  });
   // let bio = useRef("");
   const { token, savePost } = useSelector((state) => {
     return {
@@ -96,15 +99,22 @@ const Profile = () => {
   const [showFollowing, setShowFollowing] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showPostPopup, setShowPostPopup] = useState(false);
+
+  const [showReporting, setShowReporting] = useState(false);
+
   const [postAndComment, setPostAndComment] = useState();
 
   const handleShowFollowers = () => setShow(true);
   const handleShowFollowing = () => setShowFollowing(true);
   const handleShowEditProfile = () => setShowEditProfile(true);
   const handleShowPostPopup = () => setShowPostPopup(true);
+  const handleShowReporting = () => setShowReporting(true);
+
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShowFollowing(false);
   const handleCloseEditProfile = () => setShowEditProfile(false);
+  const handleClosereporting = () => setShowReporting(false);
+
   const handleClosePostPopup = () => {
     setImage([]);
     setPostAndComment([]);
@@ -612,7 +622,6 @@ const Profile = () => {
         profileInfo?.map((elm, i) => {
           return (
             <div key={elm.id} className="panel2">
-               
               <div className="edit">
                 <img
                   className="ProfilePicture"
@@ -623,7 +632,12 @@ const Profile = () => {
 
               <div className="colum">
                 <div className="follower">
-                  <p className="username">{elm.username}</p>
+                  <p
+                    className="username"
+                    style={{ width: "150px", margin: "0px" }}
+                  >
+                    {elm.username}
+                  </p>
 
                   {localStorage.getItem("userId") == searchQuery2 ? (
                     <button
@@ -661,7 +675,16 @@ const Profile = () => {
                   ) : arr.current.includes(searchQuery2) ? (
                     <button
                       // id=" UnFollow-Public"
-                      className="Btn"
+                      style={{
+                        backgroundColor: "#efefef",
+                        padding: "10px 20px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        fontWeight: "600",
+                        width: "150px",
+                        color: "black",
+                      }}
                       onClick={async () => {
                         try {
                           const res = await axios.delete(
@@ -729,10 +752,33 @@ const Profile = () => {
                   <h4>
                     <span></span>
                   </h4>
+                  {localStorage.getItem("userId") == searchQuery2 ? (
+                    ""
+                  ) : (
+                    <p
+                      style={{
+                        backgroundColor: "#EFEFEF",
+                        padding: "10px 20px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        fontWeight: "600",
+                        width: "150px",
+                        margin: "0px",
+                      }}
+                      onClick={() => {
+                        handleShowReporting();
+                      }}
+                    >
+                      Report
+                    </p>
+                  )}
                 </div>
 
                 <div className="followerr">
-                  <p className="bio">{elm.bio}</p>
+                  <p className="bio" style={{ width: "150px" }}>
+                    {elm.bio}
+                  </p>
                   <p
                     className="followers"
                     onClick={(e) => {
@@ -788,7 +834,6 @@ const Profile = () => {
                   </p>
                 </div>
               </div>
-               
             </div>
           );
         })
@@ -1020,14 +1065,14 @@ const Profile = () => {
                             },
                           }
                         );
-                   
+
                         const newProfileInfo_X = profileInfo.map(
                           (elm, index) => {
                             elm.profile_picture_url = data_user.image;
-                            return elm
+                            return elm;
                           }
                         );
-                             setProfileInfo(newProfileInfo_X)
+                        setProfileInfo(newProfileInfo_X);
                         Swal.fire({
                           position: "center",
                           icon: "success",
@@ -1051,6 +1096,78 @@ const Profile = () => {
                 </>
               );
             })}
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showReporting}
+        onHide={handleClosereporting}
+        animation={false}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{ borderBottom: "none", padding: "10px 10px" }}
+        >
+          <Modal.Title
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+              borderBottom: "1px solid #808080",
+            }}
+          >
+            Reason of Reporting
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          id="Modal.Body"
+          style={{
+            padding: "10px",
+            display: "flex",
+            overflowY: "auto",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" ,justifyContent:"center" , alignItems:"center"}}>
+            <textarea
+              id="w3review"
+              name="w3review"
+              rows="4"
+              cols="50"
+              placeholder="The Reason of Reporting"
+              onChange={(e) => {
+                setReport({ ...report, reporting: e.target.value });
+              }}
+            ></textarea>
+            <button
+              id="btn2"
+              onClick={async () => {
+                try {
+                  const result = await axios.put(
+                    `http://localhost:5000/users/update/report/${searchQuery2}`,
+                    {
+                      report: report.reporting,
+                    }
+                  );
+                  console.log(result);
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "repotting has been submit Successfully",
+                    showConfirmButton: false,
+                    timer: 1000,
+                  });
+                  handleClosereporting();
+                } catch (error) {
+                  console.log("error from reportinf", error);
+                }
+              }}
+            >
+              Reporting
+            </button>
           </div>
         </Modal.Body>
       </Modal>

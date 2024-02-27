@@ -8,6 +8,7 @@ const {
   getAllUser,
   getUserById,
   getAllUsersAdminDashboard,
+  reportUser
 } = require("../controllers/user");
 
 const authentication = require("../middlewares/authentication");
@@ -18,6 +19,7 @@ userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.delete("/delete", authentication, deleteUser);
 userRouter.put("/update", authentication, updateUser);
+userRouter.put("/update/report/:id",  reportUser);
 userRouter.get("/", getAllUser);
 userRouter.get("/:id", getUserById);
 
