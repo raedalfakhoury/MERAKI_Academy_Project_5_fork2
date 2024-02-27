@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { setsavePost } from "../redux/reducers/savePost/index";
+import NavBarPost from "../Navbar/NavBarPost";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -600,6 +601,7 @@ const Profile = () => {
 
   return (
     <div id="mainPage">
+      <NavBarPost/>
       <Followers />
       <Following />
       {/* <EditProfile /> */}

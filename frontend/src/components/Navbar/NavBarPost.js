@@ -283,29 +283,82 @@ export default function NavBarPost() {
     >
       <AppBar
         position="fixed"
-        sx={{ bgcolor: "#ffff", color: "black", height: "55px" }}
+        sx={{ bgcolor: "rgb(143,188,139)", color: "black", height: "55px" }}
       >
         <Toolbar>
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            sx={{
-              display: {
-                xs: "none",
-                sm: "block",
-                color: "#659BDC",
-                cursor: "pointer",
-              },
+          <Avatar
+            src={userProfile}
+            alt="User Profile"
+            style={{
+              width: "40px",
+              height: "40px",
+              cursor: "pointer",
             }}
-            onClick={() => {
-              redirect("/home");
+            onClick={handleClick}
+          />
+          <Search
+            style={{
+              border: "1px solid gray",
+              boxSizing: "",
+              marginBottom: "0px",
+              padding: "0px",
+              backgroundColor: "#F7F7F7",
+              color: "black",
+              width: "300px",
+              borderRadius: "20px",
+              height: "30px",
             }}
           >
-            TALAGI
-          </Typography>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
 
-          {/* Notifications Box */}
+            <StyledInputBase
+              sx={{ ml: 2, flex: 1 }}
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search" }}
+            />
+          </Search>
+          {/* Profile Picture */}
+
+          {/* new */}
+          {/* Space Box */}
+          <Box sx={{ flexGrow: 1 }} />
+          {/* Search */}
+          <div
+            style={{
+              paddingRight:"180px",
+              display: "flex",
+              gap: "10px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography style={{fontFamily: "monospace"}}
+              variant="h5"
+              noWrap
+              component="div"
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "block",
+                  color: "#fff",
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() => {
+                redirect("/home");
+              }}
+            >
+              TALAGI
+            </Typography>
+            <img
+              style={{ width: "4vw" }}
+              src="pngtree-cartoon-business-conversation-work-line-drawing-illustration-png-image_1718261-removebg-preview.png"
+              alt="Illustration of friends"
+            />
+            {/* Notifications Box */}
+          </div>
           <Box
             sx={{
               display: {
@@ -317,37 +370,15 @@ export default function NavBarPost() {
             }}
           >
             {/* Likes Notifications */}
-            <IconButton
-              sx={{ "&:hover": { backgroundColor: "red" } }}
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={8} color="error">
-                {/* <FavoriteBorderIcon /> */}
-                <SvgIcon
-                  viewBox="0 0 24 24"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    fill: "#ffff",
-                    stroke: "black",
-                    strokeWidth: 1,
-                  }}
-                >
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </SvgIcon>
-              </Badge>
-            </IconButton>
 
             {/* Bell Notifications */}
             <IconButton
-              sx={{ "&:hover": { backgroundColor: "#659BDC" } }}
+              sx={{ "&:hover": { backgroundColor: "rgb(255, 191, 0)" } }}
               size="large"
               aria-label="show 4 new mails"
               color="inhert"
             >
-              <Badge badgeContent={8} color="error">
+              <Badge badgeContent={8} color="warning">
                 {/* <NotificationsNoneOutlinedIcon /> */}
                 <SvgIcon
                   viewBox="0 0 24 24"
@@ -366,33 +397,6 @@ export default function NavBarPost() {
             </IconButton>
 
             {/* Chat Notifications */}
-            <IconButton
-              sx={{ "&:hover": { backgroundColor: "#659BDC" } }}
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="#ffff"
-              stroke="black"
-              stroke-width="4"
-            >
-              <Badge badgeContent={17} color="info">
-                <SvgIcon
-                  viewBox="0 0 24 24"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    fill: "#ffff",
-                    stroke: "black",
-                    strokeWidth: 1,
-                  }}
-                >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </SvgIcon>{" "}
-              </Badge>
-            </IconButton>
 
             {/* Message Notifications */}
             <IconButton
@@ -401,7 +405,7 @@ export default function NavBarPost() {
                 addSocket();
               }}
               sx={{
-                "&:hover": { backgroundColor: "#659BDC" },
+                "&:hover": { backgroundColor: "rgb(255, 191, 0)" },
               }}
               size="large"
               aria-label="show 17 new notifications"
@@ -409,8 +413,8 @@ export default function NavBarPost() {
             >
               <Badge
                 badgeContent={17}
-                color="info"
-                style={{ "&:hover": { backgroundColor: "#659BDC" } }}
+                color="warning"
+                style={{ "&:hover": { backgroundColor: "rgb(255, 191, 0)" } }}
               >
                 <SvgIcon
                   viewBox="0 0 24 24"
@@ -443,45 +447,6 @@ export default function NavBarPost() {
               ></path>
             </svg>
           </button>
-          {/* Space Box */}
-          <Box sx={{ flexGrow: 1 }} />
-          {/* Search */}
-
-          <Search
-            style={{
-              border: "1px solid gray",
-              boxSizing: "",
-              marginBottom: "0px",
-              padding: "0px",
-              backgroundColor: "#F7F7F7",
-              color: "black",
-              width: "400px",
-              borderRadius: "20px",
-              height: "30px",
-            }}
-          >
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-
-            <StyledInputBase
-              sx={{ ml: 2, flex: 1 }}
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-          {/* Profile Picture */}
-
-          <Avatar
-            src={userProfile}
-            alt="User Profile"
-            style={{
-              width: "40px",
-              height: "40px",
-              cursor: "pointer",
-            }}
-            onClick={handleClick}
-          />
         </Toolbar>
       </AppBar>
 
@@ -493,3 +458,246 @@ export default function NavBarPost() {
     </Box>
   );
 }
+
+// ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+
+// import * as React from "react";
+// import { styled, alpha } from "@mui/material/styles";
+// import AppBar from "@mui/material/AppBar";
+// import Box from "@mui/material/Box";
+// import Toolbar from "@mui/material/Toolbar";
+// import IconButton from "@mui/material/IconButton";
+// import Typography from "@mui/material/Typography";
+// import InputBase from "@mui/material/InputBase";
+// import Badge from "@mui/material/Badge";
+// import MenuItem from "@mui/material/MenuItem";
+// import Menu from "@mui/material/Menu";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import SearchIcon from "@mui/icons-material/Search";
+// import AccountCircle from "@mui/icons-material/AccountCircle";
+// import MailIcon from "@mui/icons-material/Mail";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
+// import MoreIcon from "@mui/icons-material/MoreVert";
+
+// const Search = styled("div")(({ theme }) => ({
+//   position: "relative",
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   "&:hover": {
+//     backgroundColor: alpha(theme.palette.common.white, 0.25),
+//   },
+//   marginRight: theme.spacing(2),
+//   marginLeft: 0,
+//   width: "100%",
+//   [theme.breakpoints.up("sm")]: {
+//     marginLeft: theme.spacing(3),
+//     width: "auto",
+//   },
+// }));
+
+// const SearchIconWrapper = styled("div")(({ theme }) => ({
+//   padding: theme.spacing(0, 2),
+//   height: "100%",
+//   position: "absolute",
+//   pointerEvents: "none",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "center",
+// }));
+
+// const StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 0),
+//     // vertical padding + font size from searchIcon
+//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//     transition: theme.transitions.create("width"),
+//     width: "100%",
+//     [theme.breakpoints.up("md")]: {
+//       width: "20ch",
+//     },
+//   },
+// }));
+
+// export default function PrimarySearchAppBar() {
+//   const [anchorEl, setAnchorEl] = React.useState(null);
+//   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+//   const isMenuOpen = Boolean(anchorEl);
+//   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+//   const handleProfileMenuOpen = (event) => {
+//     setAnchorEl(event.currentTarget);
+//   };
+
+//   const handleMobileMenuClose = () => {
+//     setMobileMoreAnchorEl(null);
+//   };
+
+//   const handleMenuClose = () => {
+//     setAnchorEl(null);
+//     handleMobileMenuClose();
+//   };
+
+//   const handleMobileMenuOpen = (event) => {
+//     setMobileMoreAnchorEl(event.currentTarget);
+//   };
+
+//   const menuId = "primary-search-account-menu";
+//   const renderMenu = (
+//     <Menu
+//       anchorEl={anchorEl}
+//       anchorOrigin={{
+//         vertical: "top",
+//         horizontal: "right",
+//       }}
+//       id={menuId}
+//       keepMounted
+//       transformOrigin={{
+//         vertical: "top",
+//         horizontal: "right",
+//       }}
+//       open={isMenuOpen}
+//       onClose={handleMenuClose}
+//     >
+//       <MenuItem onClick={()=>{
+
+//         handleMenuClose()
+//       }}>Profile</MenuItem>
+//       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+//     </Menu>
+//   );
+
+//   const mobileMenuId = "primary-search-account-menu-mobile";
+//   const renderMobileMenu = (
+//     <Menu
+//       anchorEl={mobileMoreAnchorEl}
+//       anchorOrigin={{
+//         vertical: "top",
+//         horizontal: "right",
+//       }}
+//       id={mobileMenuId}
+//       keepMounted
+//       transformOrigin={{
+//         vertical: "top",
+//         horizontal: "right",
+//       }}
+//       open={isMobileMenuOpen}
+//       onClose={handleMobileMenuClose}
+//     >
+//       <MenuItem>
+//         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+//           <Badge badgeContent={4} color="error">
+//             <MailIcon />
+//           </Badge>
+//         </IconButton>
+//         <p>Messages</p>
+//       </MenuItem>
+//       <MenuItem>
+//         <IconButton
+//           size="large"
+//           aria-label="show 17 new notifications"
+//           color="inherit"
+//         >
+//           <Badge badgeContent={17} color="error">
+//             <NotificationsIcon />
+//           </Badge>
+//         </IconButton>
+//         <p>Notifications</p>
+//       </MenuItem>
+//       <MenuItem onClick={handleProfileMenuOpen}>
+//         <IconButton
+//           size="large"
+//           aria-label="account of current user"
+//           aria-controls="primary-search-account-menu"
+//           aria-haspopup="true"
+//           color="inherit"
+//         >
+//           <AccountCircle />
+//         </IconButton>
+//         <p>Profile</p>
+//       </MenuItem>
+//     </Menu>
+//   );
+
+//   return (
+//     <Box sx={{ flexGrow: 1 }}>
+//       <AppBar position="static" sx={{ backgroundColor: "#8FBC8B" }}>
+//         <Toolbar>
+//           <IconButton
+//             size="large"
+//             edge="start"
+//             color="inherit"
+//             aria-label="open drawer"
+//             sx={{ mr: 2 }}
+//           >
+//             <MenuIcon />
+//           </IconButton>
+//           <Typography
+//             variant="h6"
+//             noWrap
+//             component="div"
+//             sx={{ display: { xs: "none", sm: "block" } }}
+//           >
+//             MUI
+//           </Typography>
+//           <Search>
+//             <SearchIconWrapper>
+//               <SearchIcon />
+//             </SearchIconWrapper>
+//             <StyledInputBase
+//               placeholder="Search…"
+//               inputProps={{ "aria-label": "search" }}
+//             />
+//           </Search>
+//           <Box sx={{ flexGrow: 1 }} />
+//           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+//             <IconButton
+//               size="large"
+//               aria-label="show 4 new mails"
+//               color="inherit"
+//             >
+//               <Badge badgeContent={4} color="error">
+//                 <MailIcon />
+//               </Badge>
+//             </IconButton>
+//             <IconButton
+//               size="large"
+//               aria-label="show 17 new notifications"
+//               color="inherit"
+//             >
+//               <Badge badgeContent={17} color="error">
+//                 <NotificationsIcon />
+//               </Badge>
+//             </IconButton>
+//             <IconButton
+//               size="large"
+//               edge="end"
+//               aria-label="account of current user"
+//               aria-controls={menuId}
+//               aria-haspopup="true"
+//               onClick={handleProfileMenuOpen}
+//               color="inherit"
+//             >
+//               <AccountCircle />
+//             </IconButton>
+//           </Box>
+//           <Box sx={{ display: { xs: "flex", md: "none" } }}>
+//             <IconButton
+//               size="large"
+//               aria-label="show more"
+//               aria-controls={mobileMenuId}
+//               aria-haspopup="true"
+//               onClick={handleMobileMenuOpen}
+//               color="inherit"
+//             >
+//               <MoreIcon />
+//             </IconButton>
+//           </Box>
+//         </Toolbar>
+//       </AppBar>
+//       {renderMobileMenu}
+//       {renderMenu}
+//     </Box>
+//   );
+// }
