@@ -139,7 +139,7 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   align-items: self-start;
-   width: 620px;
+  width: 620px;
 }
 .img-post {
   width: 200px;
@@ -526,4 +526,24 @@ body {
   display: flex;
   width: 100%;
   gap: 15px;
+}
+
+#buttonHome {
+  position: absolute;
+  color: #ecf0f1;
+  font-size: 17px;
+  background-color: #e67e22;
+  border: 1px solid #f39c12;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0px 6px 0px #d35400;
+  transition: all 0.1s;
+  top: 65px;
+  left: 10px; 
+}
+
+#buttonHome:active {
+  box-shadow: 0px 2px 0px #d35400;
+  /* position: relative; */
+  /* top: 2px; */
 }

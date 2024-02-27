@@ -11,11 +11,12 @@
   width: 300px;
   height: 180px;
   border-radius: 20px;
-  background: linear-gradient(
+  /* background: linear-gradient(
     170deg,
     rgba(58, 56, 56, 0.623) 0%,
     rgb(31, 31, 31) 100%
-  );
+  ); */
+  background: #8FBC8B;
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
   cursor: pointer;
@@ -93,11 +94,12 @@
   width: 300px;
   height: 180px;
   border-radius: 20px;
-  background: linear-gradient(
+  /* background: linear-gradient(
     170deg,
     rgba(58, 56, 56, 0.623) 0%,
     rgb(31, 31, 31) 100%
-  );
+  ); */
+  background: #8FBC8B;
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
   cursor: pointer;
@@ -175,11 +177,12 @@
   width: 300px;
   height: 180px;
   border-radius: 20px;
-  background: linear-gradient(
+  /* background: linear-gradient(
     170deg,
     rgba(58, 56, 56, 0.623) 0%,
     rgb(31, 31, 31) 100%
-  );
+  ); */
+  background: #8FBC8B;
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
   cursor: pointer;
@@ -343,9 +346,9 @@
     linear-gradient(
       137.48deg,
       #ffdb3b 10%,
-      #fe53bb 45%,
-      #8f51ea 67%,
-      #0044ff 87%
+      #FF914C 45%,
+      #8FBC8B 67%,
+      #FF914C 87%
     );
   background-origin: border-box;
   background-clip: content-box, border-box;

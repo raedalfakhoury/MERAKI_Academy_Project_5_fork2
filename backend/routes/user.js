@@ -8,7 +8,8 @@ const {
   getAllUser,
   getUserById,
   getAllUsersAdminDashboard,
-  reportUser
+  reportUser,
+  UnBanUser
 } = require("../controllers/user");
 
 const authentication = require("../middlewares/authentication");
@@ -17,9 +18,12 @@ const authorization = require("../middlewares/authorization");
 userRouter.get("/admin", getAllUsersAdminDashboard);
 userRouter.post("/register", register);
 userRouter.post("/login", login);
-userRouter.delete("/delete", authentication, deleteUser);
+userRouter.delete("/delete/:id/admin",  deleteUser);
 userRouter.put("/update", authentication, updateUser);
 userRouter.put("/update/report/:id",  reportUser);
+
+userRouter.put("/update/unban/:id",  UnBanUser);
+
 userRouter.get("/", getAllUser);
 userRouter.get("/:id", getUserById);
 

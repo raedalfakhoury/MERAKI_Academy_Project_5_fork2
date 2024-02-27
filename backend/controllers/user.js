@@ -76,15 +76,20 @@ const login = (req, res) => {
 
   const query = `SELECT Users.id,Users.username,Users.email,Users.password_hash,Users.bio, Users.profile_picture_url,Users.is_deleted,Users.created_at,roles.id AS RoleId FROM Users
   JOIN Roles ON Users.role_id=Roles.id 
-    WHERE Users.email=$1 AND is_deleted = 0`;
+    WHERE Users.email=$1`;
 
   pool
     .query(query, [email])
     .then((result) => {
-      const data = result.rows[0];
-      console.log(data);
+      const data = result?.rows[0];
+      if (data?.is_deleted == 1) {
+        res.status(404).json({
+          massage: "You cannot access the site because you are blocked",
+        });
+
+        return;
+      }
       bcryptjs.compare(password, data.password_hash, (err, isValid) => {
-        console.log(err);
         if (isValid) {
           const payload = {
             user_id: data.id,
@@ -93,7 +98,6 @@ const login = (req, res) => {
             role: data.roleid,
             is_deleted: data.is_deleted,
           };
-          // console.log(payload);
 
           const options = { expiresIn: "360m" };
 
@@ -134,7 +138,7 @@ const login = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.log("from login", err);
       res.status(403).json({
         success: false,
         massage:
@@ -142,16 +146,17 @@ const login = (req, res) => {
       });
     });
 };
-const deleteUser = (req, res) => {
-  const user_id = req.token.user_id;
 
+const deleteUser = (req, res) => {
+  const { id } = req.body;
+  const data = [id];
   const querySoftDelete = `UPDATE Users
-  SET is_deleted = 1, username = 'username', profile_picture_url = 'https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png'
-  WHERE id = ${user_id}
+  SET is_deleted = 1, profile_picture_url = 'https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_640.png'
+  WHERE id = $1
   RETURNING *`;
 
   pool
-    .query(querySoftDelete)
+    .query(querySoftDelete, data)
     .then((result) => {
       console.log(result.rows);
       res.status(203).json({
@@ -263,8 +268,8 @@ const getAllUsersAdminDashboard = (req, res) => {
 
 const reportUser = (req, res) => {
   const { id } = req.params;
-  const {report} = req.body;
-  const data = ['true' ,report ,id   ];
+  const { report } = req.body;
+  const data = ["true", report, id];
   const query = `UPDATE Users set is_band = $1, the_reporte = $2 WHERE id = $3 RETURNING *; `;
   pool
     .query(query, data)
@@ -281,6 +286,43 @@ const reportUser = (req, res) => {
       });
     });
 };
+
+
+
+const UnBanUser = (req, res) => {
+  const { id } = req.body;
+  const data = [id];
+  const querySoftDelete = `UPDATE Users
+  SET is_deleted = 0 
+  WHERE id = $1
+  RETURNING *`;
+
+  pool
+    .query(querySoftDelete, data)
+    .then((result) => {
+      console.log(result.rows);
+      res.status(203).json({
+        message: "Successful UnBan",
+        result: result.rows,
+      });
+      if (result.rows.length === 0) {
+        res.status(404).json({
+          massage: "not exist",
+          result: result.rows,
+        });
+        return;
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        massage: "SERVER ERROR",
+        err: err,
+      });
+    });
+};
+
+
+
 module.exports = {
   register,
   login,
@@ -289,5 +331,6 @@ module.exports = {
   getAllUser,
   getUserById,
   getAllUsersAdminDashboard,
-  reportUser
+  reportUser,
+  UnBanUser
 };

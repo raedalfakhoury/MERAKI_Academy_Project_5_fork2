@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
@@ -10,14 +11,19 @@ import MailIcon from "@mui/icons-material/Mail";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import axios from "axios";
+import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { setadminUsers } from "../redux/reducers/Admin";
+import { setadminUsers, updateadminUsers } from "../redux/reducers/Admin";
 import { setadminPosts } from "../redux/reducers/Admin/post";
 import { setadminComments } from "../redux/reducers/Admin/comment";
 const Admin = () => {
+  const [showReporting, setShowReporting] = useState(false);
+  const handleShowReporting = () => setShowReporting(true);
+  const handleClosereporting = () => setShowReporting(false);
   const [toggleUser, setToggleUser] = useState(false);
   const [togglePost, setTogglePost] = useState(false);
   const [toggleComment, setToggleComment] = useState(false);
+  const [report, setReport] = useState("");
   const dispatch = useDispatch();
   const { users, token, posts, comments } = useSelector((state) => {
     return {
@@ -27,7 +33,6 @@ const Admin = () => {
       comments: state.adminComments.adminComments,
     };
   });
-  console.log(users);
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
@@ -83,6 +88,7 @@ const Admin = () => {
             // width: `calc(100% - ${drawerWidth}px)`,
             width: "100%",
             margin: "0px",
+            bgcolor:"#8FBC8B"
           }}
         >
           <Toolbar sx={{ justifyContent: "center", margin: "0px" }}>
@@ -280,10 +286,15 @@ const Admin = () => {
                           borderRadius: "50%",
                           margin: "5px 0px",
                           padding: "2px",
-                          border: "1px solid grey",
+                          border: "5px solid #FF914C",
                         }}
                       ></img>
-                      <p style={{ width: "130px", textAlign: "center" }}>
+                      <p
+                        style={{ width: "130px", textAlign: "center" }}
+                        onClick={() => {
+                          console.log(ele.id);
+                        }}
+                      >
                         {ele.username}
                       </p>
                       <p style={{ width: "130px", textAlign: "center" }}>
@@ -323,22 +334,69 @@ const Admin = () => {
                             padding: "5px",
                             borderRadius: "5px",
                           }}
-                          onClick={() => {}}
+                          onClick={() => {
+                            setReport(ele.the_reporte);
+                            handleShowReporting();
+                          }}
                         >
                           Reported
                         </p>
                       )}
-                      <button class="btn12" type="button">
-                        <strong>Block</strong>
-                        <div id="container-stars">
-                          <div id="stars"></div>
-                        </div>
+                      {ele.is_deleted === 0 ? (
+                        <button
+                          class="btn12"
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              const res = await axios.delete(
+                                `http://localhost:5000/users/delete/1/admin`,
+                                { data: { id: ele.id } }
+                              );
+                              console.log(res?.data);
+                              dispatch(updateadminUsers(ele.id)); 
+                            } catch (error) {
+                              console.log(error);
+                            }
+                          }}
+                        >
+                          <strong>Ban</strong>
+                          <div id="container-stars">
+                            <div id="stars"></div>
+                          </div>
 
-                        <div id="glow">
-                          <div class="circle"></div>
-                          <div class="circle"></div>
-                        </div>
-                      </button>
+                          <div id="glow">
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                          </div>
+                        </button>
+                      ) : (
+                        <button
+                          class="btn12"
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              const res = await axios.put(
+                                `http://localhost:5000/users/update/unban/${ele.id}`,
+                                { id: ele.id }
+                              );
+                              console.log(res?.data);
+                              dispatch(updateadminUsers(ele.id));
+                            } catch (error) {
+                              console.log(error);
+                            }
+                          }}
+                        >
+                          <strong>UnBan</strong>
+                          <div id="container-stars">
+                            <div id="stars"></div>
+                          </div>
+
+                          <div id="glow">
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                          </div>
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -428,8 +486,7 @@ const Admin = () => {
                     Action
                   </p>
                 </div>
-                {posts?.map((ele) => {
-                  console.log(ele);
+                {posts?.map((ele) => { 
                   return (
                     <div
                       style={{
@@ -437,7 +494,7 @@ const Admin = () => {
                         width: "100%",
                         justifyContent: "space-between",
                         borderBottom: "1px solid #ff9b9b",
-                        alignItems: "center",
+                        alignItems: "center", 
                       }}
                     >
                       {ele.media_url.includes(".mp4") ? (
@@ -446,6 +503,8 @@ const Admin = () => {
                             cursor: "pointer",
                             height: "100px",
                             width: "130px",
+                            border: "2px solid #FF914C",
+                            margin: "5px 0px",
                           }}
                           controls
                           muted
@@ -466,6 +525,7 @@ const Admin = () => {
                             margin: "5px 0px",
                             padding: "2px",
                             boxShadow: "#5c62685c 3px 3px 3px",
+                            border: "2px solid #FF914C",
                           }}
                         ></img>
                       )}
@@ -762,6 +822,59 @@ const Admin = () => {
           </Typography>
         </Box>
       </Box>
+      <Modal
+        show={showReporting}
+        onHide={handleClosereporting}
+        animation={false}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{ borderBottom: "none", padding: "10px 10px" }}
+        >
+          <Modal.Title
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+              borderBottom: "1px solid #808080",
+            }}
+          >
+            Reason of Reporting
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          id="Modal.Body"
+          style={{
+            padding: "10px",
+            display: "flex",
+            overflowY: "auto",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <p
+              style={{
+                width: "100%",
+                textAlign: "center",
+                fontSize: "25px",
+                fontWeight: "600",
+              }}
+            >
+              {report}
+            </p>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
