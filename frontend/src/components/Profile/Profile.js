@@ -970,14 +970,8 @@ const Profile = () => {
           );
         })}
       </div>
-      <button
-        id="Floating"
-        onClick={() => {
-          Navigate("/home");
-        }}
-      >
-        HOME
-      </button>
+      
+
       <Modal
         show={showEditProfile}
         onHide={handleCloseEditProfile}
@@ -1171,6 +1165,7 @@ const Profile = () => {
           </div>
         </Modal.Body>
       </Modal>
+      <button id="buttonHome" onClick={()=>{Navigate("/home")}}>Home</button>
     </div>
   );
 };
