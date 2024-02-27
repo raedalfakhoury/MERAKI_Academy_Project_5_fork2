@@ -248,7 +248,7 @@ const getAllUsersAdminDashboard = (req, res) => {
     .then((result) => {
       res.status(200).json({
         message: "All Users",
-        length:result.rows.length,
+        length: result.rows.length,
         result: result.rows,
       });
     })
@@ -261,6 +261,26 @@ const getAllUsersAdminDashboard = (req, res) => {
     });
 };
 
+const reportUser = (req, res) => {
+  const { id } = req.params;
+  const {report} = req.body;
+  const data = ['true' ,report ,id   ];
+  const query = `UPDATE Users set is_band = $1, the_reporte = $2 WHERE id = $3 RETURNING *; `;
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(202).json({
+        message: "Reported Successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Server error",
+        err: err,
+      });
+    });
+};
 module.exports = {
   register,
   login,
@@ -269,4 +289,5 @@ module.exports = {
   getAllUser,
   getUserById,
   getAllUsersAdminDashboard,
+  reportUser
 };
