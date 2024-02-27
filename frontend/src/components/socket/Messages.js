@@ -11,16 +11,15 @@ import { setMessages, addMessages } from "../redux/reducers/Messages/message";
 import "./message.css";
 import axios from "axios";
 import { TbSquareRoundedNumber1Filled } from "react-icons/tb";
-
+import ReactSearchBox from "react-search-box";
 function Messages({ data, posts, setData }) {
-
-  useEffect(()=>{
+  useEffect(() => {
     getMessagesDataBK();
-  },[])
+  }, []);
   const dispatch = useDispatch();
   const [myFollowing, set_myFollowing] = useState();
 
-  const { token, MessagesALL,userId } = useSelector((state) => {
+  const { token, MessagesALL, userId } = useSelector((state) => {
     return {
       posts: state.posts.posts,
       userId: state.auth.userId,
@@ -62,8 +61,8 @@ function Messages({ data, posts, setData }) {
   };
 
   const ReserveMessage = (dataM) => {
-    if(dataM.from *1 !== userId *1){
-      SoundEffects()
+    if (dataM.from * 1 !== userId * 1) {
+      SoundEffects();
     }
 
     sendMessageBK(dataM);
@@ -71,11 +70,11 @@ function Messages({ data, posts, setData }) {
     set_all_message([...all_message, dataM]);
     set_compar_icn_not(dataM);
   };
-const SoundEffects= ()=>{
-let audio = new Audio("notifications-sound-127856.mp3")
-audio.play()
-audio.loop =false
-}
+  const SoundEffects = () => {
+    let audio = new Audio("notifications-sound-127856.mp3");
+    audio.play();
+    audio.loop = false;
+  };
   useEffect(() => {
     //  getMessagesDataBK()
 
@@ -149,8 +148,20 @@ audio.loop =false
       });
   };
 
+  const filterUSers = (e) => {
+    if (e.target.value === "") {
+      getMyFollowing();
+    }
+    const copy = myFollowing?.filter((user, index) => {
+      return user.username.includes(e.target.value);
+    });
+    set_myFollowing(copy);
+  };
+
   return (
-    <div style={{ position: "absolute", zIndex: "5px", top: "100%" }}>
+    <div
+      style={{ position: "absolute", zIndex: "5px", top: "100%", left: "70%" }}
+    >
       {toggleBoxMessage && (
         <Container
           className="box_Users_message"
@@ -176,18 +187,21 @@ audio.loop =false
               paddingTop: "2px",
             }}
           >
+            <textarea
+              style={{ height: "6vh", backgroundColor: "#dcdcdc" }}
+              placeholder="Placeholder"
+              // myFollowing={"dsdsdsds"}
+              onChange={(e) => {
+                filterUSers(e);
+              }}
+            />
             {myFollowing?.map((users, index) => {
               return (
                 <>
                   {users.id * 1 !== data.id * 1 && (
                     <Col xs={12}>
                       {" "}
-                      <Stack
-                        
-                        direction="row"
-                        spacing={2}
-                      >
-                     
+                      <Stack direction="row" spacing={2}>
                         <Avatar
                           style={{ cursor: "pointer" }}
                           onClick={() => {
@@ -203,18 +217,24 @@ audio.loop =false
                         <Col style={{ display: "flex", alignItems: "center" }}>
                           {users.username}
                         </Col>
-                        <Col style={{ display: "flex",justifyContent:"flex-end", alignItems: "center" }}>
-                        {compar_icn_not?.from === users.id && (
-                          <TbSquareRoundedNumber1Filled    number={4}
-                            style={{
-                              width: "20px",
-                              // backgroundColor:"red",
-                              color:"red"
-                            }}
-                          />
-                        )}
+                        <Col
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                          }}
+                        >
+                          {compar_icn_not?.from === users.id && (
+                            <TbSquareRoundedNumber1Filled
+                              number={4}
+                              style={{
+                                width: "20px",
+                                // backgroundColor:"red",
+                                color: "red",
+                              }}
+                            />
+                          )}
                         </Col>
-                    
                       </Stack>
                     </Col>
                   )}
@@ -277,10 +297,11 @@ audio.loop =false
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              backgroundColor: "blue",
+                              backgroundColor: "#FFBF00",
                               borderRadius: "17px",
                               padding: " 5px 10px",
-                              color: "white",
+                              color: "#fff",
+                              fontWeight: "600px",
                               justifyContent: "center",
                             }}
                           >
@@ -307,10 +328,11 @@ audio.loop =false
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            backgroundColor: "blue",
+                            backgroundColor: "#dcdcdc",
                             borderRadius: "14px",
                             padding: " 5px 10px",
-                            color: "white",
+                            color: "#000",
+                            fontWeight: "600px",
                             justifyContent: "center",
                           }}
                         >
@@ -341,10 +363,11 @@ audio.loop =false
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              backgroundColor: "blue",
+                              backgroundColor: "#FFBF00",
                               borderRadius: "17px",
                               padding: " 5px 10px",
-                              color: "white",
+                              color: "#fff",
+                              fontWeight: "600px",
                               justifyContent: "center",
                             }}
                           >
@@ -371,10 +394,11 @@ audio.loop =false
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            backgroundColor: "blue",
+                            backgroundColor: "#dcdcdc",
                             borderRadius: "14px",
                             padding: " 5px 10px",
-                            color: "white",
+                            color: "#000",
+                            fontWeight: "600px",
                             justifyContent: "center",
                           }}
                         >
@@ -415,6 +439,10 @@ audio.loop =false
             Close
           </Button>
           <Button
+            style={{
+              backgroundColor: "rgb(143,188,139)",
+              borderColor: "rgb(143,188,139)",
+            }}
             onClick={() => {
               // getMessagesDataBK();
               sendMessage();

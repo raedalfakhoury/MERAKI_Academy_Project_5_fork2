@@ -106,48 +106,54 @@ function AboutSection() {
   const featuredRef = useRef(null);
 
   return (
-<div className="containers">
-  <Container>
-    <Row className="gx-lg-5 align-items-center mb-5">
-      <Col
-        lg={6}
-        style={{ zIndex: 10, top: "60%", left: "30%" }}
-        className="mb-5 mb-lg-0"
-      >
-        <img
-          src="https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
-          alt="Illustration of friends"
-        />
-      </Col>
-      <Col lg={6} className="mb-5 mb-lg-0 position-relative">
-        <h1
-          className="my-5 display-3 fw-bold ls-tight"
-          style={{ color: "hsl(218, 81%, 95%)" }}
-        >
-          Connect and Share with TALAQI
-        </h1>
-        <p
-          className="mb-4 opacity-70"
-          style={{ color: "hsl(218, 81%, 85%)" }}
-        >
-          Join TALAQI, your go-to social media platform for connecting with friends, sharing moments, and discovering new experiences together.
-        </p>
-        <Button
-          href="#landing-start"
-          variant="light"
-          className="waves-effect waves-light"
-          onClick={() => {}}
-        >
-          Get Started
-        </Button>{" "}
-        <Button variant="light" className="waves-effect waves-light ">
-          Take a Tour
-        </Button>{" "}
-      </Col>
-    </Row>
-  </Container>
-</div>
-
+    <div
+      className="containers"
+      style={{
+        background: `linear-gradient(to left bottom, #8FBC8B 60%, #ffff 10%)`,
+      }}
+    >
+      <Container>
+        <Row className="gx-lg-5 align-items-center mb-5">
+          <Col 
+            lg={6}
+            style={{ zIndex: 10, top: "60%", left: "30%" }}
+            className="mb-5 mb-lg-0"
+          >
+            <img  style={{paddingTop:"80px" ,width:"30vw"}}
+              src="pngtree-cartoon-business-conversation-work-line-drawing-illustration-png-image_1718261-removebg-preview.png"
+              alt="Illustration of friends"
+            />
+          </Col>
+          <Col lg={6} className="mb-5 mb-lg-0 position-relative">
+            <h1
+              className="my-5 display-3 fw-bold ls-tight"
+              style={{ color: "#fff" }}
+            >
+              Connect and Share with TALAQI
+            </h1>
+            <p
+              className="mb-4 opacity-70"
+              style={{ color: "#696969 " }}
+            >
+              Join TALAQI, your go-to social media platform for connecting with
+              friends, sharing moments, and discovering new experiences
+              together.
+            </p>
+            <Button
+              href="#landing-start"
+              variant="light"
+              className="waves-effect waves-light"
+              onClick={() => {}}
+            >
+              Get Started
+            </Button>{" "}
+            <Button variant="light" className="waves-effect waves-light ">
+              Take a Tour
+            </Button>{" "}
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 
@@ -302,110 +308,114 @@ class WelcomePage extends React.Component {
           </Carousel>
         </div> */}
 
-<Container className="px-4 py-5" style={{ textAlign: "left" }}>
-  <h2 className="pb-2 border-bottom">
-    Welcome to TALAQI!
-  </h2>
+        <Container className="px-4 py-5" style={{ textAlign: "left" }}>
+          <h2 className="pb-2 border-bottom">Welcome to TALAQI!</h2>
 
-  <Row className="row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
-    <Col className="d-flex flex-column align-items-start gap-2">
-      <h2
-        className="fw-bold text-primary"
-        style={{
-          fontFamily: "Montserrat, sans-serif",
-          fontSize: "2rem",
-        }}
-      >
-        Connect, Share, Engage
-      </h2>
-      <p
-        className="text-secondary"
-        style={{
-          fontFamily: "Open Sans, sans-serif",
-          fontSize: "1.1rem",
-        }}
-      >
-        Join our vibrant community where you can connect with friends, share your thoughts and experiences, and engage in meaningful conversations.
-      </p>
-      <Button href="#" variant="primary" size="lg">
-        Start Your Journey
-      </Button>
-    </Col>
+          <Row className="row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+            <Col className="d-flex flex-column align-items-start gap-2">
+              <h2
+                className="fw-bold text-primary"
+                style={{
+                  fontFamily: "Montserrat, sans-serif",
+                  fontSize: "2rem",
+                }}
+              >
+                Connect, Share, Engage
+              </h2>
+              <p
+                className="text-secondary"
+                style={{
+                  fontFamily: "Open Sans, sans-serif",
+                  fontSize: "1.1rem",
+                }}
+              >
+                Join our vibrant community where you can connect with friends,
+                share your thoughts and experiences, and engage in meaningful
+                conversations.
+              </p>
+              <Button href="#" variant="primary" size="lg">
+                Start Your Journey
+              </Button>
+            </Col>
 
-    <Col>
-      <Row className="row-cols-1 row-cols-sm-2 g-4">
-        <Col className="d-flex flex-column gap-2">
-          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-            <svg className="bi" width="1em" height="1em">
-              <use xlinkHref="#collection"></use>
-            </svg>
-          </div>
-          <h4
-            className="fw-semibold mb-0 text-primary"
-            style={{ fontSize: "1.2rem" }}
-          >
-            Explore Content
-          </h4>
-          <p className="text-secondary">
-            Dive into a vast array of content ranging from posts, articles, videos, and more, curated just for you.
-          </p>
-        </Col>
+            <Col>
+              <Row className="row-cols-1 row-cols-sm-2 g-4">
+                <Col className="d-flex flex-column gap-2">
+                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+                    <svg className="bi" width="1em" height="1em">
+                      <use xlinkHref="#collection"></use>
+                    </svg>
+                  </div>
+                  <h4
+                    className="fw-semibold mb-0 text-primary"
+                    style={{ fontSize: "1.2rem" }}
+                  >
+                    Explore Content
+                  </h4>
+                  <p className="text-secondary">
+                    Dive into a vast array of content ranging from posts,
+                    articles, videos, and more, curated just for you.
+                  </p>
+                </Col>
 
-        <Col className="d-flex flex-column gap-2">
-          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-            <svg className="bi" width="1em" height="1em">
-              <use xlinkHref="#gear-fill"></use>
-            </svg>
-          </div>
-          <h4
-            className="fw-semibold mb-0 text-primary"
-            style={{ fontSize: "1.2rem" }}
-          >
-            Customize Your Profile
-          </h4>
-          <p className="text-secondary">
-            Personalize your profile with photos, bio, and interests to showcase your personality and connect with others who share your passions.
-          </p>
-        </Col>
+                <Col className="d-flex flex-column gap-2">
+                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+                    <svg className="bi" width="1em" height="1em">
+                      <use xlinkHref="#gear-fill"></use>
+                    </svg>
+                  </div>
+                  <h4
+                    className="fw-semibold mb-0 text-primary"
+                    style={{ fontSize: "1.2rem" }}
+                  >
+                    Customize Your Profile
+                  </h4>
+                  <p className="text-secondary">
+                    Personalize your profile with photos, bio, and interests to
+                    showcase your personality and connect with others who share
+                    your passions.
+                  </p>
+                </Col>
 
-        <Col className="d-flex flex-column gap-2">
-          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-            <svg className="bi" width="1em" height="1em">
-              <use xlinkHref="#speedometer"></use>
-            </svg>
-          </div>
-          <h4
-            className="fw-semibold mb-0 text-primary"
-            style={{ fontSize: "1.2rem" }}
-          >
-            Stay Updated
-          </h4>
-          <p className="text-secondary">
-            Get real-time updates on new posts, comments, and messages so you never miss out on what's happening in your network.
-          </p>
-        </Col>
+                <Col className="d-flex flex-column gap-2">
+                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+                    <svg className="bi" width="1em" height="1em">
+                      <use xlinkHref="#speedometer"></use>
+                    </svg>
+                  </div>
+                  <h4
+                    className="fw-semibold mb-0 text-primary"
+                    style={{ fontSize: "1.2rem" }}
+                  >
+                    Stay Updated
+                  </h4>
+                  <p className="text-secondary">
+                    Get real-time updates on new posts, comments, and messages
+                    so you never miss out on what's happening in your network.
+                  </p>
+                </Col>
 
-        <Col className="d-flex flex-column gap-2">
-          <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
-            <svg className="bi" width="1em" height="1em">
-              <use xlinkHref="#table"></use>
-            </svg>
-          </div>
-          <h4
-            className="fw-semibold mb-0 text-primary"
-            style={{ fontSize: "1.2rem" }}
-          >
-            Engage with Community
-          </h4>
-          <p className="text-secondary">
-            Participate in discussions, like and comment on posts, and connect with other members of the TALAQI community.
-          </p>
-        </Col>
-      </Row>
-    </Col>
-  </Row>
-</Container>
-
+                <Col className="d-flex flex-column gap-2">
+                  <div className="feature-icon-small d-inline-flex align-items-center justify-content-center text-primary bg-gradient fs-4 rounded-3">
+                    <svg className="bi" width="1em" height="1em">
+                      <use xlinkHref="#table"></use>
+                    </svg>
+                  </div>
+                  <h4
+                    className="fw-semibold mb-0 text-primary"
+                    style={{ fontSize: "1.2rem" }}
+                  >
+                    Engage with Community
+                  </h4>
+                  <p className="text-secondary">
+                    Participate in discussions, like and comment on posts, and
+                    connect with other members of the TALAQI community.
+                  </p>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
