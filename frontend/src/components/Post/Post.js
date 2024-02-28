@@ -11,6 +11,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import { FaRegComment } from "react-icons/fa";
+import Swal from "sweetalert2";
 import {
   setPosts,
   filter_like,
@@ -55,6 +56,18 @@ import { motion } from "framer-motion";
 import { BiSolidLike } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
 function Post() {
+  const handleShowReporting = () => setShowReporting(true);
+  const [showReporting, setShowReporting] = useState(false);
+  const handleClosereporting = () => setShowReporting(false);
+  const [idPost , setIdPost] = useState();
+  const [report, setReport] = useState({
+    reporting: "",
+  });
+
+
+
+
+
   const [Add_className, set_Add_className] = useState(true);
 
   const [LikeComments, setLikeComment] = useState([]);
@@ -731,6 +744,7 @@ function Post() {
         </Container>
         {/* =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
         {posts?.map((elm, i) => {
+          
           return (
             <>
               <Container className="containerPosts">
@@ -883,7 +897,9 @@ function Post() {
                         <Dropdown.Menu>
                           <Dropdown.Item
                             onClick={() => {
-                              console.log("report a post");
+                              handleShowReporting();
+                              console.log(elm.id);
+                              setIdPost(elm.id)
                             }}
                           >
                             report a post
@@ -1669,6 +1685,78 @@ function Post() {
       <br />
       <div></div>
       <br />
+      <Modal
+        show={showReporting}
+        onHide={handleClosereporting}
+        animation={false}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{ borderBottom: "none", padding: "10px 10px" }}
+        >
+          <Modal.Title
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+              borderBottom: "1px solid #808080",
+            }}
+          >
+            Reason of Reporting
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          id="Modal.Body"
+          style={{
+            padding: "10px",
+            display: "flex",
+            overflowY: "auto",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" ,justifyContent:"center" , alignItems:"center"}}>
+            <textarea
+              id="w3review"
+              name="w3review"
+              rows="4"
+              cols="50"
+              placeholder="The Reason of Reporting"
+              onChange={(e) => {
+                setReport({ ...report, reporting: e.target.value });
+              }}
+            ></textarea>
+            <button
+              id="btn2"
+              onClick={async () => {
+                try {
+                  const result = await axios.put(
+                    
+                    `http://localhost:5000/post/update/report/${idPost}`,
+                    {
+                      report: report.reporting,
+                    }
+                  );
+                  console.log(result);
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "reporting has been submit Successfully",
+                    showConfirmButton: false,
+                    timer: 1000,
+                  });
+                  handleClosereporting();
+                } catch (error) {
+                  console.log("error from reportinf", error);
+                }
+              }}
+            >
+              Reporting
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

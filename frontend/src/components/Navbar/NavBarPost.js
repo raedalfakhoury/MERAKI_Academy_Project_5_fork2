@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
@@ -199,19 +201,43 @@ export default function NavBarPost() {
       >
         Profile
       </MenuItem>
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      <MenuItem
+        onClick={async () => {
+          // لازم نرسل مع put اي اشي
+          try {
+            const res = await axios.put(
+              `http://localhost:5000/users/logout`,
+              { status: "false" },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            console.log(res);
+
+            if (res.data.result.length) {
+              handleLogout();
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      >
+        Logout
+      </MenuItem>
     </Menu>
   );
   const redirect = useNavigate();
 
-  //====================================== Get User Profile  by Id ===================================
+  //====================================== Get User Profile by Id ===================================
   const My_ID = localStorage.getItem("userId");
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/${My_ID}`)
       .then((res) => {
         setUserProfile(res.data.result[0].profile_picture_url);
-        console.log(res.data.result[0].profile_picture_url);
+        // console.log(res.data.result[0].profile_picture_url);
       })
       .catch((err) => {
         console.log(err);

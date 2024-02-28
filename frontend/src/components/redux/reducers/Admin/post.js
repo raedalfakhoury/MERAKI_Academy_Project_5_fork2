@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { createSlice } from "@reduxjs/toolkit";
 
 export const adminPostsSlice = createSlice({
@@ -7,8 +8,12 @@ export const adminPostsSlice = createSlice({
     setadminPosts: (state, action) => {
       state.adminPosts = action.payload;
     },
-    
+    updateadminPosts: (state, action) => {
+      state.adminPosts = state.adminPosts.filter((ele) => {
+        return ele.id !== action.payload;
+      });
+    },
   },
 });
-export const {setadminPosts} = adminPostsSlice.actions;
+export const { setadminPosts, updateadminPosts } = adminPostsSlice.actions;
 export default adminPostsSlice.reducer;

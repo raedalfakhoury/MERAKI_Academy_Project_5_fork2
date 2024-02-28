@@ -9,7 +9,8 @@ const {
   getUserById,
   getAllUsersAdminDashboard,
   reportUser,
-  UnBanUser
+  UnBanUser,
+  logout
 } = require("../controllers/user");
 
 const authentication = require("../middlewares/authentication");
@@ -19,7 +20,11 @@ userRouter.get("/admin", getAllUsersAdminDashboard);
 userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.delete("/delete/:id/admin",  deleteUser);
+
 userRouter.put("/update", authentication, updateUser);
+
+userRouter.put("/logout", authentication, logout);
+
 userRouter.put("/update/report/:id",  reportUser);
 
 userRouter.put("/update/unban/:id",  UnBanUser);
