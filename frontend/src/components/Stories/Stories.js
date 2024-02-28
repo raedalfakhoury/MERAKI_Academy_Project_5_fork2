@@ -13,7 +13,7 @@ import Divider from "@mui/material/Divider";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CardHeader, Avatar, IconButton, Typography } from "@mui/material";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -386,12 +386,10 @@ export default function Stories() {
                   className="model-content"
                 >
                   <h2>welcome</h2>
-                  <h2>{userName}</h2>
                   <TriggerButton
                     className="close-button"
                     type="button"
                     onClick={() => {
-                      console.log(11);
                       setOpen1(false); // Close the modal
                       setLoading1(true);
                       setUploadedStory("");
@@ -416,30 +414,26 @@ export default function Stories() {
                         <CircularProgress />
                       </Box>
                     )}
-                    <div className="input-file-section">
-                      <TriggerButton
-                        className="add-story-button"
-                        type="button"
-                        onClick={() => {
-                          document.querySelector(".input-file").click();
-                          // setOpen1(false); // Close the modal after upload
-                        }}
-                      >
-                        <input
-                          onChange={(e) => {
-                            StoryHandle(e.target.files);
-                          }}
-                          type="file"
-                          className="input-file"
-                          style={{ display: "none" }} // hide the input element visually
-                        />
-                        Choose File
-                      </TriggerButton>
-                    </div>
                   </div>
-
-                  <div
-                    className="submit-section"
+                  <div className="input-file-section">
+                    <TriggerButton
+                      className="add-story-button"
+                      type="button"
+                      onClick={() => {
+                        document.querySelector(".input-file").click();
+                      }}
+                    >
+                      <input
+                        onChange={(e) => {
+                          StoryHandle(e.target.files);
+                        }}
+                        type="file"
+                        className="input-file"
+                        style={{ display: "none" }} 
+                      />
+                      Choose File
+                    </TriggerButton>
+                    <div
                     style={{ textAlign: "center", padding: "20px" }}
                   >
                     <TriggerButton
@@ -454,6 +448,8 @@ export default function Stories() {
                       Submit Story
                     </TriggerButton>
                   </div>
+                  </div>
+              
                 </ModalContent>
               </Modal>
               {/* This Modal to Show the User Story */}
@@ -492,18 +488,20 @@ export default function Stories() {
                       //   Delete Story
                       // </button>
                       <Dropdown style={{ marginLeft: "auto" }}>
-                        <Dropdown.Toggle style={{backgroundColor:"#659BDC"}} id="dropdown-basic">
+                        <Dropdown.Toggle
+                          style={{ backgroundColor: "#659BDC" }}
+                          id="dropdown-basic"
+                        >
                           :
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                          <Dropdown.Item  onClick={(e) => deleteStory(e)}>
+                          <Dropdown.Item onClick={(e) => deleteStory(e)}>
                             Delete Story
                           </Dropdown.Item>
-                          <Dropdown.Item  onClick={(e) => handleClose(e)}>
+                          <Dropdown.Item onClick={(e) => handleClose(e)}>
                             Close
                           </Dropdown.Item>
-                          
                         </Dropdown.Menu>
                       </Dropdown>
                     ) : (
@@ -601,8 +599,8 @@ export default function Stories() {
                   </IconButton>
                 }
                 title={elem.username}
-                subheader={elem.created_at}
-              />
+                subheader={elem.created_at.substr(0, 10)} 
+                />
             </React.Fragment>
           ))}
         </div>

@@ -102,7 +102,7 @@ export default function NavBarPost() {
   });
 
   const [is_connected, set_is_connected] = useState(false);
-
+  const [searchInput, setSearchInput] = useState([]);
   const [data, setData] = useState({
     token: token,
     id: userId,
@@ -208,6 +208,23 @@ export default function NavBarPost() {
     </Menu>
   );
   const redirect = useNavigate();
+  // ======================================================== Search ========================================
+
+  const searchHandle = (e) => {
+    if (e === "") {
+      setSearchInput([]);
+    }
+    console.log(e);
+    axios
+      .post("http://localhost:5000/search", { searchString: e })
+      .then((res) => {
+        console.log(res.data);
+        setSearchInput(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   //====================================== Get User Profile  by Id ===================================
   const My_ID = localStorage.getItem("userId");
@@ -317,7 +334,19 @@ export default function NavBarPost() {
               sx={{ ml: 2, flex: 1 }}
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              onChange={(e) => {
+                searchHandle(e.target.value);
+              }}
             />
+         {searchInput.length && (
+          
+  <select>
+    {searchInput.map((elem, indx) => {
+      return <option key={indx}>{elem.username}</option>;
+    })}
+  </select>
+)}
+
           </Search>
           {/* Profile Picture */}
 
@@ -327,14 +356,15 @@ export default function NavBarPost() {
           {/* Search */}
           <div
             style={{
-              paddingRight:"180px",
+              paddingRight: "180px",
               display: "flex",
               gap: "10px",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Typography style={{fontFamily: "monospace"}}
+            <Typography
+              style={{ fontFamily: "monospace" }}
               variant="h5"
               noWrap
               component="div"
