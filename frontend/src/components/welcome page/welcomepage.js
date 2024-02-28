@@ -109,7 +109,7 @@ function AboutSection() {
     <div
       className="containers"
       style={{
-        background: `linear-gradient(to left bottom, #8FBC8B 60%, #ffff 10%)`,
+        background: `linear-gradient(to left bottom,rgb(46,70,130) 60%, #ffff 10%)`,
       }}
     >
       <Container>

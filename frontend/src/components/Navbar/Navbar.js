@@ -4,7 +4,7 @@ import { Navbar, Container, Nav, Button } from "react-bootstrap";
 const NavBar = () => {
   return (
     <header
-      style={{ paddingTop: "5px", background: "#696969  ", color: "white" }}
+      style={{ paddingTop: "5px", background: "#1D2F6D  ", color: "white" }}
     >
       <Container>
         <Navbar className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
