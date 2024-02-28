@@ -437,7 +437,52 @@ const getPostAndComment = (req, res) => {
     });
 };
 
+const reportPost = (req, res) => {
+  const { id } = req.params;
+  const { report } = req.body;
+  const data = ["true", report, id];
+  const query = `UPDATE Posts set is_band = $1, the_report = $2 WHERE id = $3 RETURNING *; `;
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(202).json({
+        message: "Reported Successfully",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Server error",
+        err: err,
+      });
+    });
+};
 
+const getAllPostsAdmin = (req, res) => {
+  const query = `SELECT   Posts.id, Posts.media_url , Users.username ,   Posts.content , Posts.created_at , Posts.is_band , Posts.the_report
+  FROM Posts 
+ JOIN Users 
+       ON posts.user_id = Users.id  
+       WHERE posts.is_deleted = 0 AND Users.is_deleted = 0 ;`;
+  pool
+    .query(query)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: "All posts retrieved successfully",
+        length: result.rows.length,
+        posts: result.rows,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        message: "Server error",
+        err: err.message,
+      });
+    });
+};
 
 module.exports = {
   createNewPost,
@@ -454,6 +499,10 @@ module.exports = {
   getSavedPosts,
   deleteSavePost,
   getPostAndComment,
+
+  reportPost,
+
+  getAllPostsAdmin
 };
 
 // CREATE TABLE Posts (

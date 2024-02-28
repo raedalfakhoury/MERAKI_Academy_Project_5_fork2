@@ -1732,7 +1732,8 @@ function Post() {
               onClick={async () => {
                 try {
                   const result = await axios.put(
-                    `http://localhost:5000/users/update/report/${idPost}`,
+                    
+                    `http://localhost:5000/post/update/report/${idPost}`,
                     {
                       report: report.reporting,
                     }
@@ -1741,7 +1742,7 @@ function Post() {
                   Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: "repotting has been submit Successfully",
+                    title: "reporting has been submit Successfully",
                     showConfirmButton: false,
                     timer: 1000,
                   });

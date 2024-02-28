@@ -20,10 +20,16 @@ const Admin = () => {
   const [showReporting, setShowReporting] = useState(false);
   const handleShowReporting = () => setShowReporting(true);
   const handleClosereporting = () => setShowReporting(false);
+
+  const [showReportingPost, setShowReportingPost] = useState(false);
+  const handleShowReportingPost = () => setShowReportingPost(true);
+  const handleClosereportingPost = () => setShowReportingPost(false);
+
   const [toggleUser, setToggleUser] = useState(false);
   const [togglePost, setTogglePost] = useState(false);
   const [toggleComment, setToggleComment] = useState(false);
   const [report, setReport] = useState("");
+  const [reportPost, setReportPost] = useState("");
   const dispatch = useDispatch();
   const { users, token, posts, comments } = useSelector((state) => {
     return {
@@ -36,6 +42,7 @@ const Admin = () => {
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
+  console.log(posts);
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/admin`)
@@ -49,7 +56,7 @@ const Admin = () => {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/post/1/getPosts`, {
+      .get(`http://localhost:5000/post/allPost/admin`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +95,7 @@ const Admin = () => {
             // width: `calc(100% - ${drawerWidth}px)`,
             width: "100%",
             margin: "0px",
-            bgcolor:"#8FBC8B"
+            bgcolor: "#8FBC8B",
           }}
         >
           <Toolbar sx={{ justifyContent: "center", margin: "0px" }}>
@@ -353,7 +360,7 @@ const Admin = () => {
                                 { data: { id: ele.id } }
                               );
                               console.log(res?.data);
-                              dispatch(updateadminUsers(ele.id)); 
+                              dispatch(updateadminUsers(ele.id));
                             } catch (error) {
                               console.log(error);
                             }
@@ -494,7 +501,7 @@ const Admin = () => {
                         width: "100%",
                         justifyContent: "space-between",
                         borderBottom: "1px solid #ff9b9b",
-                        alignItems: "center", 
+                        alignItems: "center",
                       }}
                     >
                       {ele.media_url.includes(".mp4") ? (
@@ -580,7 +587,7 @@ const Admin = () => {
                             fontWeight: "600",
                             textAlign: "center",
                           }}
-                        >
+                       onClick={()=>{console.log(ele);}} >
                           Accept
                         </p>
                       ) : (
@@ -590,6 +597,16 @@ const Admin = () => {
                             color: "red",
                             fontWeight: "600",
                             textAlign: "center",
+                            backgroundColor: "rgb(230 216 216)",
+                            cursor: "pointer",
+                            margin: "0px",
+                            padding: "5px",
+                            borderRadius: "5px",
+                          }}
+                          onClick={() => {
+                            console.log(ele);
+                            setReportPost(ele.the_report)
+                            handleShowReportingPost();
                           }}
                         >
                           Reported
@@ -871,6 +888,64 @@ const Admin = () => {
               }}
             >
               {report}
+            </p>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+
+
+
+
+      <Modal
+        show={showReportingPost}
+        onHide={handleClosereportingPost}
+        animation={false}
+        centered
+      >
+        <Modal.Header
+          closeButton
+          style={{ borderBottom: "none", padding: "10px 10px" }}
+        >
+          <Modal.Title
+            style={{
+              justifyContent: "center",
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+              borderBottom: "1px solid #808080",
+            }}
+          >
+            Reason of Reporting
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          id="Modal.Body"
+          style={{
+            padding: "10px",
+            display: "flex",
+            overflowY: "auto",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <p
+              style={{
+                width: "100%",
+                textAlign: "center",
+                fontSize: "25px",
+                fontWeight: "600",
+              }}
+            >
+              {reportPost}
             </p>
           </div>
         </Modal.Body>

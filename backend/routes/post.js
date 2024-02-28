@@ -15,7 +15,10 @@ const {
   savePost,
   getSavedPosts,
   deleteSavePost,
-  getPostAndComment
+  getPostAndComment,
+  reportPost,
+
+  getAllPostsAdmin
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
@@ -29,9 +32,14 @@ PostRouter.get("/:postbyid", authentication, getPostById);
 
 PostRouter.get("/mypost/:userId", getpostByuserId);
 
+
+PostRouter.get("/allPost/admin", authentication,getAllPostsAdmin);
+
 PostRouter.put("/update/:id", authentication, updatepostById);
 
 PostRouter.put("/save", authentication, savePost);
+
+PostRouter.put("/update/report/:id", reportPost);
 
 PostRouter.delete("/deletePosts/", authentication, deletePostByUserId);
 
