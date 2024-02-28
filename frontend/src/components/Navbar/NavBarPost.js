@@ -16,6 +16,7 @@ import { SvgIcon } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import { setLogout } from "../redux/reducers/auth/index";
+import Stack from "@mui/material/Stack";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -36,6 +37,12 @@ import Messages from "../socket/Messages";
 
 import { setPosts } from "../redux/reducers/Posts";
 
+// import * as React from 'react';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListSubheader from "@mui/material/ListSubheader";
+import { Col } from "react-bootstrap";
 // export  function Socket() {
 
 //   return (
@@ -87,7 +94,50 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function NavBarPost() {
   // const dispatch = useDispatch();
+  const [searchInput, setSearchInput] = useState([]);
 
+  function PinnedSubheaderList() {
+    return (
+      <List
+        style={{ top: "6px" }}
+        sx={{
+          borderRadius: "20px",
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+          position: "relative",
+          overflow: "auto",
+          maxHeight: 300,
+          padding: 0,
+          "& ul": { padding: 0 },
+        }}
+        subheader={<li />}
+      >
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {searchInput.map((sectionId) => (
+            <li key={`section-${sectionId}`}>
+              <Stack style={{ padding: "5px" }} direction="row" spacing={2}>
+                <Avatar
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    redirect({
+                      pathname: "/profile",
+                      search: `?prf=${sectionId.id}`,
+                    });
+                  }}
+                  alt="Remy Sharp"
+                  src={sectionId.profile_picture_url}
+                />
+                <Col style={{ display: "flex", alignItems: "center" }}>
+                  {sectionId.username}
+                </Col>
+              </Stack>
+            </li>
+          ))}
+        </div>
+      </List>
+    );
+  }
   const { posts, token, userId } = useSelector((state) => {
     return {
       posts: state.posts.posts,
@@ -99,7 +149,6 @@ export default function NavBarPost() {
   });
 
   const [is_connected, set_is_connected] = useState(false);
-  const [searchInput, setSearchInput] = useState([]);
   const [data, setData] = useState({
     token: token,
     id: userId,
@@ -359,15 +408,14 @@ export default function NavBarPost() {
                 searchHandle(e.target.value);
               }}
             />
-         {searchInput.length && (
-          
-  <select>
-    {searchInput.map((elem, indx) => {
-      return <option key={indx}>{elem.username}</option>;
-    })}
-  </select>
-)}
-
+            {/* {searchInput.length && (
+              <select>
+                {searchInput.map((elem, indx) => {
+                  return <option key={indx}>{elem.username}</option>;
+                })}
+              </select>
+            )} */}
+            <PinnedSubheaderList />
           </Search>
           {/* Profile Picture */}
 
