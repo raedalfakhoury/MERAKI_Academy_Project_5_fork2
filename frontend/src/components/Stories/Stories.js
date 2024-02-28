@@ -87,6 +87,7 @@ export default function Stories() {
     console.log(e.id, e.username);
     setUserName(e.username);
     setUser_Id(e.id);
+    setUserPhoto(e.profile_picture_url)
 
     setLoading(true);
     axios
@@ -470,9 +471,11 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
+                    src={userPhoto}
                       style={{
                         color: "black",
                         width: "40px",
+                        
                         height: "35px",
                         borderRadius: "25px",
                         cursor: "pointer",
