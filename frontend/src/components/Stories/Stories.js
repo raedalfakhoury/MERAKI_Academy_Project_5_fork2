@@ -385,17 +385,18 @@ export default function Stories() {
                   sx={{ maxWidth: 1000, maxHeight: 1200 }}
                   className="model-content"
                 >
-                  <h2>welcome</h2>
+                      <h3 style={{ fontFamily:"revert"}}>Welcome</h3>
                   <TriggerButton
                     className="close-button"
                     type="button"
+                    style={{height:"40px"}}
                     onClick={() => {
                       setOpen1(false); // Close the modal
                       setLoading1(true);
                       setUploadedStory("");
                     }}
                   >
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" >&times;</span>
                   </TriggerButton>
                   <div className="show-content">
                     {uploadedStory ? (
@@ -408,9 +409,9 @@ export default function Stories() {
                         className="video-inside-addingStory"
                       ></video>
                     ) : loading1 ? (
-                      <>Upload your Story</>
+                      <h3 style={{margin:"auto", fontFamily:"revert"}}>Upload your Story</h3>
                     ) : (
-                      <Box sx={{ display: "flex" }}>
+                      <Box style={{margin:"auto"}} sx={{ display: "flex" }}>
                         <CircularProgress />
                       </Box>
                     )}
@@ -419,6 +420,7 @@ export default function Stories() {
                     <TriggerButton
                       className="add-story-button"
                       type="button"
+                      style={{ width: "120px",height:"40px" }}
                       onClick={() => {
                         document.querySelector(".input-file").click();
                       }}
@@ -434,7 +436,7 @@ export default function Stories() {
                       Choose File
                     </TriggerButton>
                     <div
-                    style={{ textAlign: "center", padding: "20px" }}
+                    style={{ textAlign: "center" }}
                   >
                     <TriggerButton
                       className="submit-story-button"
