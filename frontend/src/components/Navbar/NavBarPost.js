@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
@@ -209,14 +211,14 @@ export default function NavBarPost() {
   );
   const redirect = useNavigate();
 
-  //====================================== Get User Profile  by Id ===================================
+  //====================================== Get User Profile by Id ===================================
   const My_ID = localStorage.getItem("userId");
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/${My_ID}`)
       .then((res) => {
         setUserProfile(res.data.result[0].profile_picture_url);
-        console.log(res.data.result[0].profile_picture_url);
+        // console.log(res.data.result[0].profile_picture_url);
       })
       .catch((err) => {
         console.log(err);
