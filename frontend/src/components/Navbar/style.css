@@ -33,7 +33,7 @@ input[type="text"] {
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
   padding-block: 0.1rem;
   padding-inline: 1.25rem;
-  background-color: #696969;
+  background-color: rgb(46,70,130);
   border-radius: 9999px;
   display: flex;
   align-items: center;

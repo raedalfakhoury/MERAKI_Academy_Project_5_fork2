@@ -14,17 +14,12 @@ import { SvgIcon } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import { setLogout } from "../redux/reducers/auth/index";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
+
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+
 import { useNavigate } from "react-router-dom";
 
 import "./style.css";
@@ -283,7 +278,7 @@ export default function NavBarPost() {
     >
       <AppBar
         position="fixed"
-        sx={{ bgcolor: "rgb(143,188,139)", color: "black", height: "55px" }}
+        sx={{ bgcolor: "rgb(87,110,153)", color: "black", height: "55px" }}
       >
         <Toolbar>
           <Avatar
@@ -327,14 +322,15 @@ export default function NavBarPost() {
           {/* Search */}
           <div
             style={{
-              paddingRight:"180px",
+              paddingRight: "180px",
               display: "flex",
               gap: "10px",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Typography style={{fontFamily: "monospace"}}
+            <Typography
+              style={{ fontFamily: "monospace" }}
               variant="h5"
               noWrap
               component="div"

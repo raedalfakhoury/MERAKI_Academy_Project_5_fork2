@@ -39,7 +39,7 @@ body {
   height: 200px;
   border-radius: 50%;
   padding: 5px;
-  border: 5px solid rgb(255, 191, 0);
+  border: 4px solid rgb(88, 111, 153);
 }
 .follower {
   display: flex;
@@ -539,7 +539,7 @@ body {
   box-shadow: 0px 6px 0px #d35400;
   transition: all 0.1s;
   top: 65px;
-  left: 10px; 
+  left: 10px;
 }
 
 #buttonHome:active {

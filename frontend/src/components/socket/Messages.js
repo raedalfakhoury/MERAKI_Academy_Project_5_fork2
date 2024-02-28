@@ -297,7 +297,7 @@ function Messages({ data, posts, setData }) {
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              backgroundColor: "#FFBF00",
+                              backgroundColor: "rgb(29,47,109)",
                               borderRadius: "17px",
                               padding: " 5px 10px",
                               color: "#fff",
@@ -363,7 +363,7 @@ function Messages({ data, posts, setData }) {
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              backgroundColor: "#FFBF00",
+                              backgroundColor: "rgb(29,47,109)",
                               borderRadius: "17px",
                               padding: " 5px 10px",
                               color: "#fff",
@@ -440,8 +440,8 @@ function Messages({ data, posts, setData }) {
           </Button>
           <Button
             style={{
-              backgroundColor: "rgb(143,188,139)",
-              borderColor: "rgb(143,188,139)",
+              backgroundColor: "rgb(46,70,130)",
+              borderColor: "rgb(46,70,130)",
             }}
             onClick={() => {
               // getMessagesDataBK();
