@@ -14,7 +14,7 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setadminUsers, updateadminUsers } from "../redux/reducers/Admin";
-import { setadminPosts } from "../redux/reducers/Admin/post";
+import { setadminPosts ,updateadminPosts} from "../redux/reducers/Admin/post";
 import { setadminComments } from "../redux/reducers/Admin/comment";
 const Admin = () => {
   const [showReporting, setShowReporting] = useState(false);
@@ -30,6 +30,7 @@ const Admin = () => {
   const [toggleComment, setToggleComment] = useState(false);
   const [report, setReport] = useState("");
   const [reportPost, setReportPost] = useState("");
+  const [idPost, setIdPost] = useState();
   const dispatch = useDispatch();
   const { users, token, posts, comments } = useSelector((state) => {
     return {
@@ -42,7 +43,7 @@ const Admin = () => {
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
-  console.log(posts);
+  
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/admin`)
@@ -493,7 +494,7 @@ const Admin = () => {
                     Action
                   </p>
                 </div>
-                {posts?.map((ele) => { 
+                {posts?.map((ele) => {
                   return (
                     <div
                       style={{
@@ -504,7 +505,7 @@ const Admin = () => {
                         alignItems: "center",
                       }}
                     >
-                      {ele.media_url.includes(".mp4") ? (
+                      {ele?.media_url?.includes(".mp4") ? (
                         <video
                           style={{
                             cursor: "pointer",
@@ -587,7 +588,10 @@ const Admin = () => {
                             fontWeight: "600",
                             textAlign: "center",
                           }}
-                       onClick={()=>{console.log(ele);}} >
+                          onClick={() => {
+                            console.log(ele);
+                          }}
+                        >
                           Accept
                         </p>
                       ) : (
@@ -604,16 +608,36 @@ const Admin = () => {
                             borderRadius: "5px",
                           }}
                           onClick={() => {
+                            setIdPost(ele.id);
                             console.log(ele);
-                            setReportPost(ele.the_report)
+                            setReportPost(ele.the_report);
                             handleShowReportingPost();
                           }}
                         >
                           Reported
                         </p>
                       )}
-                      <button class="btn12" type="button">
-                        <strong>Block</strong>
+                      <button
+                        class="btn12"
+                        type="button"
+                        onClick={async () => {
+                          
+                          try {
+                            const res = await axios.delete(
+                              `http://localhost:5000/post/${ele.id}`,{
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              }
+                            );
+                            console.log(res.data);
+                            dispatch(updateadminPosts(ele.id));
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }}
+                      >
+                        <strong>Remove</strong>
                         <div id="container-stars">
                           <div id="stars"></div>
                         </div>
@@ -892,10 +916,6 @@ const Admin = () => {
           </div>
         </Modal.Body>
       </Modal>
-
-
-
-
 
       <Modal
         show={showReportingPost}
