@@ -16,7 +16,7 @@
     rgba(58, 56, 56, 0.623) 0%,
     rgb(31, 31, 31) 100%
   ); */
-  background: #8FBC8B;
+  background: linear-gradient(170deg, rgba(58, 56, 56, 0.623) 0%, rgb(31, 31, 31) 100%);
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
   cursor: pointer;
@@ -99,7 +99,7 @@
     rgba(58, 56, 56, 0.623) 0%,
     rgb(31, 31, 31) 100%
   ); */
-  background: #8FBC8B;
+  background: linear-gradient(170deg, rgba(58, 56, 56, 0.623) 0%, rgb(31, 31, 31) 100%);
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
   cursor: pointer;
@@ -182,7 +182,7 @@
     rgba(58, 56, 56, 0.623) 0%,
     rgb(31, 31, 31) 100%
   ); */
-  background: #8FBC8B;
+  background: linear-gradient(170deg, rgba(58, 56, 56, 0.623) 0%, rgb(31, 31, 31) 100%);
   position: relative;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55);
   cursor: pointer;

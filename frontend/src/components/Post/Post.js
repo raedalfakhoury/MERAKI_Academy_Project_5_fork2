@@ -59,14 +59,10 @@ function Post() {
   const handleShowReporting = () => setShowReporting(true);
   const [showReporting, setShowReporting] = useState(false);
   const handleClosereporting = () => setShowReporting(false);
-  const [idPost , setIdPost] = useState();
+  const [idPost, setIdPost] = useState();
   const [report, setReport] = useState({
     reporting: "",
   });
-
-
-
-
 
   const [Add_className, set_Add_className] = useState(true);
 
@@ -745,6 +741,13 @@ function Post() {
         {/* =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
         {posts?.map((elm, i) => {
           
+          if(elm.user_id === 112){
+            console.log(elm.is_loggedin , elm.user_id);
+            console.log(typeof elm.is_loggedin);
+          }
+     
+        
+
           return (
             <>
               <Container className="containerPosts">
@@ -899,7 +902,7 @@ function Post() {
                             onClick={() => {
                               handleShowReporting();
                               console.log(elm.id);
-                              setIdPost(elm.id)
+                              setIdPost(elm.id);
                             }}
                           >
                             report a post
@@ -1716,7 +1719,14 @@ function Post() {
             overflowY: "auto",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column" ,justifyContent:"center" , alignItems:"center"}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <textarea
               id="w3review"
               name="w3review"
@@ -1732,7 +1742,6 @@ function Post() {
               onClick={async () => {
                 try {
                   const result = await axios.put(
-                    
                     `http://localhost:5000/post/update/report/${idPost}`,
                     {
                       report: report.reporting,
