@@ -11,6 +11,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 import { FaRegComment } from "react-icons/fa";
+import Swal from "sweetalert2";
 import {
   setPosts,
   filter_like,
@@ -57,14 +58,16 @@ import { BiLike } from "react-icons/bi";
 function Post() {
   const handleShowReporting = () => setShowReporting(true);
   const [showReporting, setShowReporting] = useState(false);
+  const handleClosereporting = () => setShowReporting(false);
+  const [idPost , setIdPost] = useState();
+  const [report, setReport] = useState({
+    reporting: "",
+  });
 
 
 
 
 
-
-
-  
   const [Add_className, set_Add_className] = useState(true);
 
   const [LikeComments, setLikeComment] = useState([]);
@@ -741,6 +744,7 @@ function Post() {
         </Container>
         {/* =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
         {posts?.map((elm, i) => {
+          
           return (
             <>
               <Container className="containerPosts">
@@ -893,7 +897,9 @@ function Post() {
                         <Dropdown.Menu>
                           <Dropdown.Item
                             onClick={() => {
-                              console.log("report a post");
+                              handleShowReporting();
+                              console.log(elm.id);
+                              setIdPost(elm.id)
                             }}
                           >
                             report a post
@@ -1726,7 +1732,7 @@ function Post() {
               onClick={async () => {
                 try {
                   const result = await axios.put(
-                    `http://localhost:5000/users/update/report/${searchQuery2}`,
+                    `http://localhost:5000/users/update/report/${idPost}`,
                     {
                       report: report.reporting,
                     }

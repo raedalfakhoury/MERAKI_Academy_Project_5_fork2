@@ -436,6 +436,9 @@ const getPostAndComment = (req, res) => {
       });
     });
 };
+
+
+
 module.exports = {
   createNewPost,
   countFAndDAndPo,
