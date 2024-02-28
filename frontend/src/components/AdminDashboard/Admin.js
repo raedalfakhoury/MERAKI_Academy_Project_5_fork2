@@ -629,8 +629,7 @@ const Admin = () => {
                                   Authorization: `Bearer ${token}`,
                                 },
                               }
-                            );
-                            console.log(res.data);
+                            ); 
                             dispatch(updateadminPosts(ele.id));
                           } catch (error) {
                             console.log(error);

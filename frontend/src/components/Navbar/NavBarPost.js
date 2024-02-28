@@ -206,7 +206,31 @@ export default function NavBarPost() {
       >
         Profile
       </MenuItem>
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      <MenuItem
+        onClick={async () => {
+          // لازم نرسل مع put اي اشي
+          try {
+            const res = await axios.put(
+              `http://localhost:5000/users/logout`,
+              { status: "false" },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            console.log(res);
+
+            if (res.data.result.length) {
+              handleLogout();
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      >
+        Logout
+      </MenuItem>
     </Menu>
   );
   const redirect = useNavigate();
@@ -329,14 +353,15 @@ export default function NavBarPost() {
           {/* Search */}
           <div
             style={{
-              paddingRight:"180px",
+              paddingRight: "180px",
               display: "flex",
               gap: "10px",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <Typography style={{fontFamily: "monospace"}}
+            <Typography
+              style={{ fontFamily: "monospace" }}
               variant="h5"
               noWrap
               component="div"

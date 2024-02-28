@@ -287,8 +287,6 @@ const reportUser = (req, res) => {
     });
 };
 
-
-
 const UnBanUser = (req, res) => {
   const { id } = req.body;
   const data = [id];
@@ -321,7 +319,26 @@ const UnBanUser = (req, res) => {
     });
 };
 
-
+const logout = (req, res) => {
+  const id = req.token.user_id;
+  const {status} = req.body;
+  const data = [id,status];
+  const query = `UPDATE Users SET is_loggedin=$2 WHERE id=$1 RETURNING *`;
+  pool
+    .query(query, data)
+    .then((result) => {
+      res.status(202).json({
+        message: "Successful logout",
+        result: result.rows,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        massage: "SERVER ERROR",
+        err: err,
+      });
+    });
+};
 
 module.exports = {
   register,
@@ -332,5 +349,6 @@ module.exports = {
   getUserById,
   getAllUsersAdminDashboard,
   reportUser,
-  UnBanUser
+  UnBanUser,
+  logout
 };
