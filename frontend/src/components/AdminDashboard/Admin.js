@@ -14,7 +14,7 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setadminUsers, updateadminUsers } from "../redux/reducers/Admin";
-import { setadminPosts ,updateadminPosts} from "../redux/reducers/Admin/post";
+import { setadminPosts, updateadminPosts } from "../redux/reducers/Admin/post";
 import { setadminComments } from "../redux/reducers/Admin/comment";
 const Admin = () => {
   const [showReporting, setShowReporting] = useState(false);
@@ -43,7 +43,7 @@ const Admin = () => {
   const [userCount, setUserCount] = useState();
   const [postCount, setPostCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
-  
+
   useEffect(() => {
     axios
       .get(`http://localhost:5000/users/admin`)
@@ -96,7 +96,7 @@ const Admin = () => {
             // width: `calc(100% - ${drawerWidth}px)`,
             width: "100%",
             margin: "0px",
-            bgcolor: "#8FBC8B",
+            bgcolor: "rgb(88,111,153)",
           }}
         >
           <Toolbar sx={{ justifyContent: "center", margin: "0px" }}>
@@ -621,15 +621,15 @@ const Admin = () => {
                         class="btn12"
                         type="button"
                         onClick={async () => {
-                          
                           try {
                             const res = await axios.delete(
-                              `http://localhost:5000/post/${ele.id}`,{
+                              `http://localhost:5000/post/${ele.id}`,
+                              {
                                 headers: {
                                   Authorization: `Bearer ${token}`,
                                 },
                               }
-                            ); 
+                            );
                             dispatch(updateadminPosts(ele.id));
                           } catch (error) {
                             console.log(error);
