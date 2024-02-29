@@ -26,7 +26,7 @@ function FeaturedSection() {
       <Row className="g-4 py-5 row-cols-1 row-cols-lg-3">
         <Col>
           <Card className="feature d-flex flex-column h-100">
-            <div className="feature-icon bg-primary bg-gradient">
+            <div style={{ backgroundColor: "rgb(46,70,130)" }}>
               <svg
                 className="bi"
                 width="1em"
@@ -50,7 +50,7 @@ function FeaturedSection() {
 
         <Col>
           <Card className="feature d-flex flex-column h-100">
-            <div className="feature-icon bg-primary bg-gradient">
+            <div style={{ backgroundColor: "rgb(46,70,130)" }}>
               <svg
                 className="bi"
                 width="1em"
@@ -74,7 +74,7 @@ function FeaturedSection() {
 
         <Col>
           <Card className="feature d-flex flex-column h-100">
-            <div className="feature-icon bg-primary bg-gradient">
+            <div style={{ backgroundColor: "rgb(46,70,130)" }}>
               <svg
                 className="bi"
                 width="1em"
@@ -114,12 +114,13 @@ function AboutSection() {
     >
       <Container>
         <Row className="gx-lg-5 align-items-center mb-5">
-          <Col 
+          <Col
             lg={6}
             style={{ zIndex: 10, top: "60%", left: "30%" }}
             className="mb-5 mb-lg-0"
           >
-            <img  style={{paddingTop:"80px" ,width:"30vw"}}
+            <img
+              style={{ paddingTop: "80px", width: "30vw" }}
               src="pngtree-cartoon-business-conversation-work-line-drawing-illustration-png-image_1718261-removebg-preview.png"
               alt="Illustration of friends"
             />
@@ -131,10 +132,7 @@ function AboutSection() {
             >
               Connect and Share with TALAQI
             </h1>
-            <p
-              className="mb-4 opacity-70"
-              style={{ color: "#696969 " }}
-            >
+            <p className="mb-4 opacity-70" style={{ color: "#fff " }}>
               Join TALAQI, your go-to social media platform for connecting with
               friends, sharing moments, and discovering new experiences
               together.
@@ -146,9 +144,6 @@ function AboutSection() {
               onClick={() => {}}
             >
               Get Started
-            </Button>{" "}
-            <Button variant="light" className="waves-effect waves-light ">
-              Take a Tour
             </Button>{" "}
           </Col>
         </Row>
@@ -187,7 +182,7 @@ function WelcomeSection() {
           className="lead"
           style={{
             fontFamily: "Open Sans, sans-serif",
-            color: "#455a64",
+            color: "#5C7073",
             padding: "20px",
             textAlign: "left",
           }}
@@ -333,9 +328,6 @@ class WelcomePage extends React.Component {
                 share your thoughts and experiences, and engage in meaningful
                 conversations.
               </p>
-              <Button href="#" variant="primary" size="lg">
-                Start Your Journey
-              </Button>
             </Col>
 
             <Col>
@@ -389,7 +381,7 @@ class WelcomePage extends React.Component {
                   >
                     Stay Updated
                   </h4>
-                  <p className="text-secondary">
+                  <p id="xs" className="text-secondary">
                     Get real-time updates on new posts, comments, and messages
                     so you never miss out on what's happening in your network.
                   </p>

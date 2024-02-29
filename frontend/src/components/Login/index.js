@@ -1,6 +1,7 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +25,8 @@ import {
   Alert,
 } from "react-bootstrap";
 import axios from "axios";
-
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 function LoginPage() {
   const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState("");
@@ -33,6 +35,7 @@ function LoginPage() {
   const redirect = useNavigate();
   const [status, setStatus] = useState(false);
   const [variant, setVariant] = useState("success");
+  const [showPass, setShowPass] = useState(true);
   const { token } = useSelector((state) => {
     return {
       token: state.auth.token,
@@ -112,10 +115,10 @@ function LoginPage() {
             <Card className="border-light-subtle shadow-sm">
               <Row className="g-0">
                 <Col xs={12} md={6}>
-                  <Card.Img
-                    className="img-fluid rounded-start w-100 h-100 object-fit-cover"
-                    loading="lazy"
-                    src="https://res.cloudinary.com/dalwd5c23/image/upload/v1705177930/samples/man-on-a-street.jpg"
+                  <img
+                    class="card-img"
+                    src="https://friendkit.cssninja.io/assets/img/illustrations/characters/friends.svg"
+                    style={{ width: "600px" }}
                   />
                 </Col>
                 <Col
@@ -128,17 +131,10 @@ function LoginPage() {
                       <Row>
                         <Col xs={12}>
                           <div className="mb-5">
-                            <div className="text-center mb-4">
-                              <a href="#!">
-                                <img
-                                  src="./assets/img/bsb-logo.svg"
-                                  alt="BootstrapBrain Logo"
-                                  width="175"
-                                  height="57"
-                                />
-                              </a>
-                            </div>
-                            <h4 className="text-center">
+                            <h4
+                              style={{ fontFamily: "cursive" }}
+                              className="text-center"
+                            >
                               Welcome back you've been missed!
                             </h4>
                           </div>
@@ -187,7 +183,10 @@ function LoginPage() {
                               />
                             </div>
                           </div>
-                          <p className="text-center mt-4 mb-5">
+                          <p
+                            style={{ fontFamily: "cursive" }}
+                            className="text-center mt-4 mb-5"
+                          >
                             Or sign in with
                           </p>
                         </Col>
@@ -212,7 +211,8 @@ function LoginPage() {
                           <Col xs={12}>
                             <Form.Floating className="mb-3">
                               <Form.Control
-                                type="password"
+                                style={{ position: "relative" }}
+                                type={!showPass ? "url" : "password"}
                                 name="password"
                                 id="password"
                                 placeholder="Password"
@@ -222,12 +222,37 @@ function LoginPage() {
                                 }}
                               />
                               <label htmlFor="password">Password</label>
+                              {showPass ? (
+                            <FaRegEyeSlash
+                              style={{
+                                position: "absolute",
+                                top: "30%",
+                                right: "5",
+                              }}
+                              onClick={() => {
+                                setShowPass(!showPass);
+                              }}
+                            />
+                          ) : (
+                            <FaRegEye
+                              style={{
+                                position: "absolute",
+                                top: "30%",
+                                right: "5",
+                              }}
+                              onClick={() => {
+                                setShowPass(!showPass);
+                              }}
+                            />
+                          )}
                             </Form.Floating>
                           </Col>
-
+                          {/*  */}
+                
                           <Col xs={12}>
                             <div className="d-grid">
                               <Button
+                                style={{ backgroundColor: "rgb(46,70,130)" }}
                                 onClick={() => {
                                   axios
                                     .post("http://localhost:5000/users/login", {
@@ -248,7 +273,7 @@ function LoginPage() {
                                       );
 
                                       {
-                                        userEmail == "raed@gmail.com"
+                                        userEmail == "admin@gmail.com"
                                           ? redirect("/admin")
                                           : redirect("/home");
                                       }
@@ -281,16 +306,11 @@ function LoginPage() {
                         <Col xs={12}>
                           <div className="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-center mt-5">
                             <a
-                              href="#!"
+                              style={{ fontWeight: "600" }}
+                              href="register"
                               className="link-secondary text-decoration-none"
                             >
                               Create new account
-                            </a>
-                            <a
-                              href="#!"
-                              className="link-secondary text-decoration-none"
-                            >
-                              Forgot password
                             </a>
                           </div>
                         </Col>

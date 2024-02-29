@@ -14,10 +14,8 @@ const NavBar = () => {
           ></Navbar.Brand>
 
           <Nav className="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <Nav.Link style={{ color: "white" }} href="/Home">
-              Home
-            </Nav.Link>
-            <Nav.Link style={{ color: "white" }} href="/users/aboutus">
+       
+            <Nav.Link style={{ color: "white" }} href="#xs">
               About Us
             </Nav.Link>
           </Nav>

@@ -249,7 +249,7 @@ const getUserById = (req, res) => {
 };
 const getAllUsersAdminDashboard = (req, res) => {
   pool
-    .query(`SELECT * FROM Users;`)
+    .query(`SELECT * FROM Users ORDER BY is_band DESC;`)
     .then((result) => {
       res.status(200).json({
         message: "All Users",

@@ -31,7 +31,7 @@ import { Button } from "react-bootstrap";
 import CloseButton from "react-bootstrap/CloseButton";
 import { IoCameraOutline } from "react-icons/io5";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 
 import Avatar from "@mui/material/Avatar";
@@ -356,7 +356,8 @@ function Post() {
         console.log(err);
       });
   };
-
+  // let { id } = useParams();
+  //         console.log(id , "=>>>>>>>>>>>>>>>>>>>>>>>>>>>> id  ?????????");
   const addComment = (id) => {
     axios
       .post(

@@ -6,6 +6,7 @@ import { styled, css } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 import "./index.css";
+import Stack from "@mui/material/Stack";
 import clsx from "clsx";
 import { Modal as BaseModal } from "@mui/base/Modal";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -14,7 +15,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { CardHeader, Avatar, IconButton, Typography } from "@mui/material";
 import Dropdown from "react-bootstrap/Dropdown";
-
+import { MdAdd } from "react-icons/md";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -52,8 +53,8 @@ export default function Stories() {
   // ================= My Informations From Local Storge =================================
   const My_ID = localStorage.getItem("userId");
   const My_userName = localStorage.getItem("name");
-  const My_Img = localStorage.getItem("image");
-
+  const My_Img = localStorage.getItem("image") || "";
+  console.log(My_Img, "My_Img =>>>>>>>>>>>>");
   // ====================================================================================
   const handleVideoEnd = () => {
     setVidIndex((prevIndex) => prevIndex + 1);
@@ -87,7 +88,7 @@ export default function Stories() {
     console.log(e.id, e.username);
     setUserName(e.username);
     setUser_Id(e.id);
-    setUserPhoto(e.profile_picture_url)
+    setUserPhoto(e.profile_picture_url);
 
     setLoading(true);
     axios
@@ -269,17 +270,14 @@ export default function Stories() {
               }}
               aria-label="recipe"
             >
-              <img
-                src={My_Img}
-                onClick={() => handleOpenMyStories()}
-                style={{
-                  color: "black",
-                  width: "40px",
-                  height: "35px",
-                  borderRadius: "25px",
-                  cursor: "pointer",
-                }}
-              />
+              <Stack direction="row" spacing={2}>
+                <Avatar
+                  onClick={() => handleOpenMyStories()}
+                  style={{ cursor: "pointer" }}
+                  alt="Remy Sharp"
+                  src={My_Img}
+                />
+              </Stack>
             </Avatar>
           }
           action={<IconButton aria-label="settings"></IconButton>}
@@ -386,18 +384,18 @@ export default function Stories() {
                   sx={{ maxWidth: 1000, maxHeight: 1200 }}
                   className="model-content"
                 >
-                      <h3 style={{ fontFamily:"revert"}}>Welcome</h3>
+                  <h3 style={{ fontFamily: "revert" }}>Welcome</h3>
                   <TriggerButton
                     className="close-button"
                     type="button"
-                    style={{height:"40px"}}
+                    style={{ height: "40px" }}
                     onClick={() => {
                       setOpen1(false); // Close the modal
                       setLoading1(true);
                       setUploadedStory("");
                     }}
                   >
-                    <span aria-hidden="true" >&times;</span>
+                    <span aria-hidden="true">&times;</span>
                   </TriggerButton>
                   <div className="show-content">
                     {uploadedStory ? (
@@ -410,9 +408,11 @@ export default function Stories() {
                         className="video-inside-addingStory"
                       ></video>
                     ) : loading1 ? (
-                      <h3 style={{margin:"auto", fontFamily:"revert"}}>Upload your Story</h3>
+                      <h3 style={{ margin: "auto", fontFamily: "revert" }}>
+                        Upload your Story
+                      </h3>
                     ) : (
-                      <Box style={{margin:"auto"}} sx={{ display: "flex" }}>
+                      <Box style={{ margin: "auto" }} sx={{ display: "flex" }}>
                         <CircularProgress />
                       </Box>
                     )}
@@ -421,7 +421,7 @@ export default function Stories() {
                     <TriggerButton
                       className="add-story-button"
                       type="button"
-                      style={{ width: "120px",height:"40px" }}
+                      style={{ width: "120px", height: "40px" }}
                       onClick={() => {
                         document.querySelector(".input-file").click();
                       }}
@@ -432,27 +432,24 @@ export default function Stories() {
                         }}
                         type="file"
                         className="input-file"
-                        style={{ display: "none" }} 
+                        style={{ display: "none" }}
                       />
                       Choose File
                     </TriggerButton>
-                    <div
-                    style={{ textAlign: "center" }}
-                  >
-                    <TriggerButton
-                      className="submit-story-button"
-                      type="button"
-                      onClick={() => {
-                        // Function to submit story
-                        postdata(uploadedStory);
-                        setOpen1(false); // Close the modal after submission
-                      }}
-                    >
-                      Submit Story
-                    </TriggerButton>
+                    <div style={{ textAlign: "center" }}>
+                      <TriggerButton
+                        className="submit-story-button"
+                        type="button"
+                        onClick={() => {
+                          // Function to submit story
+                          postdata(uploadedStory);
+                          setOpen1(false); // Close the modal after submission
+                        }}
+                      >
+                        Submit Story
+                      </TriggerButton>
+                    </div>
                   </div>
-                  </div>
-              
                 </ModalContent>
               </Modal>
               {/* This Modal to Show the User Story */}
@@ -471,11 +468,11 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
-                    src={userPhoto}
+                      src={userPhoto}
                       style={{
                         color: "black",
                         width: "40px",
-                        
+
                         height: "35px",
                         borderRadius: "25px",
                         cursor: "pointer",
@@ -563,10 +560,14 @@ export default function Stories() {
             </Avatar>
           }
           action={<IconButton aria-label="settings"></IconButton>}
-          title={
+          title=
+          {
             <Typography variant="h6" sx={{ fontSize: "15px" }}>
+              
               Add New Story
+            
             </Typography>
+        
           }
           subheader={
             <Typography variant="h6" sx={{ fontSize: "12px" }}>
@@ -575,9 +576,10 @@ export default function Stories() {
           }
         />
         <div
+          className="box_Users_message"
           style={{
             maxHeight: "220px",
-            overflowY: "scroll",
+            overflowY: "auto",
           }}
         >
           {/* Render all friends */}
@@ -592,7 +594,7 @@ export default function Stories() {
                     style={{
                       color: "black",
                       width: "40px",
-                      height: "35px",
+                      height: "40px",
                       borderRadius: "25px",
                       cursor: "pointer",
                     }}
@@ -600,12 +602,12 @@ export default function Stories() {
                 }
                 action={
                   <IconButton aria-label="settings">
-                    <MoreVertIcon />
+                    {/* <MoreVertIcon /> */}
                   </IconButton>
                 }
                 title={elem.username}
-                subheader={elem.created_at.substr(0, 10)} 
-                />
+                subheader={elem.created_at.substr(0, 10)}
+              />
             </React.Fragment>
           ))}
         </div>

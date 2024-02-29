@@ -7,7 +7,8 @@ import { setSuggestedFreinds } from "../redux/reducers/users/users";
 import "../recommendedFreind/recommendedFreind.css";
 import { GoPersonAdd } from "react-icons/go";
 import { SiNike } from "react-icons/si";
-
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 const RecommendedFreind = () => {
   const [toggle, setToggle] = useState([]);
   const [counter, setCounter] = useState(0);
@@ -20,7 +21,7 @@ const RecommendedFreind = () => {
       token: state.auth.token,
     };
   });
- 
+
   const getSuggesterFreinds = async () => {
     try {
       const result = await axios.get(
@@ -31,7 +32,7 @@ const RecommendedFreind = () => {
           },
         }
       );
-      
+
       shuffleProduct(result?.data?.result ?? []);
       setLength(result?.data?.result.length);
     } catch (error) {
@@ -67,21 +68,33 @@ const RecommendedFreind = () => {
         <h6>{length}</h6>
       </div>
       {length === 0 ? (
-       <div style={{display:"flex" , justifyContent:"center" , height:"100%",alignItems:"center"}}> <p >No Suggested Friends</p></div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "100%",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <p>No Suggested Friends</p>
+        </div>
       ) : (
         suggestedFreinds?.slice(0, 5).map((item, i) => (
           <div key={item.id} className="panel">
             <div className="all-info">
-              <img
-               
-               
-                className="profileImg"
-                alt=""
-                src={item.profile_picture_url}
-                style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-              />
+              <Stack direction="row" spacing={2}>
+                <Avatar
+                  style={{ cursor: "pointer" }}
+                  alt="Remy Sharp"
+                  src={item.profile_picture_url}
+                />
+              </Stack>
+
               <div className="name-bio">
-                <p className="name">{item.username}</p>
+                <p className="name">
+                  {item.username === "admin2" ? "jamal xx" : item.username}
+                </p>
                 <p className="bio">{item.bio}</p>
               </div>
             </div>
@@ -99,7 +112,7 @@ const RecommendedFreind = () => {
                         },
                       }
                     );
-                    
+
                     getSuggesterFreinds();
                   } catch (error) {
                     console.log("from add followed", error);

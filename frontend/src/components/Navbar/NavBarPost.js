@@ -120,10 +120,18 @@ export default function NavBarPost() {
                 <Avatar
                   style={{ cursor: "pointer" }}
                   onClick={() => {
+         
+                    handleMenuClose();
                     redirect({
-                      pathname: "/profile",
-                      search: `?prf=${sectionId.id}`,
+                      pathname: "/home",
+                      search: ``,
                     });
+                 setTimeout(()=>{
+                  redirect({
+                    pathname: "/profile",
+                    search: `?prf=${sectionId.id}`,
+                  });
+                 },0)
                   }}
                   alt="Remy Sharp"
                   src={sectionId.profile_picture_url}
@@ -241,12 +249,20 @@ export default function NavBarPost() {
     >
       <MenuItem
         onClick={() => {
+         
           handleMenuClose();
           redirect({
-            pathname: "/profile",
-            search: `?prf=${My_ID}`,
+            pathname: "/home",
+            search: ``,
           });
+       setTimeout(()=>{
+        redirect({
+          pathname: "/profile",
+          search: `?prf=${My_ID}`,
+        });
+       },0)
         }}
+        
       >
         Profile
       </MenuItem>
@@ -478,7 +494,7 @@ export default function NavBarPost() {
               color="inhert"
             >
             
-              <Badge badgeContent={8} color="warning">
+              <Badge color="warning">
                 {/* <NotificationsNoneOutlinedIcon /> */}
                 <SvgIcon
                   viewBox="0 0 24 24"
@@ -514,7 +530,7 @@ export default function NavBarPost() {
            
 
               <Badge
-                badgeContent={17}
+                // badgeContent={17}
                 color="warning"
                 style={{ "&:hover": { backgroundColor: "rgb(255, 191, 0)" } }}
               >
