@@ -93,7 +93,7 @@ function Messages({ data, posts, setData }) {
   const getMyFollowing = () => {
     axios
       .get(
-        `http://localhost:5000/followers/Following/${localStorage.getItem(
+        `https://talaqi-platform.onrender.com/followers/Following/${localStorage.getItem(
           "userId"
         )}`
       )
@@ -116,7 +116,7 @@ function Messages({ data, posts, setData }) {
     console.log("jamal");
     axios
       .post(
-        `http://localhost:5000/message/send`,
+        `https://talaqi-platform.onrender.com/message/send`,
         { send_for_id: dataM.to, Content: dataM.message },
         {
           headers: {
@@ -134,7 +134,7 @@ function Messages({ data, posts, setData }) {
   const getMessagesDataBK = () => {
     console.log("getMessageBK");
     axios
-      .get(`http://localhost:5000/message/`, {
+      .get(`https://talaqi-platform.onrender.com/message/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

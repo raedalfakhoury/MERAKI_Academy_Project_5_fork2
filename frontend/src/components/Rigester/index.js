@@ -234,7 +234,7 @@ export default function Rigester() {
     //               id="Register_btn"
     //               onClick={() => {
     //                 axios
-    //                   .post("http://localhost:5000/users/register", {
+    //                   .post("https://talaqi-platform.onrender.com/users/register", {
     //                     username: `${userFirstName} ${userLastName}`,
     //                     email: userEmail,
     //                     password_hash: userPassword
@@ -477,12 +477,15 @@ export default function Rigester() {
                 style={{ height: "50px", width: "300px", marginLeft: "23px" }}
                 onClick={() => {
                   axios
-                    .post("http://localhost:5000/users/register", {
-                      username: userName,
-                      email: userEmail,
-                      password_hash: userPassword,
-                      profile_picture_url: userPhoto,
-                    })
+                    .post(
+                      "https://talaqi-platform.onrender.com/users/register",
+                      {
+                        username: userName,
+                        email: userEmail,
+                        password_hash: userPassword,
+                        profile_picture_url: userPhoto,
+                      }
+                    )
                     .then((res) => {
                       setStatus(true);
                       setUserResult(res.data.message);

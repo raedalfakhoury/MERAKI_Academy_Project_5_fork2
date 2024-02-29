@@ -46,7 +46,7 @@ const Admin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/users/admin`)
+      .get(`https://talaqi-platform.onrender.com/users/admin`)
       .then((result) => {
         setUserCount(result?.data?.length);
         dispatch(setadminUsers(result?.data?.result));
@@ -57,7 +57,7 @@ const Admin = () => {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/post/allPost/admin`, {
+      .get(`https://talaqi-platform.onrender.com/post/allPost/admin`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,7 +72,7 @@ const Admin = () => {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/comments/comments/admin`, {
+      .get(`https://talaqi-platform.onrender.com/comments/comments/admin`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -357,7 +357,7 @@ const Admin = () => {
                           onClick={async () => {
                             try {
                               const res = await axios.delete(
-                                `http://localhost:5000/users/delete/1/admin`,
+                                `https://talaqi-platform.onrender.com/users/delete/1/admin`,
                                 { data: { id: ele.id } }
                               );
                               console.log(res?.data);
@@ -384,7 +384,7 @@ const Admin = () => {
                           onClick={async () => {
                             try {
                               const res = await axios.put(
-                                `http://localhost:5000/users/update/unban/${ele.id}`,
+                                `https://talaqi-platform.onrender.com/users/update/unban/${ele.id}`,
                                 { id: ele.id }
                               );
                               console.log(res?.data);
@@ -496,7 +496,7 @@ const Admin = () => {
                 </div>
                 {posts?.map((ele) => {
                   console.log(ele.is_band);
-                  
+
                   return (
                     <div
                       style={{
@@ -625,7 +625,7 @@ const Admin = () => {
                         onClick={async () => {
                           try {
                             const res = await axios.delete(
-                              `http://localhost:5000/post/${ele.id}`,
+                              `https://talaqi-platform.onrender.com/post/${ele.id}`,
                               {
                                 headers: {
                                   Authorization: `Bearer ${token}`,

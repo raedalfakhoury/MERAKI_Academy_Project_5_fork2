@@ -120,18 +120,17 @@ export default function NavBarPost() {
                 <Avatar
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-         
                     handleMenuClose();
                     redirect({
                       pathname: "/home",
                       search: ``,
                     });
-                 setTimeout(()=>{
-                  redirect({
-                    pathname: "/profile",
-                    search: `?prf=${sectionId.id}`,
-                  });
-                 },0)
+                    setTimeout(() => {
+                      redirect({
+                        pathname: "/profile",
+                        search: `?prf=${sectionId.id}`,
+                      });
+                    }, 0);
                   }}
                   alt="Remy Sharp"
                   src={sectionId.profile_picture_url}
@@ -249,20 +248,18 @@ export default function NavBarPost() {
     >
       <MenuItem
         onClick={() => {
-         
           handleMenuClose();
           redirect({
             pathname: "/home",
             search: ``,
           });
-       setTimeout(()=>{
-        redirect({
-          pathname: "/profile",
-          search: `?prf=${My_ID}`,
-        });
-       },0)
+          setTimeout(() => {
+            redirect({
+              pathname: "/profile",
+              search: `?prf=${My_ID}`,
+            });
+          }, 0);
         }}
-        
       >
         Profile
       </MenuItem>
@@ -271,7 +268,7 @@ export default function NavBarPost() {
           // لازم نرسل مع put اي اشي
           try {
             const res = await axios.put(
-              `http://localhost:5000/users/logout`,
+              `https://talaqi-platform.onrender.com/users/logout`,
               { status: "false" },
               {
                 headers: {
@@ -302,7 +299,7 @@ export default function NavBarPost() {
     }
     console.log(e);
     axios
-      .post("http://localhost:5000/search", { searchString: e })
+      .post("https://talaqi-platform.onrender.com/search", { searchString: e })
       .then((res) => {
         console.log(res.data);
         setSearchInput(res.data.result);
@@ -316,7 +313,7 @@ export default function NavBarPost() {
   const My_ID = localStorage.getItem("userId");
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/users/${My_ID}`)
+      .get(`https://talaqi-platform.onrender.com/users/${My_ID}`)
       .then((res) => {
         setUserProfile(res.data.result[0].profile_picture_url);
         // console.log(res.data.result[0].profile_picture_url);
@@ -493,7 +490,6 @@ export default function NavBarPost() {
               aria-label="show 4 new mails"
               color="inhert"
             >
-            
               <Badge color="warning">
                 {/* <NotificationsNoneOutlinedIcon /> */}
                 <SvgIcon
@@ -527,8 +523,6 @@ export default function NavBarPost() {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-           
-
               <Badge
                 // badgeContent={17}
                 color="warning"

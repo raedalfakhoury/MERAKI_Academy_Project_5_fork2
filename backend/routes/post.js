@@ -18,11 +18,10 @@ const {
   getPostAndComment,
   reportPost,
 
-  getAllPostsAdmin
+  getAllPostsAdmin,
 } = require("../controllers/post");
 
 const authentication = require("../middlewares/authentication");
-
 
 PostRouter.delete("/delete/saved", authentication, deleteSavePost);
 PostRouter.get("/allSavePost", authentication, getSavedPosts);
@@ -32,8 +31,7 @@ PostRouter.get("/:postbyid", authentication, getPostById);
 
 PostRouter.get("/mypost/:userId", getpostByuserId);
 
-
-PostRouter.get("/allPost/admin", authentication,getAllPostsAdmin);
+PostRouter.get("/allPost/admin", authentication, getAllPostsAdmin);
 
 PostRouter.put("/update/:id", authentication, updatepostById);
 
@@ -58,7 +56,7 @@ PostRouter.get(
 module.exports = PostRouter;
 
 // test createNewPost
-//  http://localhost:5000/post/allpost
+//  https://talaqi-platform.onrender.com/post/allpost
 // token :eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJuYW1lIjoiamFtNGFsYmFyaG9vbSIsImltYWdlIjoiaHR0cHM6Ly9pbWFnZXMuY3RmYXNzZXRzLm5ldC9oNmdvbzlndzFoaDYvMnNOWnRGQVdPZFAxbG1RMzNWd1JOMy8yNGU5NTNiOTIwYTljZDBmZjJlMWQ1ODc3NDJhMjQ3Mi8xLWludHJvLXBob3RvLWZpbmFsLmpwZz93PTEyMDAmaD05OTImcT03MCZmbT13ZWJwIiwicm9sZSI6MSwiaXNfZGVsZXRlZCI6MCwiaWF0IjoxNzA3NDg1NzgzLCJleHAiOjE3MDc1MDczODN9.7qARUw50bqXvN9hMNDXN_tYmNpCJiD6omK6Qqn4D1rA
 
 // 1.0{
@@ -71,7 +69,7 @@ module.exports = PostRouter;
 //     "media_url": "https://thirdworldpress-us.imgix.net/covers/9780883782231.jpg?auto=format&w=300"
 // }
 
-//! http://localhost:5000/post/1/getAllPostsMyFollower  {API method : get}
+//! https://talaqi-platform.onrender.com/post/1/getAllPostsMyFollower  {API method : get}
 /* 
 {
 

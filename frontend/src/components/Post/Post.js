@@ -74,7 +74,7 @@ function Post() {
 
   const Count_like_Comment = (id) => {
     axios
-      .get(`http://localhost:5000/LikeComments/${id}`, {
+      .get(`https://talaqi-platform.onrender.com/LikeComments/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +90,7 @@ function Post() {
 
   const getAllIdLikeComments = () => {
     axios
-      .get(`http://localhost:5000/LikeComments/2/xx`, {
+      .get(`https://talaqi-platform.onrender.com/LikeComments/2/xx`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -107,7 +107,7 @@ function Post() {
   const createLikeComment = (id) => {
     axios
       .post(
-        `http://localhost:5000/LikeComments/${id}`,
+        `https://talaqi-platform.onrender.com/LikeComments/${id}`,
         {},
         {
           headers: {
@@ -134,7 +134,7 @@ function Post() {
 
   const removeLikeComments = (id) => {
     axios
-      .delete(`http://localhost:5000/LikeComments/${id}`, {
+      .delete(`https://talaqi-platform.onrender.com/LikeComments/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -157,7 +157,7 @@ function Post() {
   const postSavedArray = useRef([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/post/allSavePost`, {
+      .get(`https://talaqi-platform.onrender.com/post/allSavePost`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -278,7 +278,7 @@ function Post() {
   const createNewPost = () => {
     axios
       .post(
-        `http://localhost:5000/post/create`,
+        `https://talaqi-platform.onrender.com/post/create`,
         { content: ContentPost, media_url: image_url || video },
         {
           headers: {
@@ -309,7 +309,7 @@ function Post() {
   const Like = (id) => {
     axios
       .post(
-        `http://localhost:5000/likes/${id}`,
+        `https://talaqi-platform.onrender.com/likes/${id}`,
         {},
         {
           headers: {
@@ -319,7 +319,7 @@ function Post() {
       )
       .then((result) => {
         axios
-          .get(`http://localhost:5000/likes/${id}`, {
+          .get(`https://talaqi-platform.onrender.com/likes/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -338,7 +338,7 @@ function Post() {
 
   const getCommentsByPostId = (PostID) => {
     axios
-      .get(`http://localhost:5000/comments/${PostID}`, {
+      .get(`https://talaqi-platform.onrender.com/comments/${PostID}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -361,7 +361,7 @@ function Post() {
   const addComment = (id) => {
     axios
       .post(
-        `http://localhost:5000/comments/${id}`,
+        `https://talaqi-platform.onrender.com/comments/${id}`,
         { content: inputAddComment },
         {
           headers: {
@@ -392,7 +392,7 @@ function Post() {
   };
   const deletedComment = (commentID, PostID) => {
     axios
-      .delete(`http://localhost:5000/comments/${commentID}`, {
+      .delete(`https://talaqi-platform.onrender.com/comments/${commentID}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -410,7 +410,7 @@ function Post() {
 
   const deletePostById = (id) => {
     axios
-      .delete(`http://localhost:5000/post/${id}`, {
+      .delete(`https://talaqi-platform.onrender.com/post/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -426,11 +426,14 @@ function Post() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/post/1/getAllPostsMyFollower", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        "https://talaqi-platform.onrender.com/post/1/getAllPostsMyFollower",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((result) => {
         dispatch(setPosts(result.data.result));
       })
@@ -469,7 +472,7 @@ function Post() {
     console.log(inputUpdate);
     axios
       .put(
-        `http://localhost:5000/post/update/${inputUpdate.ID_post}`,
+        `https://talaqi-platform.onrender.com/post/update/${inputUpdate.ID_post}`,
         {
           content: inputUpdate.content,
           media_url: inputUpdate.image,
@@ -492,7 +495,7 @@ function Post() {
   const updateCommentAPI = () => {
     axios
       .put(
-        `http://localhost:5000/comments/${UpdateComment.id_comment}`,
+        `https://talaqi-platform.onrender.com/comments/${UpdateComment.id_comment}`,
         {
           comment: UpdateComment.content,
         },
@@ -512,7 +515,7 @@ function Post() {
   };
   const getAllUserLikedPost = (id) => {
     axios
-      .get(`http://localhost:5000/likes/AllLikeByPost/${id}`, {
+      .get(`https://talaqi-platform.onrender.com/likes/AllLikeByPost/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -741,13 +744,10 @@ function Post() {
         </Container>
         {/* =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
         {posts?.map((elm, i) => {
-          
-          if(elm.user_id === 112){
-            console.log(elm.is_loggedin , elm.user_id);
+          if (elm.user_id === 112) {
+            console.log(elm.is_loggedin, elm.user_id);
             console.log(typeof elm.is_loggedin);
           }
-     
-        
 
           return (
             <>
@@ -1015,7 +1015,7 @@ function Post() {
                             onClick={async () => {
                               try {
                                 const res = await axios.put(
-                                  `http://localhost:5000/post/save`,
+                                  `https://talaqi-platform.onrender.com/post/save`,
                                   { post_id: elm.id },
 
                                   {
@@ -1049,7 +1049,7 @@ function Post() {
                             onClick={async () => {
                               try {
                                 const res = await axios.delete(
-                                  `http://localhost:5000/post/delete/saved`,
+                                  `https://talaqi-platform.onrender.com/post/delete/saved`,
                                   {
                                     data: { post_id: elm.id },
                                     headers: {
@@ -1743,7 +1743,7 @@ function Post() {
               onClick={async () => {
                 try {
                   const result = await axios.put(
-                    `http://localhost:5000/post/update/report/${idPost}`,
+                    `https://talaqi-platform.onrender.com/post/update/report/${idPost}`,
                     {
                       report: report.reporting,
                     }

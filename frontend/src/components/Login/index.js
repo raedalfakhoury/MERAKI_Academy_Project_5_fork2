@@ -48,14 +48,14 @@ function LoginPage() {
     const email = data.email;
 
     axios
-      .post("http://localhost:5000/users/register", {
+      .post("https://talaqi-platform.onrender.com/users/register", {
         username: name,
         email: email,
         password_hash: password,
       })
       .then((res) => {
         axios
-          .post("http://localhost:5000/users/login", {
+          .post("https://talaqi-platform.onrender.com/users/login", {
             email: email,
             password: password,
           })
@@ -81,7 +81,7 @@ function LoginPage() {
           err.response.data.message === "The email or username already exists"
         ) {
           axios
-            .post("http://localhost:5000/users/login", {
+            .post("https://talaqi-platform.onrender.com/users/login", {
               email: email,
               password: password,
             })
@@ -223,42 +223,45 @@ function LoginPage() {
                               />
                               <label htmlFor="password">Password</label>
                               {showPass ? (
-                            <FaRegEyeSlash
-                              style={{
-                                position: "absolute",
-                                top: "30%",
-                                right: "5",
-                              }}
-                              onClick={() => {
-                                setShowPass(!showPass);
-                              }}
-                            />
-                          ) : (
-                            <FaRegEye
-                              style={{
-                                position: "absolute",
-                                top: "30%",
-                                right: "5",
-                              }}
-                              onClick={() => {
-                                setShowPass(!showPass);
-                              }}
-                            />
-                          )}
+                                <FaRegEyeSlash
+                                  style={{
+                                    position: "absolute",
+                                    top: "30%",
+                                    right: "5",
+                                  }}
+                                  onClick={() => {
+                                    setShowPass(!showPass);
+                                  }}
+                                />
+                              ) : (
+                                <FaRegEye
+                                  style={{
+                                    position: "absolute",
+                                    top: "30%",
+                                    right: "5",
+                                  }}
+                                  onClick={() => {
+                                    setShowPass(!showPass);
+                                  }}
+                                />
+                              )}
                             </Form.Floating>
                           </Col>
                           {/*  */}
-                
+
                           <Col xs={12}>
                             <div className="d-grid">
                               <Button
                                 style={{ backgroundColor: "rgb(46,70,130)" }}
                                 onClick={() => {
                                   axios
-                                    .post("http://localhost:5000/users/login", {
-                                      email: userEmail,
-                                      password: userPassword,
-                                    })
+                                    .post(
+                                      "https://talaqi-platform.onrender.com/users/login",
+                                      {
+                                        email: userEmail,
+                                        password: userPassword,
+                                      }
+                                    )
                                     .then((res) => {
                                       setStatus(true);
                                       console.log(res.data);
