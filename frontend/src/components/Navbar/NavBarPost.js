@@ -465,7 +465,7 @@ export default function NavBarPost() {
                 redirect("/home");
               }}
             >
-              TALAGI
+              TALAQI
             </Typography>
             <img
               style={{ width: "4vw" }}
