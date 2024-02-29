@@ -477,6 +477,7 @@ export default function NavBarPost() {
               aria-label="show 4 new mails"
               color="inhert"
             >
+            
               <Badge badgeContent={8} color="warning">
                 {/* <NotificationsNoneOutlinedIcon /> */}
                 <SvgIcon
@@ -510,6 +511,8 @@ export default function NavBarPost() {
               aria-label="show 17 new notifications"
               color="inherit"
             >
+           
+
               <Badge
                 badgeContent={17}
                 color="warning"
