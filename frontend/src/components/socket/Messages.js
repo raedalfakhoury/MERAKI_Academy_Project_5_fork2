@@ -160,7 +160,7 @@ function Messages({ data, posts, setData }) {
 
   return (
     <div
-      style={{ position: "absolute", zIndex: "5px", top: "100%", left: "70%" }}
+      style={{ position: "absolute", zIndex: "5px", top: "100%", left: "65%" }}
     >
       {toggleBoxMessage && (
         <Container
@@ -173,7 +173,7 @@ function Messages({ data, posts, setData }) {
             zIndex: "50",
             position: "absolute",
             backgroundColor: "#fff",
-            borderRadius: "2px",
+            borderRadius: "5px",
             //   left: "100%",
             top: "-25px",
             //   right:"1px"
@@ -209,7 +209,7 @@ function Messages({ data, posts, setData }) {
                             addID(users);
                             handleShow();
                             // setData({...data,socket:null})
-                            set_toggleBoxMessage(false);
+                            // set_toggleBoxMessage(false);
                           }}
                           alt="Remy Sharp"
                           src={users.profile_picture_url}
@@ -426,12 +426,12 @@ function Messages({ data, posts, setData }) {
             variant="secondary"
             onClick={() => {
               handleClose();
-              setData({
-                ...data,
-                socket: null,
-              });
+              // setData({
+              //   ...data,
+              //   socket: null,
+              // });
               setTimeout(() => {
-                set_toggleBoxMessage(true);
+                // set_toggleBoxMessage(true);
                 getMessagesDataBK();
               }, 1000);
             }}
