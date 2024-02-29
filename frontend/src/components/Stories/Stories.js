@@ -66,7 +66,7 @@ export default function Stories() {
     console.log("Deleted");
     const story_id = userStory[storyIndex].id;
     axios
-      .delete(`http://localhost:5000/story/${story_id}`, {
+      .delete(`https://talaqi-platform.onrender.com/story/${story_id}`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
@@ -92,7 +92,7 @@ export default function Stories() {
 
     setLoading(true);
     axios
-      .get(`http://localhost:5000/story/${e.id}`, {
+      .get(`https://talaqi-platform.onrender.com/story/${e.id}`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
@@ -116,7 +116,7 @@ export default function Stories() {
     setUserName(My_userName);
     setLoading(true);
     axios
-      .get(`http://localhost:5000/story/${My_ID}`, {
+      .get(`https://talaqi-platform.onrender.com/story/${My_ID}`, {
         headers: {
           Authorization: `Bearer ${test}`,
         },
@@ -148,11 +148,14 @@ export default function Stories() {
   // ==========================  Get All Following ======================================
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/followers/Following/${My_ID}`, {
-        headers: {
-          Authorization: `Bearer ${test}`,
-        },
-      })
+      .get(
+        `https://talaqi-platform.onrender.com/followers/Following/${My_ID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${test}`,
+          },
+        }
+      )
       .then((res) => {
         setData(res.data.result);
         console.log(Data);
@@ -224,7 +227,7 @@ export default function Stories() {
   const postdata = (Url) => {
     axios
       .post(
-        `http://localhost:5000/story`,
+        `https://talaqi-platform.onrender.com/story`,
         { video_url: Url },
         {
           headers: {
@@ -560,14 +563,10 @@ export default function Stories() {
             </Avatar>
           }
           action={<IconButton aria-label="settings"></IconButton>}
-          title=
-          {
+          title={
             <Typography variant="h6" sx={{ fontSize: "15px" }}>
-              
               Add New Story
-            
             </Typography>
-        
           }
           subheader={
             <Typography variant="h6" sx={{ fontSize: "12px" }}>

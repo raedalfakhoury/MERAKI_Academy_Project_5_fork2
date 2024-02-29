@@ -25,7 +25,7 @@ const RecommendedFreind = () => {
   const getSuggesterFreinds = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:5000/followers/suggested`,
+        `https://talaqi-platform.onrender.com/followers/suggested`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ const RecommendedFreind = () => {
                   handleToggle(i);
                   try {
                     const result = await axios.post(
-                      `http://localhost:5000/followers/add`,
+                      `https://talaqi-platform.onrender.com/followers/add`,
                       { followed_id: item.id },
                       {
                         headers: {

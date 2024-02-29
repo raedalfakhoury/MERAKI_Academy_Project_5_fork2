@@ -83,7 +83,12 @@ export function TemporaryDrawer() {
     <div>
       {["Drawer"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button style={{border:"2px solid #000"}} onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Button
+            style={{ border: "2px solid #000" }}
+            onClick={toggleDrawer(anchor, true)}
+          >
+            {anchor}
+          </Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}
@@ -108,11 +113,11 @@ const Explore = () => {
     };
   });
 
-  // http://localhost:5000/post/1/getPosts
+  // https://talaqi-platform.onrender.com/post/1/getPosts
   const [Posts, setPosts] = React.useState([]);
   React.useEffect(() => {
     axios
-      .get(`http://localhost:5000/post/1/getPosts`, {
+      .get(`https://talaqi-platform.onrender.com/post/1/getPosts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

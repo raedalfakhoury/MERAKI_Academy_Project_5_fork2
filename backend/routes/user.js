@@ -10,7 +10,7 @@ const {
   getAllUsersAdminDashboard,
   reportUser,
   UnBanUser,
-  logout
+  logout,
 } = require("../controllers/user");
 
 const authentication = require("../middlewares/authentication");
@@ -19,15 +19,15 @@ const authorization = require("../middlewares/authorization");
 userRouter.get("/admin", getAllUsersAdminDashboard);
 userRouter.post("/register", register);
 userRouter.post("/login", login);
-userRouter.delete("/delete/:id/admin",  deleteUser);
+userRouter.delete("/delete/:id/admin", deleteUser);
 
 userRouter.put("/update", authentication, updateUser);
 
 userRouter.put("/logout", authentication, logout);
 
-userRouter.put("/update/report/:id",  reportUser);
+userRouter.put("/update/report/:id", reportUser);
 
-userRouter.put("/update/unban/:id",  UnBanUser);
+userRouter.put("/update/unban/:id", UnBanUser);
 
 userRouter.get("/", getAllUser);
 userRouter.get("/:id", getUserById);
@@ -38,7 +38,7 @@ module.exports = userRouter;
 
 TEST register => 
 
-! api http://localhost:5000/users/register {ipa method : post}
+! api https://talaqi-platform.onrender.com/users/register {ipa method : post}
 
 !body =>
   {
@@ -50,7 +50,7 @@ TEST register =>
 }
 
 
-! api http://localhost:5000/users/login {ipa method : post}
+! api https://talaqi-platform.onrender.com/users/login {ipa method : post}
 
 !body =>
 
@@ -61,7 +61,7 @@ TEST register =>
 
 
 
-! api http://localhost:5000/users/update {ipa method : put}
+! api https://talaqi-platform.onrender.com/users/update {ipa method : put}
 
 !body =>
 {
@@ -71,7 +71,7 @@ TEST register =>
 }
 
 
-! api http://localhost:5000/users/delete {ipa method : delete}
+! api https://talaqi-platform.onrender.com/users/delete {ipa method : delete}
 
 !body =>no body
 
