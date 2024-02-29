@@ -209,7 +209,7 @@ function Messages({ data, posts, setData }) {
                             addID(users);
                             handleShow();
                             // setData({...data,socket:null})
-                            // set_toggleBoxMessage(false);
+                            set_toggleBoxMessage(false);
                           }}
                           alt="Remy Sharp"
                           src={users.profile_picture_url}
@@ -426,12 +426,12 @@ function Messages({ data, posts, setData }) {
             variant="secondary"
             onClick={() => {
               handleClose();
-              // setData({
-              //   ...data,
-              //   socket: null,
-              // });
+              setData({
+                ...data,
+                socket: null,
+              });
               setTimeout(() => {
-                // set_toggleBoxMessage(true);
+                set_toggleBoxMessage(true);
                 getMessagesDataBK();
               }, 1000);
             }}

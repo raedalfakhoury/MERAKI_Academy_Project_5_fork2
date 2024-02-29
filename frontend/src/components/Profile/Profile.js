@@ -32,6 +32,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 const Profile = () => {
+  const [remove, setRemove] = useState(false);
   const [data_user, set_data_user] = useState({
     bio: "",
     image: "",
@@ -64,7 +65,7 @@ const Profile = () => {
 
   const Navigate = useNavigate();
   const arr = useRef([]);
-  const [remove, setRemove] = useState(false);
+
   const [test, setTest] = useState(true);
   const [image, setImage] = useState();
   const [report, setReport] = useState({
@@ -82,7 +83,7 @@ const Profile = () => {
   const queryParams = new URLSearchParams(location.search);
   // const searchQuery = queryParams.get("prf") || "";
   const [searchQuery2, setSearchQuery2] = useState(
-    queryParams.get("prf") || ""
+    queryParams.get("prf") *1 || ""
   );
   const [profileInfo, setProfileInfo] = useState();
   const [loader, setLoader] = useState(true);
@@ -190,6 +191,7 @@ const Profile = () => {
           animation={false}
           centered
         >
+          
           <Modal.Header closeButton style={{ borderBottom: "none" }}>
             <Modal.Title
               style={{
@@ -207,8 +209,11 @@ const Profile = () => {
             style={{ padding: "10px", height: "525px", overflowY: "scroll" }}
           >
             {followers?.map((item, i) => {
+
               return (
                 <div key={i} className="pop-main">
+                       
+            
                   <div
                     onClick={() => {
                       setMyPosts([]);
@@ -233,7 +238,11 @@ const Profile = () => {
                     />
 
                     <div className="name-bio-pop">
-                      <p className="name-pop">{item.username}</p>
+                      <p className="name-pop">
+                        {item.username}{" "}
+               
+                     
+                      </p>
 
                       <p className="bio-pop">{item.bio}</p>
                     </div>
@@ -611,7 +620,7 @@ const Profile = () => {
 
   return (
     <div id="mainPage">
-      <NavBarPost/>
+      <NavBarPost />
       <Followers />
       <Following />
       {/* <EditProfile /> */}
@@ -622,6 +631,8 @@ const Profile = () => {
         profileInfo?.map((elm, i) => {
           return (
             <div key={elm.id} className="panel2">
+                   
+        
               <div className="edit">
                 <img
                   className="ProfilePicture"
@@ -637,12 +648,28 @@ const Profile = () => {
                     style={{ width: "150px", margin: "0px" }}
                   >
                     {elm.username}
+            { countFollowers *1 > 3   &&     <svg style={{marginLeft:"5px"}}
+                            aria-label="Verified"
+                            class="x1lliihq x1n2onr6"
+                            fill="rgb(0, 149, 246)"
+                            height="18"
+                            role="img"
+                            viewBox="0 0 40 40"
+                            width="18"
+                          >
+                            <title>Verified</title>
+                            <path
+                              d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"
+                              fill-rule="evenodd"
+                            ></path>
+                          </svg>}
                   </p>
 
                   {localStorage.getItem("userId") == searchQuery2 ? (
                     <button
                       className="Btn"
                       onClick={async () => {
+                        setRemove(!remove);
                         try {
                           const result = await axios.get(
                             `http://localhost:5000/users/${searchQuery2}`
@@ -672,7 +699,7 @@ const Profile = () => {
                         <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
                       </svg>
                     </button>
-                  ) : arr.current.includes(searchQuery2 *1) ? (
+                  ) : arr.current.includes(searchQuery2 *1) || arr.current.includes(searchQuery2 ) ?(
                     <button
                       // id=" UnFollow-Public"
                       style={{
@@ -686,6 +713,7 @@ const Profile = () => {
                         color: "black",
                       }}
                       onClick={async () => {
+                        setRemove(!remove);
                         try {
                           const res = await axios.delete(
                             `http://localhost:5000/followers/delete`,
@@ -720,6 +748,7 @@ const Profile = () => {
                       // id="Follow-Public"
                       className="Btn"
                       onClick={async () => {
+                        setRemove(!remove);
                         if (arr.current.includes(searchQuery2)) {
                         } else {
                           try {
@@ -970,7 +999,6 @@ const Profile = () => {
           );
         })}
       </div>
-      
 
       <Modal
         show={showEditProfile}
@@ -1125,7 +1153,14 @@ const Profile = () => {
             overflowY: "auto",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column" ,justifyContent:"center" , alignItems:"center"}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <textarea
               id="w3review"
               name="w3review"

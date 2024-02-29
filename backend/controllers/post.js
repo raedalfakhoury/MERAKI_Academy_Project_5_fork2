@@ -459,11 +459,11 @@ const reportPost = (req, res) => {
 };
 
 const getAllPostsAdmin = (req, res) => {
-  const query = `SELECT   Posts.id, Posts.media_url , Users.username ,   Posts.content , Posts.created_at , Posts.is_band , Posts.the_report
+  const query = `SELECT Posts.id, Posts.media_url , Users.username ,   Posts.content , Posts.created_at , Posts.is_band , Posts.the_report
   FROM Posts 
  JOIN Users 
        ON posts.user_id = Users.id  
-       WHERE posts.is_deleted = 0 AND Users.is_deleted = 0 ;`;
+       WHERE posts.is_deleted = 0 AND Users.is_deleted = 0 ORDER BY is_band DESC;`;
   pool
     .query(query)
     .then((result) => {

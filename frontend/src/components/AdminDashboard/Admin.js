@@ -495,6 +495,8 @@ const Admin = () => {
                   </p>
                 </div>
                 {posts?.map((ele) => {
+                  console.log(ele.is_band);
+                  
                   return (
                     <div
                       style={{
