@@ -160,7 +160,7 @@ function Messages({ data, posts, setData }) {
 
   return (
     <div
-      style={{ position: "absolute", zIndex: "5px", top: "100%", left: "70%" }}
+      style={{ position: "absolute", zIndex: "5px", top: "100%", left: "65%" }}
     >
       {toggleBoxMessage && (
         <Container
