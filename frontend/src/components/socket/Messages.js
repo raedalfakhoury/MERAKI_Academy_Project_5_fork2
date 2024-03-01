@@ -284,8 +284,8 @@ function Messages({ data, posts, setData }) {
             MessagesALL.map((mess, index) => {
               return (
                 <>
-                  {mess.senderid == data.id ? (
-                    mess.recipientid === data_message?.to && (
+                  {mess.senderid == data.from ? (
+                    mess.recipientid === data?.to && (
                       <p>
                         <Stack
                           direction="row"
@@ -350,8 +350,8 @@ function Messages({ data, posts, setData }) {
             all_message.map((mess, index) => {
               return (
                 <>
-                  {mess.from == data.id ? (
-                    mess.to === data_message?.to && (
+                  {mess.from == data.from ? (
+                    mess.to === data?.to && (
                       <p>
                         <Stack
                           direction="row"
