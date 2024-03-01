@@ -36,15 +36,16 @@ app.use("/search", searchRouter);
 
 app.use("*", (req, res) => res.status(404).json("NO content at this path"));
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
+
 
 const { Server, Socket } = require("socket.io");
 const auth = require("./middlewares/auth");
 const messageHandler = require("./controllers/message");
 const socketCi = require("./middlewares/socket");
-const io = new Server(8080, { cors: { origin: "*" } });
+const io = new Server(server, { cors: { origin: "*" } });
 const clients = {};
 
 io.use(auth);
