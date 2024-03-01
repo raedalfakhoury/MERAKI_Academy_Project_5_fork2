@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 
 const socketInit = ({ id, token }) => {
-  return io("http://localhost:8080/", {
+  return io("https://talaqi-platform.onrender.com", {
     extraHeaders: { id, token },
     // autoConnect:false,
   });
