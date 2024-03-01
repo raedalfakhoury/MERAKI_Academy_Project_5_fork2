@@ -7,7 +7,7 @@ const routerMessage = express.Router()
 
 
 routerMessage.post("/send",authentication,createNewMessage)
-routerMessage.get("/",authentication,getAllMessage)
+routerMessage.get("/:id",authentication,getAllMessage)
 
 
 
