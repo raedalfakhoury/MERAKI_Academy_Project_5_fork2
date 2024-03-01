@@ -43,10 +43,10 @@ const createNewMessage = (req, res) => {
 
 const getAllMessage = (req,res)=>{
     const user_id = req.token.user_id;
-    // const send_for_id = req.params.id
+    const send_for_id = req.params.id
 
 
-    const query = `SELECT * FROM Messages WHERE SenderID = ${user_id} OR recipientid = ${user_id};`
+    const query = `SELECT * FROM Messages WHERE SenderID = ${user_id} AND RecipientID = ${send_for_id} OR SenderID = ${send_for_id} AND RecipientID = ${user_id} ;`
 
     pool.query(query).then((result)=>{
         res.status(200).json({

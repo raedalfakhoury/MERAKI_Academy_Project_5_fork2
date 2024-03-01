@@ -13,8 +13,14 @@ import axios from "axios";
 import { TbSquareRoundedNumber1Filled } from "react-icons/tb";
 import ReactSearchBox from "react-search-box";
 function Messages({ data, posts, setData }) {
+
+
+// const [BK_data_message,set_BK_data_message] =useState([])
+
+
+
   useEffect(() => {
-    getMessagesDataBK();
+   
   }, []);
   const dispatch = useDispatch();
   const [myFollowing, set_myFollowing] = useState();
@@ -132,10 +138,10 @@ function Messages({ data, posts, setData }) {
         console.log(err);
       });
   };
-  const getMessagesDataBK = () => {
+  const getMessagesDataBK = (id) => {
     console.log("getMessageBK");
     axios
-      .get(`https://talaqi-platform.onrender.com/message/`, {
+      .get(`https://talaqi-platform.onrender.com/message/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -209,6 +215,7 @@ function Messages({ data, posts, setData }) {
                             console.log(users.id);
                             addID(users);
                             handleShow();
+                            getMessagesDataBK(users.id);
                             // setData({...data,socket:null})
                             set_toggleBoxMessage(false);
                           }}
