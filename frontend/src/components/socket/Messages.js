@@ -285,7 +285,7 @@ function Messages({ data, posts, setData }) {
               return (
                 <>
                   {mess.senderid == data_message.from ? (
-                    mess.recipientid === data_message?.to && (
+                    mess.recipientid == data_message?.to && (
                       <p>
                         <Stack
                           direction="row"
@@ -351,7 +351,7 @@ function Messages({ data, posts, setData }) {
               return (
                 <>
                   {mess.from == data_message.from ? (
-                    mess.to === data_message?.to && (
+                    mess.to == data_message?.to && (
                       <p>
                         <Stack
                           direction="row"
