@@ -13,9 +13,15 @@ import axios from "axios";
 import { TbSquareRoundedNumber1Filled } from "react-icons/tb";
 import ReactSearchBox from "react-search-box";
 function Messages({ data, posts, setData }) {
-  // const [BK_data_message,set_BK_data_message] =useState([])
 
-  useEffect(() => {}, []);
+
+// const [BK_data_message,set_BK_data_message] =useState([])
+
+
+
+  useEffect(() => {
+   
+  }, []);
   const dispatch = useDispatch();
   const [myFollowing, set_myFollowing] = useState();
 
@@ -48,13 +54,13 @@ function Messages({ data, posts, setData }) {
   const [to_user, set_to_user] = useState("");
 
   const [data_message, setDate_message] = useState({
-    content: "",
-    recipientid: "",
-    senderid: data.id,
+    message: "",
+    to: "",
+    from: data.id,
   });
 
   const addID = (users) => {
-    setDate_message({ ...data_message, recipientid: users.id });
+    setDate_message({ ...data_message, to: users.id });
 
     set_data_user_for_sind(users);
     set_send_for_id(users.id);
@@ -107,9 +113,9 @@ function Messages({ data, posts, setData }) {
   };
   const sendMessage = () => {
     data.socket.emit("message", {
-      to: data_message.recipientid * 1,
-      from: data_message.senderid * 1,
-      message: data_message.content,
+      to: data_message.to * 1,
+      from: data_message.from * 1,
+      message: data_message.message,
     });
     sendMessageBK();
   };
@@ -118,10 +124,7 @@ function Messages({ data, posts, setData }) {
     axios
       .post(
         `https://talaqi-platform.onrender.com/message/send`,
-        {
-          send_for_id: data_message.recipientid,
-          Content: data_message.content,
-        },
+        { send_for_id: data_message.to, Content: data_message.message },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -129,7 +132,6 @@ function Messages({ data, posts, setData }) {
         }
       )
       .then((result) => {
-        dispatch(addMessages(data_message));
         console.log(result);
       })
       .catch((err) => {
@@ -291,7 +293,7 @@ function Messages({ data, posts, setData }) {
               return (
                 <>
                   {mess.senderid == data.id ? (
-                    mess.recipientid === data_message?.recipientid && (
+                    mess.recipientid === data_message?.to && (
                       <p>
                         <Stack
                           direction="row"
@@ -351,13 +353,13 @@ function Messages({ data, posts, setData }) {
               );
             })}
 
-          {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! socket io 
+          {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! socket io  */}
           {all_message.length > 0 &&
             all_message.map((mess, index) => {
               return (
                 <>
                   {mess.from == data.id ? (
-                    mess.to === data_message?.recipientid && (
+                    mess.to === data_message?.to && (
                       <p>
                         <Stack
                           direction="row"
@@ -415,16 +417,16 @@ function Messages({ data, posts, setData }) {
                   )}
                 </>
               );
-            })} */}
+            })}
         </Modal.Body>
         <Modal.Footer>
           <textarea
             style={{ height: "10vh" }}
-            value={data_message.content}
+            value={data_message.message}
             type="text"
             placeholder="message"
             onChange={(e) => {
-              setDate_message({ ...data_message, content: e.target.value });
+              setDate_message({ ...data_message, message: e.target.value });
               set_Content(e.target.value);
             }}
           />
@@ -452,7 +454,7 @@ function Messages({ data, posts, setData }) {
             onClick={() => {
               // getMessagesDataBK();
               sendMessage();
-              setDate_message({ ...data_message, content: "" });
+              setDate_message({ ...data_message, message: "" });
             }}
             variant="primary"
           >
