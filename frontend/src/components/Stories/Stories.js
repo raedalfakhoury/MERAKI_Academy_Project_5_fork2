@@ -471,7 +471,7 @@ export default function Stories() {
                   <div className="show-story-user-information">
                     {" "}
                     <img
-                      src={My_Img}
+                      src={ user_Id == My_ID ? My_Img: userPhoto}
                       style={{
                         color: "black",
                         width: "40px",
