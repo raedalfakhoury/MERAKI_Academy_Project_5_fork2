@@ -65,7 +65,7 @@ function Messages({ data, posts, setData }) {
       SoundEffects();
     }
 
-    sendMessageBK(dataM);
+    // sendMessageBK(dataM);
     console.log(dataM);
     set_all_message([...all_message, dataM]);
     set_compar_icn_not(dataM);
@@ -111,13 +111,14 @@ function Messages({ data, posts, setData }) {
       from: data_message.from * 1,
       message: data_message.message,
     });
+    sendMessageBK();
   };
-  const sendMessageBK = (dataM) => {
+  const sendMessageBK = () => {
     console.log("jamal");
     axios
       .post(
         `https://talaqi-platform.onrender.com/message/send`,
-        { send_for_id: dataM.to, Content: dataM.message },
+        { send_for_id: data_message.to, Content: data_message.message },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -284,8 +285,8 @@ function Messages({ data, posts, setData }) {
             MessagesALL.map((mess, index) => {
               return (
                 <>
-                  {mess.senderid == data_message.from ? (
-                    mess.recipientid == data_message?.to && (
+                  {mess.senderid == data.id ? (
+                    mess.recipientid === data_message?.to && (
                       <p>
                         <Stack
                           direction="row"
@@ -350,8 +351,8 @@ function Messages({ data, posts, setData }) {
             all_message.map((mess, index) => {
               return (
                 <>
-                  {mess.from == data_message.from ? (
-                    mess.to == data_message?.to && (
+                  {mess.from == data.id ? (
+                    mess.to === data_message?.to && (
                       <p>
                         <Stack
                           direction="row"
