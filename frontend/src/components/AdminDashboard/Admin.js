@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
@@ -619,7 +621,8 @@ const Admin = () => {
                           Reported
                         </p>
                       )}
-                      <button
+                      <a
+                        href="mailto:raedfirst81@gmail.com?subject = Feedback&body = Message"
                         class="btn12"
                         type="button"
                         onClick={async () => {
@@ -638,12 +641,7 @@ const Admin = () => {
                           }
                         }}
                       >
-                        {/* <a href = "mailto:abc@example.com?subject = Feedback&body = Message">
-Send Feedback
-</a> */}
-                        <a href="mailto:raedfirst81@gmail.com?subject = تم حذف منشورك لمخالفة معايير المجتمع لدينا  = Message">
-                          Send Feedback
-                        </a>
+                        <strong>Remove</strong>
                         <div id="container-stars">
                           <div id="stars"></div>
                         </div>
@@ -652,7 +650,7 @@ Send Feedback
                           <div class="circle"></div>
                           <div class="circle"></div>
                         </div>
-                      </button>
+                      </a>
                     </div>
                   );
                 })}
