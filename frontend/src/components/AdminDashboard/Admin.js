@@ -638,7 +638,12 @@ const Admin = () => {
                           }
                         }}
                       >
-                        <strong>Remove</strong>
+                        {/* <a href = "mailto:abc@example.com?subject = Feedback&body = Message">
+Send Feedback
+</a> */}
+                        <a href="mailto:raedfirst81@gmail.com?subject = تم حذف منشورك لمخالفة معايير المجتمع لدينا  = Message">
+                          Send Feedback
+                        </a>
                         <div id="container-stars">
                           <div id="stars"></div>
                         </div>
