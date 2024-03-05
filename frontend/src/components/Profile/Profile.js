@@ -1032,7 +1032,7 @@ const Profile = () => {
                     </Button>
                   </div>
                   <textarea
-                    value={data_user.bio}
+                    value={data_user?.bio}
                     id="w3review"
                     name="w3review"
                     rows="4"

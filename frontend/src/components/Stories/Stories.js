@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
